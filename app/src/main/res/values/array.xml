@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="emailaddr">
+        <item>\직접 입력하기</item>
+        <item>\@google.com</item>
+        <item>\@naver.com</item>
+        <item>\@daum.net</item>
+        <item>\@hanmail.net</item>
+        <item>\@nate.com</item>
+        <item>\@yahoo.com</item>
+        <item>\@yahoo.co.kr</item>
+        <item>\@hotmail.com</item>
+        <item>\@mail.hanmir.com</item>
+        <item>\@netian.com</item>
+        <item>\@korea.com</item>
+        <item>\@intizen.com</item>
+    </string-array>
+
+
+
+</resources>
