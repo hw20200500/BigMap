@@ -239,7 +239,7 @@ FirebaseUser currentUser = auth.getCurrentUser();*/
                             queue.add(registerRequest);*/
 
                             // Send the signup data to the server using a HTTP POST request
-                            String url = "http://192.168.45.87/register_chatgpt.php";
+                            String url = "http://192.168.45.245/register_chatgpt.php";
                             RequestQueue queue = Volley.newRequestQueue(PersonIform.this);
 
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,

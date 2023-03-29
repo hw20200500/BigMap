@@ -11,6 +11,6 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="25dp"
-        android:text="Like" />
+        android:text="즐겨찾기" />
 
 </FrameLayout>

@@ -56,7 +56,7 @@ public class Login extends AppCompatActivity {
                 progressDialog.setMessage("Logging in...");
                 progressDialog.show();
 */
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://192.168.45.87/login_chatgpt.php",
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://192.168.45.245/login_chatgpt.php",
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {

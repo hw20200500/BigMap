@@ -11,6 +11,6 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="25dp"
-        android:text="viewlist" />
+        android:text="사용자 건의함(게시판)" />
 
 </FrameLayout>
