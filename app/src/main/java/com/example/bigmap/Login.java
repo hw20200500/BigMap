@@ -34,28 +34,25 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Set up the login form.
+        // 로그인 이메일, 비번 입력창 변수 저장
         Email = findViewById(R.id.userEmail);
         Password = findViewById(R.id.userPassword);
 
-        // Button
-        loginButton = (Button) findViewById(R.id.button_login); // sign in button
-        newuserButton = (Button) findViewById(R.id.button_new_user); // sign up button
+        // 로그인 버튼, 회원가입 버튼
+        loginButton = (Button) findViewById(R.id.button_login); // 로그인
+        newuserButton = (Button) findViewById(R.id.button_new_user); // 회원가입
 
 
         // 로그인 버튼 클릭
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //edittext에 입력된 이메일과 비번을 String 형태로 변환 및 변수에 저장.
                 String userEmail = Email.getText().toString().trim();
                 String userPassword = Password.getText().toString().trim();
 
-//                loginUser(userEmail, userPassword);
 
-                /*progressDialog = new ProgressDialog(Login.this);
-                progressDialog.setMessage("Logging in...");
-                progressDialog.show();
-*/
+                //php파일이 연결된 링크로 가서 데이터베이스에 접근. 만일 데이터베이스에 없는 이메일 주소, 비밀번호이거나, 사용자의 이메일 주소와 비밀번호가 일치하지 않는 경우, 경고 문구 출력, 그렇지 않으면 로그인 완료.
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://192.168.45.245/login_chatgpt.php",
                         new Response.Listener<String>() {
                             @Override
@@ -108,7 +105,7 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        // 회원가입 버튼 클릭
+        // 회원가입 버튼 클릭. 회원가입 페이지로 넘어감.
         newuserButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {

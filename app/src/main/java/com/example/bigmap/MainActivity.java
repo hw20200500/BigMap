@@ -1,5 +1,6 @@
 package com.example.bigmap;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -28,35 +29,83 @@ public class MainActivity extends AppCompatActivity {
     private final static String USER_KEY = "";
     boolean isEDC;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //tmap navi sdk 화면으로 불러오기
+//        initUI();
+//        initUISDK();
+
+//        checkPermission();
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
+        getSupportFragmentManager().beginTransaction().add(R.id.main_content,new Bottom_Home()).commit();
+        //바텀 네비게이션뷰 안의 아이템 설정
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    //item을 클릭시 id값을 가져와 FrameLayout에 fragment.xml띄우기
+                    case R.id.item_home:
+                        findViewById(R.id.main_frame).setVisibility(View.INVISIBLE);
+                        findViewById(R.id.main_content).setVisibility(View.VISIBLE);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new Bottom_Home()).commit();
+
+                        break;
+                    case R.id.item_star:
+                        findViewById(R.id.main_frame).setVisibility(View.INVISIBLE);
+                        findViewById(R.id.main_content).setVisibility(View.VISIBLE);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new Bottom_Favorite()).commit();
+
+                        break;
+                    case R.id.item_viewList:
+                        findViewById(R.id.main_frame).setVisibility(View.VISIBLE);
+                        findViewById(R.id.main_content).setVisibility(View.INVISIBLE);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new BoardFragment()).commit();
+                        break;
+                    case R.id.item_mine:
+                        findViewById(R.id.main_frame).setVisibility(View.VISIBLE);
+                        findViewById(R.id.main_content).setVisibility(View.INVISIBLE);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new MypageFragment()).commit();
+                        break;
+                }
+                return true;
+            }
+
+        });
+    }
+
+        private void checkPermission() {
+
+        if (checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            initUI();
+            initUISDK();
+        } else {
+            String[] permissionArr = {android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION};
+            requestPermissions(permissionArr, 100);
+        }
+    }
+    private void initUISDK() {
+
+        TmapUISDK.Companion.initialize(this, CLIENT_ID, API_KEY, USER_KEY,new TmapUISDK.InitializeListener() {
+
+            @Override
+            public void onSuccess() {
+                Log.e(TAG, "success initialize");
+            }
+
+            @Override
+            public void onFail(int i, @Nullable String s) {
+                Log.e(TAG, "fail initialize : " + s);
+            }
+        });
+    }
 
 
-//    private void checkPermission() {
-//
-//        if (checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-//                && checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//            initUI();
-//            initUISDK();
-//        } else {
-//            String[] permissionArr = {android.Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
-//            requestPermissions(permissionArr, 100);
-//        }
-//    }
-//    private void initUISDK() {
-//
-//        TmapUISDK.Companion.initialize(this, CLIENT_ID, API_KEY, USER_KEY,new TmapUISDK.InitializeListener() {
-//
-//            @Override
-//            public void onSuccess() {
-//                Log.e(TAG, "success initialize");
-//            }
-//
-//            @Override
-//            public void onFail(int i, @Nullable String s) {
-//                Log.e(TAG, "fail initialize : " + s);
-//            }
-//        });
-//    }
-
+//    tmap Navi SDK 함수 모음 (이전에는 가상 디바이스에서 구현이 되다가 갑자기 다운되서 안되네요.. 그래서 일단 비활성화 해놨습니다.)
 
 //    @Override
 //    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -73,14 +122,14 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    }
 
-//    private void initUI() {
-//        fragmentManager = getSupportFragmentManager();
-//
-//        navigationFragment = TmapUISDK.Companion.getFragment();
-//
-//        transaction = fragmentManager.beginTransaction();
-//        transaction.add(R.id.tmapUILayout, navigationFragment);
-//        transaction.commitAllowingStateLoss();
+    private void initUI() {
+        fragmentManager = getSupportFragmentManager();
+
+        navigationFragment = TmapUISDK.Companion.getFragment();
+
+        transaction = fragmentManager.beginTransaction();
+        transaction.add(R.id.tmapUILayout, navigationFragment);
+        transaction.commitAllowingStateLoss();
 
 //        isEDC = false;
 
@@ -209,61 +258,5 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
 
-    }
-
-    //안전운행
-
-
-
-
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        //tmap navi sdk 화면으로 불러오기
-//        initUI();
-//        initUISDK();
-
-//        checkPermission();
-//        navigationFragment.setSettings(new MapSetting());
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
-        getSupportFragmentManager().beginTransaction().add(R.id.main_content,new Bottom_Home()).commit();
-        //바텀 네비게이션뷰 안의 아이템 설정
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    //item을 클릭시 id값을 가져와 FrameLayout에 fragment.xml띄우기
-                    case R.id.item_home:
-                        findViewById(R.id.main_frame).setVisibility(View.INVISIBLE);
-                        findViewById(R.id.main_content).setVisibility(View.VISIBLE);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new Bottom_Home()).commit();
-
-                        break;
-                    case R.id.item_star:
-                        findViewById(R.id.main_frame).setVisibility(View.INVISIBLE);
-                        findViewById(R.id.main_content).setVisibility(View.VISIBLE);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new Bottom_Favorite()).commit();
-
-                        break;
-                    case R.id.item_viewList:
-                        findViewById(R.id.main_frame).setVisibility(View.VISIBLE);
-                        findViewById(R.id.main_content).setVisibility(View.INVISIBLE);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new ViewList_Fragment()).commit();
-                        break;
-                    case R.id.item_mine:
-                        findViewById(R.id.main_frame).setVisibility(View.VISIBLE);
-                        findViewById(R.id.main_content).setVisibility(View.INVISIBLE);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new MypageFragment()).commit();
-                        break;
-                }
-                return true;
-            }
-
-        });
     }
 }

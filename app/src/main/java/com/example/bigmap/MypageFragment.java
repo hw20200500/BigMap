@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 public class MypageFragment extends Fragment {
 
 
-
+    //마이페이지
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

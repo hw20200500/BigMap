@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 
 public class Bottom_Favorite extends Fragment {
 
-
+    //즐겨찾기 bottom sheet
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

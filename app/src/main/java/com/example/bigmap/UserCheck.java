@@ -11,6 +11,7 @@ import com.example.bigmap.databinding.ActivityUserCheckBinding;
 
 public class UserCheck extends AppCompatActivity {
 
+    // 개인정보 동의 관련 체크박스 페이지. 필수를 모두 체크하지 않으면 다음 페이지로 넘어갈 수 없게 제작.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

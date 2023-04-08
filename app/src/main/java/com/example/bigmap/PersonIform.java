@@ -54,11 +54,12 @@ public class PersonIform extends AppCompatActivity {
         Spinner spinnerM = findViewById(R.id.userBirth_month);
         Spinner spinnerD = findViewById(R.id.userBirth_day);
 
-        //이메일 주소
+        //이메일 주소 입력
         Spinner spinnermails = findViewById(R.id.Emailaddr);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.emailaddr, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnermails.setAdapter(adapter);
+
 
         spinnermails.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -186,17 +187,15 @@ public class PersonIform extends AppCompatActivity {
             }
         });
 
-//회원가입 버튼 클릭
 
-
-
+        //회원가입 버튼 클릭: EditText가 모두 채워지지 않았다면 '~을 작성하세요' 문구 출력, 그렇지 않으면 php파일 링크로 이동하여 데이터베이스에 회원 정보 저장
         binding.buttonPIFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (editUserMail.length() != 0 && editUserName.length() != 0 && editUserPhoneNum.length() != 0 && PhoneCertifNum.length() != 0 && userpw.length() != 0 && userpw_check.length() != 0 && spinnerD.getSelectedItemPosition() != 0 && spinnerM.getSelectedItemPosition() != 0 && spinnerY.getSelectedItemPosition() != 0) {
                     binding.buttonPIFinish.setEnabled(true);
 
-                            //signup();
+                            //signup(); edittext정보 문자화해서 변수에 저장
                             String userEmail = editUserMail.getText().toString().trim();
                             String userPassword = userpw.getText().toString().trim();
                             String userName = editUserName.getText().toString().trim();
@@ -208,8 +207,8 @@ public class PersonIform extends AppCompatActivity {
                             String userBirth_day = spinnerD.getSelectedItem().toString().trim();
                             String userPhoneNum = editUserPhoneNum.getText().toString().trim();
 
-                            // Send the signup data to the server using a HTTP POST request
-                            String url = "http://192.168.45.245/register_chatgpt.php";
+                            // Send the signup data to the server using a HTTP POST request: php 파일이 있는 웹 링크로 이동
+                            String url = "http://192.168.45.245/register.php";
                             RequestQueue queue = Volley.newRequestQueue(PersonIform.this);
 
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -231,6 +230,7 @@ public class PersonIform extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
                                 }
                             }) {
+                                //입력된 개인정보를 모두 데이터베이스에 저장하기
                                 @Override
                                 protected Map<String, String> getParams() {
                                     Map<String, String> params = new HashMap<String, String>();
@@ -247,6 +247,7 @@ public class PersonIform extends AppCompatActivity {
 
                             queue.add(stringRequest);
 
+                            //모든 edittext에 입력하지 않았을 경우
                 } else {
                     if (editUserMail.length() == 0) {
                         Toast.makeText(getApplicationContext(), "이메일을 작성해주세요.", Toast.LENGTH_SHORT).show();
@@ -285,57 +286,7 @@ public class PersonIform extends AppCompatActivity {
     });
     }
 
-    private void signup() {
-        EditText editUserMail = findViewById(R.id.userEmail);
-        EditText editUserName = findViewById(R.id.userName);
-        EditText editUserPhoneNum = findViewById(R.id.userPhoneNum);
-        EditText PhoneCertifNum = findViewById(R.id.phoneCertif_Num);
-        EditText userpw = findViewById(R.id.userPassword);
-        EditText userpw_check = findViewById(R.id.user_pw_check);
-        Spinner spinnerY = findViewById(R.id.userBirth_year);
-        Spinner spinnerM = findViewById(R.id.userBirth_month);
-        Spinner spinnerD = findViewById(R.id.userBirth_day);
 
-        String userEmail = editUserMail.getText().toString().trim();
-        String userPassword = userpw.getText().toString().trim();
-        String userName = editUserName.getText().toString().trim();
-        String userBirth_year = spinnerY.getSelectedItem().toString().trim();
-        String userBirth_month = spinnerM.getSelectedItem().toString().trim();
-        String userBirth_day = spinnerD.getSelectedItem().toString().trim();
-        String userPhoneNum = editUserPhoneNum.getText().toString().trim();
-
-        // Send the signup data to the server using a HTTP POST request
-        String url = "http://192.168.45.240/register_chatgpt.php";
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "회원가입에 실패하였습니다.", Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("userEmail", userEmail);
-                params.put("userPassword", userPassword);
-                params.put("userName", userName);
-                params.put("userBirth_year", userBirth_year);
-                params.put("userBirth_month", userBirth_month);
-                params.put("userBirth_day", userBirth_day);
-                params.put("userPhoneNum", userPhoneNum);
-                return params;
-            }
-        };
-
-        queue.add(stringRequest);
-    }
 
 }
 
