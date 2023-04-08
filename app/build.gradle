@@ -34,6 +34,10 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -50,4 +54,33 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.5.3'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
+
+    def compose_version = '1.1.1'
+
+    implementation files('lib/vsm-tmap-sdk-v2-android-1.6.118.aar')
+    implementation files('lib/navigation-sdk.aar')
+    implementation files('lib/tmap-ui-sdk-1.1.aar')
+    implementation files('lib/TmapEngineCommonData')
+
+    // for vsm sdk
+    implementation 'com.google.flatbuffers:flatbuffers-java:1.11.0'
+
+    // Dependency for Navi SDK.
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
+    implementation 'com.google.android.exoplayer:exoplayer:2.17.1'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.17.1'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.17.1'
+
+    // Dependency for UI SDK.
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.foundation:foundation:$compose_version"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.material:material-icons-core:$compose_version"
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+    implementation 'com.airbnb.android:lottie:3.0.7'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 }

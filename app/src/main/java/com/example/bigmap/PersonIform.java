@@ -189,8 +189,6 @@ public class PersonIform extends AppCompatActivity {
 //회원가입 버튼 클릭
 
 
-/*FirebaseAuth auth = FirebaseAuth.getInstance();
-FirebaseUser currentUser = auth.getCurrentUser();*/
 
         binding.buttonPIFinish.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,34 +207,6 @@ FirebaseUser currentUser = auth.getCurrentUser();*/
                             String userBirth_month = spinnerM.getSelectedItem().toString().trim();
                             String userBirth_day = spinnerD.getSelectedItem().toString().trim();
                             String userPhoneNum = editUserPhoneNum.getText().toString().trim();
-
-                            /*Response.Listener<String> responseListener = new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    try {
-
-                                        JSONObject jsonObject = new JSONObject(response);
-                                        boolean success = jsonObject.getBoolean("success");
-                                        if (success) {//회원 등록에 성공한 경우
-                                            Toast.makeText(getApplicationContext(), "회원 등록에 성공하였습니다.", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(PersonIform.this, Login.class);
-                                            startActivity(intent);
-                                        } else { //회원 등록에 실패한 경우
-                                            Toast.makeText(getApplicationContext(), "회원 등록에 실패하였습니다.", Toast.LENGTH_SHORT).show();
-                                            return;
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-//                                        throw new RuntimeException(e);
-                                    }
-
-                                }
-                            };
-
-                            //서버로 Volley를 이용해서 요청.
-                            RegisterRequest registerRequest = new RegisterRequest(userEmail, userPassword, userName, userBirth_year, userBirth_month, userBirth_day, userPhoneNum, responseListener);
-                            RequestQueue queue = Volley.newRequestQueue(PersonIform.this);
-                            queue.add(registerRequest);*/
 
                             // Send the signup data to the server using a HTTP POST request
                             String url = "http://192.168.45.245/register_chatgpt.php";

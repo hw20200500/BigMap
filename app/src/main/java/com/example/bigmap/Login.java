@@ -60,18 +60,7 @@ public class Login extends AppCompatActivity {
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                /*Toast.makeText(getApplicationContext(), "로그인이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(intent1);*/
-                                /*progressDialog.dismiss();
-                                response = response.trim();
-                                if (response.equals("Login successful.")) {
-                                    // Login successful, do something
-                                    Toast.makeText(Login.this, "Login complete", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    // Login failed, show error message
-                                    Toast.makeText(Login.this, "Email or password does not match.", Toast.LENGTH_SHORT).show();
-                                }*/
+
 
                                 JSONObject jsonObject = null;
                                 try {
@@ -128,55 +117,5 @@ public class Login extends AppCompatActivity {
             }
         });
     }
-
-//    private void loginUser(final String email, final String password) {
-//        progressDialog = new ProgressDialog(Login.this);
-//        progressDialog.setMessage("Logging in...");
-//        progressDialog.show();
-//
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://192.168.45.87/login_chatgpt.php",
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        progressDialog.dismiss();
-//                        try {
-//                            JSONObject jsonObject = new JSONObject(response);
-//                            String message = jsonObject.getString("message");
-//
-//                            if (message.equals("Login success")) {
-//                                // Login successful, do something
-//                                Toast.makeText(Login.this, message, Toast.LENGTH_SHORT).show();
-//                            } else {
-//                                // Login failed, show error message
-//                                Toast.makeText(Login.this, "Email or password does not match.", Toast.LENGTH_SHORT).show();
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                            Toast.makeText(Login.this, "Error occurred: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        progressDialog.dismiss();
-//                        Toast.makeText(Login.this, "Error occurred: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                }) {
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<>();
-//                params.put("email", email);
-//                params.put("password", password);
-//                return params;
-//            }
-//        };
-//
-//        RequestQueue requestQueue = Volley.newRequestQueue(Login.this);
-//        requestQueue.add(stringRequest);
-//    }
-
-
-
 
     }
