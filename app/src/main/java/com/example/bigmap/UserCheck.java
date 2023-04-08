@@ -24,10 +24,11 @@ public class UserCheck extends AppCompatActivity {
 
         binding.buttonOk.setOnClickListener(view -> {
             if (checked1.isChecked() && checked2.isChecked() && checked3.isChecked()) {
-                binding.buttonOk.setEnabled(true);
-                Intent intent1 = new Intent(this, PersonIform.class);
+//                binding.buttonOk.setEnabled(true);
+                Intent intent_register = new Intent(this, PersonIform.class);
+//                Intent intent1 = new Intent(this, PersonIform.class);
 //                Intent intent1 = new Intent(this, PersonInform.class);
-                startActivity(intent1);
+                startActivity(intent_register);
             } else {
                 Toast.makeText(getApplicationContext(), "모든 필수 항목에 체크해주세요.", Toast.LENGTH_SHORT).show();
             }

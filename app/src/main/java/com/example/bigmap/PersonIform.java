@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.bigmap.databinding.ActivityPersonIformBinding;
+//import com.example.bigmap.databinding.ActivityPersonIformBinding;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -40,9 +40,9 @@ public class PersonIform extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_iform);
 
-        ActivityPersonIformBinding binding = ActivityPersonIformBinding.inflate(getLayoutInflater());
+//        ActivityPersonIformBinding binding = ActivityPersonIformBinding.inflate(getLayoutInflater());
 
-        setContentView(binding.getRoot());
+//        setContentView(binding.getRoot());
 
         EditText editUserMail = findViewById(R.id.userEmail);
         EditText editUserName = findViewById(R.id.userName);
@@ -67,7 +67,8 @@ public class PersonIform extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (spinnermails.getSelectedItem().toString()!="직접 입력하기") {
-                    binding.userEmail.append(spinnermails.getSelectedItem().toString());
+                    editUserMail.append(spinnermails.getSelectedItem().toString());
+//                    binding.userEmail.append(spinnermails.getSelectedItem().toString());
                 }
             }
 
@@ -176,24 +177,25 @@ public class PersonIform extends AppCompatActivity {
             }
         });
 
-        binding.userPhoneNum.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-        EditText phoneNumber = findViewById(R.id.userPhoneNum);
-        Button buttonSend = findViewById(R.id.button_phoneCertif);
+        editUserPhoneNum.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+//        binding.userPhoneNum.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+//        EditText phoneNumber = findViewById(R.id.userPhoneNum);
+        Button buttonSend = (Button) findViewById(R.id.button_phoneCertif);
 
-        binding.buttonPhoneCertif.setOnClickListener(new View.OnClickListener() {
+        buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 /*ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.SMS_SEND},Permission_REQUEST_SMS);*/
             }
         });
 
-
+        Button buttonPIFinsh = (Button) findViewById(R.id.button_PI_Finish);
         //회원가입 버튼 클릭: EditText가 모두 채워지지 않았다면 '~을 작성하세요' 문구 출력, 그렇지 않으면 php파일 링크로 이동하여 데이터베이스에 회원 정보 저장
-        binding.buttonPIFinish.setOnClickListener(new View.OnClickListener() {
+        buttonPIFinsh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (editUserMail.length() != 0 && editUserName.length() != 0 && editUserPhoneNum.length() != 0 && PhoneCertifNum.length() != 0 && userpw.length() != 0 && userpw_check.length() != 0 && spinnerD.getSelectedItemPosition() != 0 && spinnerM.getSelectedItemPosition() != 0 && spinnerY.getSelectedItemPosition() != 0) {
-                    binding.buttonPIFinish.setEnabled(true);
+                   buttonPIFinsh.setEnabled(true);
 
                             //signup(); edittext정보 문자화해서 변수에 저장
                             String userEmail = editUserMail.getText().toString().trim();
@@ -208,7 +210,7 @@ public class PersonIform extends AppCompatActivity {
                             String userPhoneNum = editUserPhoneNum.getText().toString().trim();
 
                             // Send the signup data to the server using a HTTP POST request: php 파일이 있는 웹 링크로 이동
-                            String url = "http://192.168.45.245/register.php";
+                            String url = "http://192.168.45.170/register_bigmap.php";
                             RequestQueue queue = Volley.newRequestQueue(PersonIform.this);
 
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
