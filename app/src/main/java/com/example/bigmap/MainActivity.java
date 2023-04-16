@@ -42,10 +42,16 @@ public class MainActivity extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE); //타이틀 바 제거 코드 입니다.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //checkPermission();
+        checkPermission();
         initnav_var();
 
     }
+     public void onClick1(View view){
+         navigationFragment.startSafeDrive();
+
+     }
+
+
         private void initnav_var(){
             BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
             getSupportFragmentManager().beginTransaction().add(R.id.main_content,new Bottom_Home()).commit();
