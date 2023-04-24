@@ -12,7 +12,7 @@
 
             android:id="@+id/tmapUILayout"
             android:layout_width="match_parent"
-            android:layout_height="600dp"
+            android:layout_height="700dp"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
