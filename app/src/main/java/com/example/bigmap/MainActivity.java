@@ -1,7 +1,8 @@
 package com.example.bigmap;
 
-import com.example.bigmap.BuildConfig;
+
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,9 +18,23 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.skt.tmap.engine.navigation.SDKManager;
+
+import com.skt.tmap.engine.navigation.network.RequestConstant;
+import com.skt.tmap.engine.navigation.network.ndds.CarOilType;
+import com.skt.tmap.engine.navigation.network.ndds.NddsDataType;
+import com.skt.tmap.engine.navigation.network.ndds.TollCarType;
+import com.skt.tmap.engine.navigation.network.ndds.dto.request.TruckType;
 import com.skt.tmap.engine.navigation.route.RoutePlanType;
+import com.skt.tmap.engine.navigation.route.data.MapPoint;
+import com.skt.tmap.engine.navigation.route.data.WayPoint;
+import com.skt.tmap.vsm.coordinates.VSMCoordinates;
+import com.tmapmobility.tmap.tmapsdk.ui.data.CarOption;
+import com.tmapmobility.tmap.tmapsdk.ui.data.TruckInfoKey;
 import com.tmapmobility.tmap.tmapsdk.ui.fragment.NavigationFragment;
 import com.tmapmobility.tmap.tmapsdk.ui.util.TmapUISDK;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,52 +59,94 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkPermission();
-        initnav_var();
+        //initnav_var();
 
     }
      public void onClick1(View view){
-         navigationFragment.startSafeDrive();
+         CarOption carOption = new CarOption();
+         carOption.setCarType(TollCarType.LargeTruck);
+         carOption.setOilType(CarOilType.PremiumGasoline);
+         carOption.setHipassOn(true);
+
+         //트럭 경로 요청하기 위한 추가 정보
+         HashMap<String, String> truckDetailInfo = new HashMap<>();
+         truckDetailInfo.put(TruckInfoKey.TruckType.getValue(), TruckType.Truck.toString());
+
+         truckDetailInfo.put(TruckInfoKey.TruckWeight.getValue(), "2500.0");   // 단위 kg 화물의 무게
+         truckDetailInfo.put(TruckInfoKey.TruckHeight.getValue(), "420.0");     // 단위 cm 화물차 높이
+         truckDetailInfo.put(TruckInfoKey.TruckWidth.getValue(), "250.0");           // 단위 cm 화물차 너비
+         truckDetailInfo.put(TruckInfoKey.TruckLength.getValue(), "1200.0");    // 단위 cm 화물차 길이
+         carOption.setTruckInfo(truckDetailInfo);
+
+         //현재 위치
+         Location currentLocation = SDKManager.getInstance().getCurrentPosition();
+         String currentName = VSMCoordinates.getAddressOffline(currentLocation.getLongitude(), currentLocation.getLatitude());
+
+         WayPoint startPoint = new WayPoint(currentName, new MapPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
+
+         //목적지
+         WayPoint endPoint = new WayPoint("천안cgv", new MapPoint(127.109797, 36.8192206), "", RequestConstant.RpFlagCode.UNKNOWN);
+         //WayPoint endPoint = new WayPoint("강남역", new MapPoint(127.027813, 37.497999), "280181", (byte) 5);
+
+
+         navigationFragment.setCarOption(carOption);
+
+         navigationFragment.setRoutePlanType(RoutePlanType.Traffic_Truck);
+
+         //길안내 바로 시작
+         navigationFragment.requestRoute(startPoint, null, endPoint, false, new TmapUISDK.RouteRequestListener() {
+             @Override
+             public void onSuccess() {
+                 Log.e(TAG, "requestRoute Success");
+             }
+
+             @Override
+             public void onFail(int i, @Nullable String s) {
+                 Toast.makeText(MainActivity.this, i + "::" + s, Toast.LENGTH_SHORT).show();
+                 Log.e(TAG, "onFail " + i + " :: " + s);
+                 Log.e(TAG, "onFail " + i + " :: " + s);
+             }
+         });
 
      }
 
-
-        private void initnav_var(){
-            BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
-            getSupportFragmentManager().beginTransaction().add(R.id.main_content,new Bottom_Home()).commit();
-            //바텀 네비게이션뷰 안의 아이템 설정
-            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                    switch (menuItem.getItemId()) {
-                        //item을 클릭시 id값을 가져와 FrameLayout에 fragment.xml띄우기
-                        case R.id.item_home:
-                            findViewById(R.id.main_frame).setVisibility(View.INVISIBLE);
-                            findViewById(R.id.main_content).setVisibility(View.VISIBLE);
-                            getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new Bottom_Home()).commit();
-
-                            break;
-                        case R.id.item_star:
-                            findViewById(R.id.main_frame).setVisibility(View.INVISIBLE);
-                            findViewById(R.id.main_content).setVisibility(View.VISIBLE);
-                            getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new Bottom_Favorite()).commit();
-
-                            break;
-                        case R.id.item_viewList:
-                            findViewById(R.id.main_frame).setVisibility(View.VISIBLE);
-                            findViewById(R.id.main_content).setVisibility(View.INVISIBLE);
-                            getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new BoardFragment()).commit();
-                            break;
-                        case R.id.item_mine:
-                            findViewById(R.id.main_frame).setVisibility(View.VISIBLE);
-                            findViewById(R.id.main_content).setVisibility(View.INVISIBLE);
-                            getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new MypageFragment()).commit();
-                            break;
-                    }
-                    return true;
-                }
-
-            });
-        }
+//        private void initnav_var(){
+//            BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
+//            getSupportFragmentManager().beginTransaction().add(R.id.main_content,new Bottom_Home()).commit();
+//            //바텀 네비게이션뷰 안의 아이템 설정
+//            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+//                @Override
+//                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+//                    switch (menuItem.getItemId()) {
+//                        //item을 클릭시 id값을 가져와 FrameLayout에 fragment.xml띄우기
+//                        case R.id.item_home:
+//                            findViewById(R.id.main_frame).setVisibility(View.INVISIBLE);
+//                            findViewById(R.id.main_content).setVisibility(View.VISIBLE);
+//                            getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new Bottom_Home()).commit();
+//
+//                            break;
+//                        case R.id.item_star:
+//                            findViewById(R.id.main_frame).setVisibility(View.INVISIBLE);
+//                            findViewById(R.id.main_content).setVisibility(View.VISIBLE);
+//                            getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new Bottom_Favorite()).commit();
+//
+//                            break;
+//                        case R.id.item_viewList:
+//                            findViewById(R.id.main_frame).setVisibility(View.VISIBLE);
+//                            findViewById(R.id.main_content).setVisibility(View.INVISIBLE);
+//                            getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new BoardFragment()).commit();
+//                            break;
+//                        case R.id.item_mine:
+//                            findViewById(R.id.main_frame).setVisibility(View.VISIBLE);
+//                            findViewById(R.id.main_content).setVisibility(View.INVISIBLE);
+//                            getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new MypageFragment()).commit();
+//                            break;
+//                    }
+//                    return true;
+//                }
+//
+//            });
+//        }
         private void checkPermission() {
 
         if (checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -118,8 +175,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    tmap Navi SDK 함수 모음 (이전에는 가상 디바이스에서 구현이 되다가 갑자기 다운되서 안되네요.. 그래서 일단 비활성화 해놨습니다.)
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -145,6 +200,117 @@ public class MainActivity extends AppCompatActivity {
         transaction.commitAllowingStateLoss();
 
         isEDC = false;
+        navigationFragment.setDrivingStatusCallback(new TmapUISDK.DrivingStatusCallback() {
+            @Override
+            public void onStartNavigation() {
+
+            }
+
+            @Override
+            public void onStopNavigation() {
+
+            }
+
+            @Override
+            public void onPermissionDenied(int i, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onArrivedDestination(@NonNull String s, int i, int i1) {
+
+            }
+
+            @Override
+            public void onBreakawayFromRouteEvent() {
+
+            }
+
+            @Override
+            public void onApproachingAlternativeRoute() {
+
+            }
+
+            @Override
+            public void onPassedAlternativeRouteJunction() {
+
+            }
+
+            @Override
+            public void onPeriodicReroute() {
+
+            }
+
+            @Override
+            public void onRouteChanged(int i) {
+
+            }
+
+            @Override
+            public void onForceReroute(@NonNull NddsDataType.DestSearchFlag destSearchFlag) {
+
+            }
+
+            @Override
+            public void onNoLocationSignal(boolean b) {
+
+            }
+
+            @Override
+            public void onApproachingViaPoint() {
+
+            }
+
+            @Override
+            public void onPassedViaPoint() {
+
+            }
+
+            @Override
+            public void onChangeRouteOptionComplete(@NonNull RoutePlanType routePlanType) {
+
+            }
+
+            @Override
+            public void onBreakAwayRequestComplete() {
+
+            }
+
+            @Override
+            public void onPeriodicRerouteComplete() {
+
+            }
+
+            @Override
+            public void onUserRerouteComplete() {
+
+            }
+
+            @Override
+            public void onDestinationDirResearchComplete() {
+
+            }
+
+            @Override
+            public void onDoNotRerouteToDestinationComplete() {
+
+            }
+
+            @Override
+            public void onFailRouteRequest(@NonNull String s, @NonNull String s1) {
+
+            }
+
+            @Override
+            public void onPassedTollgate(int i) {
+
+            }
+
+            @Override
+            public void onLocationChanged() {
+
+            }
+        });
 
 
     }
