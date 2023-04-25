@@ -53,7 +53,7 @@ public class Login extends AppCompatActivity {
 
 
                 //php파일이 연결된 링크로 가서 데이터베이스에 접근. 만일 데이터베이스에 없는 이메일 주소, 비밀번호이거나, 사용자의 이메일 주소와 비밀번호가 일치하지 않는 경우, 경고 문구 출력, 그렇지 않으면 로그인 완료.
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://192.168.45.170/login_bigmap.php",
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://192.168.45.172/login_bigmap.php",
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {

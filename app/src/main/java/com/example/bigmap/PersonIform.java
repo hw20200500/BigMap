@@ -210,7 +210,7 @@ public class PersonIform extends AppCompatActivity {
                             String userPhoneNum = editUserPhoneNum.getText().toString().trim();
 
                             // Send the signup data to the server using a HTTP POST request: php 파일이 있는 웹 링크로 이동
-                            String url = "http://192.168.45.170/register_bigmap.php";
+                            String url = "http://192.168.45.172/register_bigmap.php";
                             RequestQueue queue = Volley.newRequestQueue(PersonIform.this);
 
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
