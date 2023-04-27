@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".mypage_birth_ch">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="생년월일을 선택하세요."
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="생년월일"
+        android:textSize="13dp"
+        android:layout_marginTop="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:columnCount="3"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/vew_bolder"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/userBirth_year"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingVertical="10dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1.6"
+            android:background="@drawable/vew_bolder"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/userBirth_month"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingVertical="10dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1.6"
+            android:background="@drawable/vew_bolder"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/userBirth_day"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingVertical="10dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="저장"
+        android:layout_marginTop="15dp"
+        android:id="@+id/button_save"
+        android:padding="10dp"
+        android:layout_gravity="bottom"/>
+
+</LinearLayout>
