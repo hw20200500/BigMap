@@ -128,6 +128,8 @@
                             android:layout_height="30dp"
                             android:background="@drawable/shape_button"
                             android:text="실명 수정"
+                            android:id="@+id/button_nameC"
+                            android:clickable="true"
                             android:textColor="#999999" />
                     </LinearLayout>
                     <View
@@ -165,6 +167,8 @@
                             android:layout_height="30dp"
                             android:background="@drawable/shape_button"
                             android:text="수정"
+                            android:id="@+id/button_phoneC"
+                            android:clickable="true"
                             android:textColor="#999999" />
                     </LinearLayout>
                     <View
@@ -202,6 +206,8 @@
                             android:layout_height="30dp"
                             android:background="@drawable/shape_button"
                             android:text="수정"
+                            android:id="@+id/button_emailC"
+                            android:clickable="true"
                             android:textColor="#999999" />
                     </LinearLayout>
                     <View
@@ -240,6 +246,8 @@
                             android:layout_height="30dp"
                             android:background="@drawable/shape_button"
                             android:text="수정"
+                            android:id="@+id/button_birthC"
+                            android:clickable="true"
                             android:textColor="#999999" />
                     </LinearLayout>
 
