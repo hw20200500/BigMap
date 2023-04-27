@@ -1,24 +1,33 @@
 package com.example.bigmap;
 
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
+
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.skt.tmap.engine.navigation.network.RequestConstant;
+import com.skt.tmap.engine.navigation.network.ndds.NddsDataType;
 import com.skt.tmap.engine.navigation.route.RoutePlanType;
+import com.skt.tmap.engine.navigation.route.data.MapPoint;
+import com.skt.tmap.engine.navigation.route.data.WayPoint;
 import com.tmapmobility.tmap.tmapsdk.ui.fragment.NavigationFragment;
 import com.tmapmobility.tmap.tmapsdk.ui.util.TmapUISDK;
 import com.skt.tmap.engine.navigation.SDKManager;
@@ -53,20 +62,26 @@ public class MainActivity extends AppCompatActivity {
 
 
     private NavigationFragment navigationFragment;
+
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
-    private static final String TAG = "TMapUISDKSample";
+
+    private static final String TAG = "Big_Map";
     private final static String CLIENT_ID = "";
-    private final static String API_KEY = "aN30ZSiyEh53NXC2wXb4d2gP0cAIuP2S1RTH6X10";
+    private final static String API_KEY = BuildConfig.Api_key;
     private final static String USER_KEY = "";
     boolean isEDC;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE); //타이틀 바 제거 코드 입니다.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        checkPermission();
+        initnav();
+    }
+    private void initnav(){
         FrameLayout bottomSheet = findViewById(R.id.main_content);
         FrameLayout mainLayout = findViewById(R.id.tmapUILayout);
         int screenHeight = getResources().getDisplayMetrics().heightPixels;
@@ -91,13 +106,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-        //tmap navi sdk 화면으로 불러오기
-//        initUI();
-//        initUISDK();
-
-        checkPermission();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
         getSupportFragmentManager().beginTransaction().add(R.id.main_content,new Bottom_Home()).commit();
@@ -134,6 +142,56 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
+    }
+
+    public void onClick1(View view){
+        CarOption carOption = new CarOption();
+        carOption.setCarType(TollCarType.LargeTruck);
+        carOption.setOilType(CarOilType.PremiumGasoline);
+        carOption.setHipassOn(true);
+
+        //트럭 경로 요청하기 위한 추가 정보
+        HashMap<String, String> truckDetailInfo = new HashMap<>();
+        truckDetailInfo.put(TruckInfoKey.TruckType.getValue(), TruckType.Truck.toString());
+
+        truckDetailInfo.put(TruckInfoKey.TruckWeight.getValue(), "2500.0");    // 단위 kg 화물의 무게
+        truckDetailInfo.put(TruckInfoKey.TruckHeight.getValue(), "420.0");     // 단위 cm 화물차 높이
+        truckDetailInfo.put(TruckInfoKey.TruckWidth.getValue(), "250.0");      // 단위 cm 화물차 너비
+        truckDetailInfo.put(TruckInfoKey.TruckLength.getValue(), "1200.0");    // 단위 cm 화물차 길이
+        carOption.setTruckInfo(truckDetailInfo);
+
+        //현재 위치
+        Location currentLocation = SDKManager.getInstance().getCurrentPosition();
+        String currentName = VSMCoordinates.getAddressOffline(currentLocation.getLongitude(), currentLocation.getLatitude());
+
+        WayPoint startPoint = new WayPoint(currentName, new MapPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
+
+
+        //목적지
+        WayPoint endPoint = new WayPoint("천안cgv", new MapPoint(127.109797, 36.8192206), "", RequestConstant.RpFlagCode.UNKNOWN);
+        //WayPoint endPoint = new WayPoint("강남역", new MapPoint(127.027813, 37.497999), "280181", (byte) 5);
+
+
+        navigationFragment.setCarOption(carOption);
+
+        navigationFragment.setRoutePlanType(RoutePlanType.Traffic_Truck);
+
+        //길안내 코드(시작지점,null,도착지점,false or true(false 경로 안내 해줌 true 는 경로 안내 안하고 바로 네비시작),TmapUISDK.RouteRequestListener()
+        navigationFragment.requestRoute(startPoint, null, endPoint, false, new TmapUISDK.RouteRequestListener() {
+            @Override
+            public void onSuccess() {
+                Log.e(TAG, "requestRoute Success");
+            }
+
+            @Override
+            public void onFail(int i, @Nullable String s) {
+                Toast.makeText(MainActivity.this, i + "::" + s, Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onFail " + i + " :: " + s);
+                Log.e(TAG, "onFail " + i + " :: " + s);
+            }
+        });
+
     }
 
     private void checkPermission() {
@@ -164,8 +222,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    tmap Navi SDK 함수 모음 (이전에는 가상 디바이스에서 구현이 되다가 갑자기 다운되서 안되네요.. 그래서 일단 비활성화 해놨습니다.)
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -191,133 +247,119 @@ public class MainActivity extends AppCompatActivity {
         transaction.commitAllowingStateLoss();
 
         isEDC = false;
-
-
-        //네비게이션 상태 변경 시 callback
         navigationFragment.setDrivingStatusCallback(new TmapUISDK.DrivingStatusCallback() {
-
             @Override
-            public void onUserRerouteComplete() {
-                // 사용자 재탐색 동작 완료 시 호출
+            public void onStartNavigation() {
+
             }
 
             @Override
             public void onStopNavigation() {
-                // 네비게이션 종료 시 호출
-//                buttonLayout.setVisibility(View.VISIBLE);
-            }
 
-            @Override
-            public void onStartNavigation() {
-                Log.e(TAG, "onStartNavigation");
-                // 네비게이션 시작 시 호출
-            }
-
-            @Override
-            public void onRouteChanged(int i) {
-                // 경로 변경 완료 시 호출
             }
 
             @Override
             public void onPermissionDenied(int i, @Nullable String s) {
-                // 권한 에러 발생 시 호출
+
             }
 
             @Override
-            public void onPeriodicRerouteComplete() {
-                // 정주기 재탐색 동작 완료 시 호출
+            public void onArrivedDestination(@NonNull String s, int i, int i1) {
+
             }
 
             @Override
-            public void onPeriodicReroute() {
-                // 정주기 재탐색 발생 시점에 호출
+            public void onBreakawayFromRouteEvent() {
+
             }
 
             @Override
-            public void onPassedViaPoint() {
-                // 경유지 통과 시 호출
-            }
+            public void onApproachingAlternativeRoute() {
 
-            @Override
-            public void onPassedTollgate(int i) {
-                // 톨게이트 통과 시 호출
-                // i 요금
             }
 
             @Override
             public void onPassedAlternativeRouteJunction() {
-                // 대안 경로 통과 시 호출
+
+            }
+
+            @Override
+            public void onPeriodicReroute() {
+
+            }
+
+            @Override
+            public void onRouteChanged(int i) {
+
+            }
+
+            @Override
+            public void onForceReroute(@NonNull NddsDataType.DestSearchFlag destSearchFlag) {
+
             }
 
             @Override
             public void onNoLocationSignal(boolean b) {
-                // GPS 상태 변화 시점에 호출
+
+            }
+
+            @Override
+            public void onApproachingViaPoint() {
+
+            }
+
+            @Override
+            public void onPassedViaPoint() {
+
+            }
+
+            @Override
+            public void onChangeRouteOptionComplete(@NonNull RoutePlanType routePlanType) {
+
+            }
+
+            @Override
+            public void onBreakAwayRequestComplete() {
+
+            }
+
+            @Override
+            public void onPeriodicRerouteComplete() {
+
+            }
+
+            @Override
+            public void onUserRerouteComplete() {
+
+            }
+
+            @Override
+            public void onDestinationDirResearchComplete() {
+
+            }
+
+            @Override
+            public void onDoNotRerouteToDestinationComplete() {
+
+            }
+
+            @Override
+            public void onFailRouteRequest(@NonNull String s, @NonNull String s1) {
+
+            }
+
+            @Override
+            public void onPassedTollgate(int i) {
 
             }
 
             @Override
             public void onLocationChanged() {
-                //위치 갱신 때 마다 호출
-            }
 
-            @Override
-            public void onFailRouteRequest(@NonNull String errorCode, @NonNull String errorMsg) {
-                //경로 탐색 실패 시 호출
-            }
-
-            @Override
-            public void onDoNotRerouteToDestinationComplete() {
-                //미리 종료 안내 동작 탐색 완료 시점에 호출
-            }
-
-            @Override
-            public void onDestinationDirResearchComplete() {
-                // 건너편 안내 동작 탐색 완료 시점에 호출
-            }
-
-            @Override
-            public void onChangeRouteOptionComplete(@NonNull RoutePlanType routePlanType) {
-                // 경로 옵션 변경 완료 시 호출
-            }
-
-            @Override
-            public void onBreakawayFromRouteEvent() {
-                // 경로 이탈 재탐색 발생 시점에 호출
-                Log.e(TAG, "onBreakawayFromRouteEvent");
-            }
-
-            @Override
-            public void onBreakAwayRequestComplete() {
-                //경로 이탈 재탐색 동작 완료 시점에 호출
-                Log.e(TAG, "onBreakAwayRequestComplete");
-            }
-
-            @Override
-            public void onArrivedDestination(@NonNull String dest, int drivingTime, int drivingDistance) {
-                // 목적지 도착 시 호출
-                // dest 목적지 명
-                // drivingTime 운전시간
-                // drivingDistance 운전거리
-            }
-
-            @Override
-            public void onApproachingViaPoint() {
-                // 경유지 접근 시점에 호출 (1km 이내)
-            }
-
-            @Override
-            public void onApproachingAlternativeRoute() {
-                // 대안 경로 접근 시 호출
-            }
-
-            @Override
-            public void onForceReroute(@NonNull com.skt.tmap.engine.navigation.network.ndds.NddsDataType.DestSearchFlag destSearchFlag)  {
-                // 경로 재탐색 발생 시점에 호출
             }
         });
 
 
     }
-
 
 }
