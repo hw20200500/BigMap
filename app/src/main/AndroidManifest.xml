@@ -53,6 +53,21 @@
             android:exported="false">
            
         </activity>
+        <activity
+            android:name=".board_chat"
+            android:exported="false"/>
+        <activity
+            android:name=".board_notice"
+            android:exported="false"/>
+        <activity
+            android:name=".board_qna"
+            android:exported="false"/>
+        <activity
+            android:name=".board_free"
+            android:exported="false"/>
+        <activity
+            android:name=".board_write"
+            android:exported="false"/>
     </application>
 
 </manifest>
