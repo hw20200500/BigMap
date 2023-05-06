@@ -23,11 +23,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.skt.tmap.TMapData;
+import com.skt.tmap.TMapTapi;
 import com.skt.tmap.engine.navigation.network.RequestConstant;
 import com.skt.tmap.engine.navigation.network.ndds.NddsDataType;
 import com.skt.tmap.engine.navigation.route.RoutePlanType;
 import com.skt.tmap.engine.navigation.route.data.MapPoint;
 import com.skt.tmap.engine.navigation.route.data.WayPoint;
+import com.skt.tmap.poi.TMapPOIItem;
 import com.tmapmobility.tmap.tmapsdk.ui.fragment.NavigationFragment;
 import com.tmapmobility.tmap.tmapsdk.ui.util.TmapUISDK;
 import com.skt.tmap.engine.navigation.SDKManager;
@@ -149,51 +152,77 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick1(View view){
-        CarOption carOption = new CarOption();
-        carOption.setCarType(TollCarType.LargeTruck);
-        carOption.setOilType(CarOilType.PremiumGasoline);
-        carOption.setHipassOn(true);
-
-        //트럭 경로 요청하기 위한 추가 정보
-        HashMap<String, String> truckDetailInfo = new HashMap<>();
-        truckDetailInfo.put(TruckInfoKey.TruckType.getValue(), TruckType.Truck.toString());
-
-        truckDetailInfo.put(TruckInfoKey.TruckWeight.getValue(), "2500.0");    // 단위 kg 화물의 무게
-        truckDetailInfo.put(TruckInfoKey.TruckHeight.getValue(), "420.0");     // 단위 cm 화물차 높이
-        truckDetailInfo.put(TruckInfoKey.TruckWidth.getValue(), "250.0");      // 단위 cm 화물차 너비
-        truckDetailInfo.put(TruckInfoKey.TruckLength.getValue(), "1200.0");    // 단위 cm 화물차 길이
-        carOption.setTruckInfo(truckDetailInfo);
-
-        //현재 위치
-        Location currentLocation = SDKManager.getInstance().getCurrentPosition();
-        String currentName = VSMCoordinates.getAddressOffline(currentLocation.getLongitude(), currentLocation.getLatitude());
-
-        WayPoint startPoint = new WayPoint(currentName, new MapPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
+        TMapData tmapdata = new TMapData();
+        String strData = "한남대학교";  //위치 변경할 주소
+        ArrayList<Object> tlist = new ArrayList<>();
+        ArrayList<Object> tlist2 = new ArrayList<>();
 
 
-        //목적지
-        WayPoint endPoint = new WayPoint("천안cgv", new MapPoint(127.109797, 36.8192206), "", RequestConstant.RpFlagCode.UNKNOWN);
-        //WayPoint endPoint = new WayPoint("강남역", new MapPoint(127.027813, 37.497999), "280181", (byte) 5);
 
-
-        navigationFragment.setCarOption(carOption);
-
-        navigationFragment.setRoutePlanType(RoutePlanType.Traffic_Truck);
-
-        //길안내 코드(시작지점,null,도착지점,false or true(false 경로 안내 해줌 true 는 경로 안내 안하고 바로 네비시작),TmapUISDK.RouteRequestListener()
-        navigationFragment.requestRoute(startPoint, null, endPoint, false, new TmapUISDK.RouteRequestListener() {
+        //poi데이터 찾아오는함수 (in tmap-sdk-1.2.arr)
+        tmapdata.findAllPOI(strData, new TMapData.OnFindAllPOIListener() {
             @Override
-            public void onSuccess() {
-                Log.e(TAG, "requestRoute Success");
-            }
+            public void onFindAllPOI(ArrayList<TMapPOIItem> poiItemList) {
 
-            @Override
-            public void onFail(int i, @Nullable String s) {
-                Toast.makeText(MainActivity.this, i + "::" + s, Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "onFail " + i + " :: " + s);
-                Log.e(TAG, "onFail " + i + " :: " + s);
+                for (TMapPOIItem item : poiItemList) {
+//                    Log.e("Poi Item", "name:" + item.getPOIName() + " address:" + item.getPOIAddress()+
+//                            " 위도:" + item.getPOIPoint().getLatitude()+", 경도:"+item.getPOIPoint().getLongitude()
+//                    );
+                    tlist.add(item.getPOIName()+","+item.getPOIPoint().getLatitude()+","+item.getPOIPoint().getLongitude());
+
+                }
+                System.out.println(tlist);
+                System.out.println(tlist.get(0));
+                Object tlist3 = tlist.get(0);//데이터 찾아와보는중
+
             }
         });
+
+//        CarOption carOption = new CarOption();
+//        carOption.setCarType(TollCarType.LargeTruck);
+//        carOption.setOilType(CarOilType.PremiumGasoline);
+//        carOption.setHipassOn(true);
+//
+//        //트럭 경로 요청하기 위한 추가 정보
+//        HashMap<String, String> truckDetailInfo = new HashMap<>();
+//        truckDetailInfo.put(TruckInfoKey.TruckType.getValue(), TruckType.Truck.toString());
+//
+//        truckDetailInfo.put(TruckInfoKey.TruckWeight.getValue(), "2500.0");    // 단위 kg 화물의 무게
+//        truckDetailInfo.put(TruckInfoKey.TruckHeight.getValue(), "420.0");     // 단위 cm 화물차 높이
+//        truckDetailInfo.put(TruckInfoKey.TruckWidth.getValue(), "250.0");      // 단위 cm 화물차 너비
+//        truckDetailInfo.put(TruckInfoKey.TruckLength.getValue(), "1200.0");    // 단위 cm 화물차 길이
+//        carOption.setTruckInfo(truckDetailInfo);
+//
+//        //현재 위치
+//        Location currentLocation = SDKManager.getInstance().getCurrentPosition();
+//        String currentName = VSMCoordinates.getAddressOffline(currentLocation.getLongitude(), currentLocation.getLatitude());
+//
+//        WayPoint startPoint = new WayPoint(currentName, new MapPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
+//
+//
+//        //목적지
+//        WayPoint endPoint = new WayPoint("천안cgv", new MapPoint(127.109797, 36.8192206), "", RequestConstant.RpFlagCode.UNKNOWN);
+//        //WayPoint endPoint = new WayPoint("강남역", new MapPoint(127.027813, 37.497999), "280181", (byte) 5);
+//
+//
+//        navigationFragment.setCarOption(carOption);
+//
+//        navigationFragment.setRoutePlanType(RoutePlanType.Traffic_Truck);
+//
+//        //길안내 코드(시작지점,null,도착지점,false or true(false 경로 안내 해줌 true 는 경로 안내 안하고 바로 네비시작),TmapUISDK.RouteRequestListener()
+//        navigationFragment.requestRoute(startPoint, null, endPoint, false, new TmapUISDK.RouteRequestListener() {
+//            @Override
+//            public void onSuccess() {
+//                Log.e(TAG, "requestRoute Success");
+//            }
+//
+//            @Override
+//            public void onFail(int i, @Nullable String s) {
+//                Toast.makeText(MainActivity.this, i + "::" + s, Toast.LENGTH_SHORT).show();
+//                Log.e(TAG, "onFail " + i + " :: " + s);
+//                Log.e(TAG, "onFail " + i + " :: " + s);
+//            }
+//        });
 
     }
 
@@ -210,6 +239,10 @@ public class MainActivity extends AppCompatActivity {
     }
     private void initUISDK() {
 
+        //tmap-sdk-1.2.arr인증부분
+        TMapTapi tmaptapi = new TMapTapi(this);
+        tmaptapi.setSKTmapAuthentication(API_KEY);
+        //tamp-navigation인증부분
         TmapUISDK.Companion.initialize(this, CLIENT_ID, API_KEY, USER_KEY,new TmapUISDK.InitializeListener() {
 
             @Override

@@ -62,6 +62,7 @@ dependencies {
     implementation files('lib/navigation-sdk.aar')
     implementation files('lib/tmap-ui-sdk-1.1.aar')
     implementation files('lib/TmapEngineCommonData.aar')
+    implementation files('lib/tmap-sdk-1.2.aar')
 
     // for vsm sdk
     implementation 'com.google.flatbuffers:flatbuffers-java:1.11.0'
