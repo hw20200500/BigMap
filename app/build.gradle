@@ -13,7 +13,7 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
+        buildConfigField "String", "Api_key", '"aN30ZSiyEh53NXC2wXb4d2gP0cAIuP2S1RTH6X10"'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
