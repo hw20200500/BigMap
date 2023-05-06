@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 //import com.example.bigmap.databinding.ActivityPersonIformBinding;
 import com.android.volley.Request;
@@ -26,6 +27,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.protobuf.Any;
 
 
 import java.nio.charset.Charset;
@@ -33,7 +46,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PersonIform extends AppCompatActivity {
-
+    private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +57,8 @@ public class PersonIform extends AppCompatActivity {
 //        ActivityPersonIformBinding binding = ActivityPersonIformBinding.inflate(getLayoutInflater());
 
 //        setContentView(binding.getRoot());
+        firebaseAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         EditText editUserMail = findViewById(R.id.userEmail);
         EditText editUserName = findViewById(R.id.userName);
@@ -66,7 +82,7 @@ public class PersonIform extends AppCompatActivity {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (spinnermails.getSelectedItem().toString()!="직접 입력하기") {
+                if (position!=0) {
                     editUserMail.append(spinnermails.getSelectedItem().toString());
 //                    binding.userEmail.append(spinnermails.getSelectedItem().toString());
                 }
@@ -160,6 +176,7 @@ public class PersonIform extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                System.out.println("월을 선택하세요");
             }
         });
 
@@ -174,6 +191,7 @@ public class PersonIform extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                System.out.println("일을 선택하세요");
             }
         });
 
@@ -190,7 +208,7 @@ public class PersonIform extends AppCompatActivity {
         });
 
         Button buttonPIFinsh = (Button) findViewById(R.id.button_PI_Finish);
-        //회원가입 버튼 클릭: EditText가 모두 채워지지 않았다면 '~을 작성하세요' 문구 출력, 그렇지 않으면 php파일 링크로 이동하여 데이터베이스에 회원 정보 저장
+        //회원가입 버튼 클릭: EditText가 모두 채워지지 않았다면 '~을 작성하세요' 문구 출력, 그렇지 않으면 파이어베이스 사용자 정보 및 데이터베이스(파이어스토어)에 회원 정보 저장
         buttonPIFinsh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,19 +216,79 @@ public class PersonIform extends AppCompatActivity {
                    buttonPIFinsh.setEnabled(true);
 
                             //signup(); edittext정보 문자화해서 변수에 저장
-                            String userEmail = editUserMail.getText().toString().trim();
-                            String userPassword = userpw.getText().toString().trim();
-                            String userName = editUserName.getText().toString().trim();
-                            //int userBirth_year = Integer.parseInt(spinnerY.getSelectedItem().toString());
-                            //int userBirth_month = Integer.parseInt(spinnerM.getSelectedItem().toString());
-                            //int userBirth_day = Integer.parseInt(spinnerD.getSelectedItem().toString());
-                            String userBirth_year = spinnerY.getSelectedItem().toString().trim();
+                            String userEmail = editUserMail.getText().toString();
+                            String userPassword = userpw.getText().toString();
+                            String userName = editUserName.getText().toString();
+                            int userBirth_year = Integer.parseInt(spinnerY.getSelectedItem().toString());
+                            int userBirth_month = Integer.parseInt(spinnerM.getSelectedItem().toString());
+                            int userBirth_day = Integer.parseInt(spinnerD.getSelectedItem().toString());
+                            /*String userBirth_year = spinnerY.getSelectedItem().toString().trim();
                             String userBirth_month = spinnerM.getSelectedItem().toString().trim();
-                            String userBirth_day = spinnerD.getSelectedItem().toString().trim();
+                            String userBirth_day = spinnerD.getSelectedItem().toString().trim();*/
                             String userPhoneNum = editUserPhoneNum.getText().toString().trim();
 
+
+                            //파이어베이스에 신규계정 등록하기
+                            firebaseAuth.createUserWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(PersonIform.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                        //가입 성공시
+                                        if (task.isSuccessful()) {
+
+                                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                                            String email = user.getEmail();
+                                            String uid = user.getUid();
+
+
+                                            //해쉬맵 테이블을 파이어베이스 데이터베이스(파이어스토어)에 저장
+                                            HashMap<Object,Object> hashMap = new HashMap<>();
+
+                                            hashMap.put("email",email);
+                                            hashMap.put("password",userPassword);
+                                            hashMap.put("name",userName);
+                                            hashMap.put("birth_year",userBirth_year);
+                                            hashMap.put("birth_month",userBirth_month);
+                                            hashMap.put("birth_day",userBirth_day);
+                                            hashMap.put("phone_number",userPhoneNum);
+                                            hashMap.put("uid",uid);
+
+
+
+
+//                                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+//                                            DatabaseReference reference = database.getReference("Users");
+//                                            reference.child(userName).setValue(hashMap);
+
+                                            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+                                            firestore.collection("사용자DB").document(email).set(hashMap);
+
+
+                                            //가입이 이루어져을시 가입 화면을 빠져나감.
+                                            Intent intent = new Intent(PersonIform.this, Login.class);
+                                            startActivity(intent);
+                                            finish();
+                                            Toast.makeText(PersonIform.this, "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show();
+
+                                        } else {
+                                            Toast.makeText(PersonIform.this, "회원가입 실패", Toast.LENGTH_SHORT).show();
+                                            return;  //해당 메소드 진행을 멈추고 빠져나감.
+
+                                        }
+
+                                    }
+                                })
+                                    // 새 계정 만드는 활동 자체가 실패(에러)했을 경우
+                                    .addOnFailureListener(PersonIform.this, new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(PersonIform.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+
+
                             // Send the signup data to the server using a HTTP POST request: php 파일이 있는 웹 링크로 이동
-                            String url = "http://192.168.45.172/register_bigmap.php";
+                            /*String url = "http://172.30.1.17/register_bigmap.php";
                             RequestQueue queue = Volley.newRequestQueue(PersonIform.this);
 
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -247,7 +325,7 @@ public class PersonIform extends AppCompatActivity {
                                 }
                             };
 
-                            queue.add(stringRequest);
+                            queue.add(stringRequest);*/
 
                             //모든 edittext에 입력하지 않았을 경우
                 } else {
@@ -287,6 +365,7 @@ public class PersonIform extends AppCompatActivity {
 
     });
     }
+
 
 
 

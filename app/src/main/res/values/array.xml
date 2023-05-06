@@ -3,7 +3,7 @@
 
     <string-array name="emailaddr">
         <item>\직접 입력하기</item>
-        <item>\@google.com</item>
+        <item>\@gmail.com</item>
         <item>\@naver.com</item>
         <item>\@daum.net</item>
         <item>\@hanmail.net</item>
