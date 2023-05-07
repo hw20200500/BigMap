@@ -13,8 +13,8 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-        buildConfigField "String", "Api_key", '"aN30ZSiyEh53NXC2wXb4d2gP0cAIuP2S1RTH6X10"'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "Api_key", '"aN30ZSiyEh53NXC2wXb4d2gP0cAIuP2S1RTH6X10"'
     }
 
     buildTypes {
@@ -88,7 +88,7 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.0.7'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
 
-    
+
     implementation 'de.hdodenhof:circleimageview:3.1.0' //Circle ImageView
 
     // Import the Firebase BoM
