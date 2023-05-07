@@ -1,8 +1,10 @@
-package com.example.bigmap;
+package com.example.bigmap.Login;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.bigmap.R;
 
 public class WelcomeView extends AppCompatActivity {
 

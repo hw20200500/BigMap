@@ -1,4 +1,4 @@
-package com.example.bigmap;
+package com.example.bigmap.Login;
 
 import static android.content.ContentValues.TAG;
 
@@ -26,6 +26,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.bigmap.R;
 
 
 import java.nio.charset.Charset;

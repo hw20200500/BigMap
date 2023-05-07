@@ -1,8 +1,10 @@
-package com.example.bigmap;
+package com.example.bigmap.Mypage;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.bigmap.R;
 
 public class mypage_phonnumCh extends AppCompatActivity {
 

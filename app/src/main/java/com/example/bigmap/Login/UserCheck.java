@@ -1,4 +1,4 @@
-package com.example.bigmap;
+package com.example.bigmap.Login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bigmap.R;
 import com.example.bigmap.databinding.ActivityUserCheckBinding;
 
 public class UserCheck extends AppCompatActivity {
