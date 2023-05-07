@@ -1,153 +1,222 @@
 package com.example.bigmap;
 
-
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
+
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
+import com.example.bigmap.bottom.BoardFragment;
+import com.example.bigmap.bottom.Bottom_Favorite;
+import com.example.bigmap.bottom.Bottom_Home;
+import com.example.bigmap.bottom.MypageFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.skt.tmap.engine.navigation.SDKManager;
-
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.skt.tmap.TMapData;
+import com.skt.tmap.TMapTapi;
 import com.skt.tmap.engine.navigation.network.RequestConstant;
-import com.skt.tmap.engine.navigation.network.ndds.CarOilType;
 import com.skt.tmap.engine.navigation.network.ndds.NddsDataType;
-import com.skt.tmap.engine.navigation.network.ndds.TollCarType;
-import com.skt.tmap.engine.navigation.network.ndds.dto.request.TruckType;
 import com.skt.tmap.engine.navigation.route.RoutePlanType;
 import com.skt.tmap.engine.navigation.route.data.MapPoint;
 import com.skt.tmap.engine.navigation.route.data.WayPoint;
+import com.skt.tmap.poi.TMapPOIItem;
+import com.tmapmobility.tmap.tmapsdk.ui.fragment.NavigationFragment;
+import com.tmapmobility.tmap.tmapsdk.ui.util.TmapUISDK;
+import com.skt.tmap.engine.navigation.SDKManager;
+import com.skt.tmap.engine.navigation.network.ndds.CarOilType;
+import com.skt.tmap.engine.navigation.network.ndds.TollCarType;
+import com.skt.tmap.engine.navigation.network.ndds.dto.request.TruckType;
 import com.skt.tmap.vsm.coordinates.VSMCoordinates;
 import com.tmapmobility.tmap.tmapsdk.ui.data.CarOption;
 import com.tmapmobility.tmap.tmapsdk.ui.data.TruckInfoKey;
-import com.tmapmobility.tmap.tmapsdk.ui.fragment.NavigationFragment;
-import com.tmapmobility.tmap.tmapsdk.ui.util.TmapUISDK;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-
 
     private NavigationFragment navigationFragment;
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
-
-    private final static String apikey = BuildConfig.Api_key;
-
     private static final String TAG = "Big_Map";
     private final static String CLIENT_ID = "";
-    private final static String API_KEY = apikey;
+    private final static String API_KEY = BuildConfig.Api_key;
     private final static String USER_KEY = "";
     boolean isEDC;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE); //타이틀 바 제거 코드 입니다.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkPermission();
-        //initnav_var();
+        initnav();
+    }
+    private void initnav(){
+        FrameLayout bottomSheet = findViewById(R.id.main_content);
+        FrameLayout mainLayout = findViewById(R.id.tmapUILayout);
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+
+
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheetBehavior.setPeekHeight(getResources().getDimensionPixelSize(R.dimen.main_layout_height));
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+                int bottomSheetHeight = 400;
+                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    bottomSheetHeight = (int) (bottomSheet.getHeight())-150;
+                }
+                int mainLayoutHeight = screenHeight - bottomSheetHeight;
+                mainLayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                int bottomSheetHeight = (int) (bottomSheet.getHeight() * slideOffset);
+                int mainLayoutHeight = screenHeight - bottomSheetHeight;
+                mainLayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
+            }
+        });
+
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
+        getSupportFragmentManager().beginTransaction().add(R.id.main_content,new Bottom_Home()).commit();
+        //바텀 네비게이션뷰 안의 아이템 설정
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    //item을 클릭시 id값을 가져와 FrameLayout에 fragment.xml띄우기
+                    case R.id.item_home:
+                        findViewById(R.id.main_frame).setVisibility(View.INVISIBLE);
+                        findViewById(R.id.main_content).setVisibility(View.VISIBLE);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new Bottom_Home()).commit();
+
+                        break;
+                    case R.id.item_star:
+                        findViewById(R.id.main_frame).setVisibility(View.INVISIBLE);
+                        findViewById(R.id.main_content).setVisibility(View.VISIBLE);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new Bottom_Favorite()).commit();
+
+                        break;
+                    case R.id.item_viewList:
+                        findViewById(R.id.main_frame).setVisibility(View.VISIBLE);
+                        findViewById(R.id.main_content).setVisibility(View.INVISIBLE);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new BoardFragment()).commit();
+                        break;
+                    case R.id.item_mine:
+                        findViewById(R.id.main_frame).setVisibility(View.VISIBLE);
+                        findViewById(R.id.main_content).setVisibility(View.INVISIBLE);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new MypageFragment()).commit();
+                        break;
+                }
+                return true;
+            }
+
+        });
 
     }
-     public void onClick1(View view){
-         CarOption carOption = new CarOption();
-         carOption.setCarType(TollCarType.LargeTruck);
-         carOption.setOilType(CarOilType.PremiumGasoline);
-         carOption.setHipassOn(true);
 
-         //트럭 경로 요청하기 위한 추가 정보
-         HashMap<String, String> truckDetailInfo = new HashMap<>();
-         truckDetailInfo.put(TruckInfoKey.TruckType.getValue(), TruckType.Truck.toString());
+    public void nav_truck(List<Object> poi_search){
 
-         truckDetailInfo.put(TruckInfoKey.TruckWeight.getValue(), "2500.0");   // 단위 kg 화물의 무게
-         truckDetailInfo.put(TruckInfoKey.TruckHeight.getValue(), "420.0");     // 단위 cm 화물차 높이
-         truckDetailInfo.put(TruckInfoKey.TruckWidth.getValue(), "250.0");           // 단위 cm 화물차 너비
-         truckDetailInfo.put(TruckInfoKey.TruckLength.getValue(), "1200.0");    // 단위 cm 화물차 길이
-         carOption.setTruckInfo(truckDetailInfo);
+        Object search_data = poi_search.get(0);
 
-         //현재 위치
-         Location currentLocation = SDKManager.getInstance().getCurrentPosition();
-         String currentName = VSMCoordinates.getAddressOffline(currentLocation.getLongitude(), currentLocation.getLatitude());
+        ArrayList<Object> search_data_list = new ArrayList<>();
+        Collections.addAll(search_data_list, ((String) search_data).split(","));
+        System.out.println(search_data_list.get(0));
+        System.out.println(search_data_list.get(1));
+        System.out.println(search_data_list.get(2));
 
-         WayPoint startPoint = new WayPoint(currentName, new MapPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
+        double longi,lati;
+        longi = Double.parseDouble((String) search_data_list.get(1));
+        lati = Double.parseDouble((String) search_data_list.get(2));
 
-         //목적지
-         WayPoint endPoint = new WayPoint("천안cgv", new MapPoint(127.109797, 36.8192206), "", RequestConstant.RpFlagCode.UNKNOWN);
-         //WayPoint endPoint = new WayPoint("강남역", new MapPoint(127.027813, 37.497999), "280181", (byte) 5);
+        CarOption carOption = new CarOption();
+        carOption.setCarType(TollCarType.LargeTruck);
+        carOption.setOilType(CarOilType.PremiumGasoline);
+        carOption.setHipassOn(true);
 
+        //트럭 경로 요청 하기 위한 추가 정보
+        HashMap<String, String> truckDetailInfo = new HashMap<>();
 
-         navigationFragment.setCarOption(carOption);
+        truckDetailInfo.put(TruckInfoKey.TruckType.getValue(), TruckType.Truck.toString());
+        truckDetailInfo.put(TruckInfoKey.TruckWeight.getValue(), "2500.0");    // 단위 kg 화물의 무게
+        truckDetailInfo.put(TruckInfoKey.TruckHeight.getValue(), "420.0");     // 단위 cm 화물차 높이
+        truckDetailInfo.put(TruckInfoKey.TruckWidth.getValue(), "250.0");      // 단위 cm 화물차 너비
+        truckDetailInfo.put(TruckInfoKey.TruckLength.getValue(), "1200.0");    // 단위 cm 화물차 길이
 
-         navigationFragment.setRoutePlanType(RoutePlanType.Traffic_Truck);
+        carOption.setTruckInfo(truckDetailInfo);
 
-         //길안내 바로 시작
-         navigationFragment.requestRoute(startPoint, null, endPoint, false, new TmapUISDK.RouteRequestListener() {
-             @Override
-             public void onSuccess() {
-                 Log.e(TAG, "requestRoute Success");
-             }
+        //현재 위치
+        Location currentLocation = SDKManager.getInstance().getCurrentPosition();
+        String currentName = VSMCoordinates.getAddressOffline(currentLocation.getLongitude(), currentLocation.getLatitude());
 
-             @Override
-             public void onFail(int i, @Nullable String s) {
-                 Toast.makeText(MainActivity.this, i + "::" + s, Toast.LENGTH_SHORT).show();
-                 Log.e(TAG, "onFail " + i + " :: " + s);
-                 Log.e(TAG, "onFail " + i + " :: " + s);
-             }
-         });
+        WayPoint startPoint = new WayPoint(currentName, new MapPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
 
-     }
+        //목적지
+        WayPoint endPoint = new WayPoint(search_data_list.get(0).toString(), new MapPoint(longi,lati), "", RequestConstant.RpFlagCode.UNKNOWN);
 
-//        private void initnav_var(){
-//            BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
-//            getSupportFragmentManager().beginTransaction().add(R.id.main_content,new Bottom_Home()).commit();
-//            //바텀 네비게이션뷰 안의 아이템 설정
-//            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-//                @Override
-//                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-//                    switch (menuItem.getItemId()) {
-//                        //item을 클릭시 id값을 가져와 FrameLayout에 fragment.xml띄우기
-//                        case R.id.item_home:
-//                            findViewById(R.id.main_frame).setVisibility(View.INVISIBLE);
-//                            findViewById(R.id.main_content).setVisibility(View.VISIBLE);
-//                            getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new Bottom_Home()).commit();
-//
-//                            break;
-//                        case R.id.item_star:
-//                            findViewById(R.id.main_frame).setVisibility(View.INVISIBLE);
-//                            findViewById(R.id.main_content).setVisibility(View.VISIBLE);
-//                            getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new Bottom_Favorite()).commit();
-//
-//                            break;
-//                        case R.id.item_viewList:
-//                            findViewById(R.id.main_frame).setVisibility(View.VISIBLE);
-//                            findViewById(R.id.main_content).setVisibility(View.INVISIBLE);
-//                            getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new BoardFragment()).commit();
-//                            break;
-//                        case R.id.item_mine:
-//                            findViewById(R.id.main_frame).setVisibility(View.VISIBLE);
-//                            findViewById(R.id.main_content).setVisibility(View.INVISIBLE);
-//                            getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new MypageFragment()).commit();
-//                            break;
-//                    }
-//                    return true;
-//                }
-//
-//            });
-//        }
-        private void checkPermission() {
+        //네비게이션 화면 구성
+        navigationFragment.setCarOption(carOption);
+
+        navigationFragment.setRoutePlanType(RoutePlanType.Traffic_Truck);
+
+        //길안내 코드(시작 지점,null,도착 지점,false or true(false 경로 안내 해줌 true 는 경로 안내 안하고 바로 네비시작),TmapUISDK.RouteRequestListener()
+        navigationFragment.requestRoute(startPoint, null, endPoint, false, new TmapUISDK.RouteRequestListener() {
+            @Override
+            public void onSuccess() {
+                Log.e(TAG, "requestRoute Success");
+            }
+
+            @Override
+            public void onFail(int i, @Nullable String s) {
+                Toast.makeText(MainActivity.this, i + "::" + s, Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onFail " + i + " :: " + s);
+                Log.e(TAG, "onFail " + i + " :: " + s);
+            }
+        });
+    }
+
+    public void onClick1(View view){
+        TMapData tmapdata = new TMapData();
+        String strData = "천안시청";  //위치 변경할 주소 (검색창에서 여기로 데이터로 전송하면됨)
+
+        tmapdata.findAllPOI(strData, poiItemList -> {
+            List<Object> poiList = new ArrayList<>();
+
+            for (TMapPOIItem item : poiItemList) {
+                Log.d("Poi Item", "name:" + item.getPOIName() + " address:" + item.getPOIAddress()+
+                        " 위도:" + item.getPOIPoint().getLatitude()+", 경도:"+item.getPOIPoint().getLongitude()/*+" 거리:"+item.getDistance(tMapPoint)*/
+                );
+                poiList.add(item.getPOIName()+","+item.getPOIPoint().getLongitude()+","+item.getPOIPoint().getLatitude());
+            }
+            // selectDataList에 데이터 추가
+            runOnUiThread(() -> {
+                nav_truck(poiList);
+            });
+        });
+    }
+
+    private void checkPermission() {
 
         if (checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -160,6 +229,10 @@ public class MainActivity extends AppCompatActivity {
     }
     private void initUISDK() {
 
+        //tmap-sdk-1.2.arr인증부분
+        TMapTapi tmaptapi = new TMapTapi(this);
+        tmaptapi.setSKTmapAuthentication(API_KEY);
+        //tamp-navigation인증부분
         TmapUISDK.Companion.initialize(this, CLIENT_ID, API_KEY, USER_KEY,new TmapUISDK.InitializeListener() {
 
             @Override
@@ -173,7 +246,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -191,6 +263,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initUI() {
+
+
         fragmentManager = getSupportFragmentManager();
 
         navigationFragment = TmapUISDK.Companion.getFragment();
@@ -312,6 +386,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
+
 }

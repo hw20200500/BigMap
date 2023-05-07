@@ -7,56 +7,83 @@
     android:id="@+id/main_activity_layout"
     tools:context=".MainActivity">
 
+    <FrameLayout
+        android:id="@+id/tmapUILayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="120dp"
+        android:layout_below="@+id/main_content">
 
-        <FrameLayout
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom"
+            android:text="test"
+            android:onClick="onClick1"/>
 
-            android:id="@+id/tmapUILayout"
-            android:layout_width="match_parent"
-            android:layout_height="700dp"
+    </FrameLayout>
 
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <Button
-                android:id="@+id/button"
-                android:onClick="onClick1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="입력"
-                />
-        </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="15dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/shape_searchbar"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="8dp"
+            android:clickable="true"
+            android:src="@drawable/menu_icon"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="장소, 버스, 지하철, 주소 검색"
+            android:layout_marginLeft="10dp"
+            android:textSize="20dp"
+            android:textColor="#bbbbbb"/>
+
+
+    </LinearLayout>
+
+
+
 
 
 <!--    홈, 즐겨찾기 페이지 bottomsheet frame -->
-        <FrameLayout
-            android:id="@+id/main_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:visibility="visible"
-            app:behavior_peekHeight="200dp"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-            app:layout_constraintBottom_toTopOf="@id/bottom_sheet"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        </FrameLayout>
+    <FrameLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:behavior_peekHeight="200dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:layout_constraintBottom_toTopOf="@id/bottom_sheet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </FrameLayout>
 
     <!-- bottom menu -->
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:foregroundGravity="center_horizontal"
-            android:background="#fff"
-            app:labelVisibilityMode="labeled"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:menu="@menu/bottom_navi_menu"/>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:foregroundGravity="center_horizontal"
+        android:background="#fff"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_navi_menu"/>
 
     <!--    게시판, 마이페이지 frame-->
-        <FrameLayout
-            android:id="@+id/main_frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+    <FrameLayout
+        android:id="@+id/main_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

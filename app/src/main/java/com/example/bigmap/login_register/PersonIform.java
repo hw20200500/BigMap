@@ -1,6 +1,4 @@
-package com.example.bigmap;
-
-import static android.content.ContentValues.TAG;
+package com.example.bigmap.login_register;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,7 +6,6 @@ import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,29 +18,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 //import com.example.bigmap.databinding.ActivityPersonIformBinding;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.bigmap.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.protobuf.Any;
 
 
-import java.nio.charset.Charset;
 import java.util.HashMap;
-import java.util.Map;
 
 public class PersonIform extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
@@ -365,6 +352,7 @@ public class PersonIform extends AppCompatActivity {
 
     });
     }
+
 
 
 

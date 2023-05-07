@@ -1,9 +1,6 @@
-package com.example.bigmap;
+package com.example.bigmap.bottom;
 
 import android.content.Intent;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.bigmap.R;
 import com.example.bigmap.databinding.FragmentBoardBinding;
+import com.example.bigmap.mypage.mypage_birth_ch;
+import com.example.bigmap.mypage.mypage_email_ch;
+import com.example.bigmap.mypage.mypage_name_ch;
+import com.example.bigmap.mypage.mypage_phonnumCh;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;

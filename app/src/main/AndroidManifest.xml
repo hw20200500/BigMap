@@ -18,15 +18,14 @@
         android:theme="@style/Theme.BigMap"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity android:name=".mypage_birth_ch"
+        <activity android:name=".mypage.mypage_birth_ch"
             android:exported="false"/>
-        <activity android:name=".mypage_email_ch"
+        <activity android:name=".mypage.mypage_email_ch"
             android:exported="false"/>
-        <activity android:name=".mypage_phonnumCh"
+        <activity android:name=".mypage.mypage_phonnumCh"
             android:exported="false"/>
-        <activity android:name=".mypage_name_ch"
+        <activity android:name=".mypage.mypage_name_ch"
             android:exported="false"/>
-
 
         <activity
             android:name=".MainActivity"
@@ -34,37 +33,37 @@
 
         </activity>
         <activity
-            android:name=".WelcomeView"
+            android:name=".login_register.WelcomeView"
             android:exported="false" />
         <activity
-            android:name=".PersonIform"
+            android:name=".login_register.PersonIform"
             android:exported="false" />
         <activity
-            android:name=".UserCheck"
+            android:name=".login_register.UserCheck"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".login_register.Login"
             android:exported="true">
-            <intent-filter>
+             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".board_chat"
+            android:name=".board.board_chat"
             android:exported="false"/>
         <activity
-            android:name=".board_notice"
+            android:name=".board.board_notice"
             android:exported="false"/>
         <activity
-            android:name=".board_qna"
+            android:name=".board.board_qna"
             android:exported="false"/>
         <activity
-            android:name=".board_free"
+            android:name=".board.board_free"
             android:exported="false"/>
         <activity
-            android:name=".board_write"
+            android:name=".board.board_write"
             android:exported="false"/>
     </application>
 
