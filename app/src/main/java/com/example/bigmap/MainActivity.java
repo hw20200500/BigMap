@@ -93,7 +93,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
 
-                int bottomSheetHeight = (int) (bottomSheet.getHeight());
+                int bottomSheetHeight = 400;
+                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    bottomSheetHeight = (int) (bottomSheet.getHeight())-150;
+                }
                 int mainLayoutHeight = screenHeight - bottomSheetHeight;
                 mainLayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
             }
