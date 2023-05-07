@@ -1,8 +1,10 @@
-package com.example.bigmap;
+package com.example.bigmap.board;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.bigmap.R;
 
 public class board_notice extends AppCompatActivity {
 

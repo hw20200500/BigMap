@@ -1,4 +1,4 @@
-package com.example.bigmap;
+package com.example.bigmap.board;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.bigmap.R;
 
 public class board_free extends AppCompatActivity {
 

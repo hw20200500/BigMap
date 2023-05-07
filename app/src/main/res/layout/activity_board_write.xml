@@ -10,7 +10,7 @@
     android:background="#FFFFFF"
     android:orientation="vertical"
     android:weightSum="15"
-    tools:context=".board_write">
+    tools:context=".board.board_write">
 
     <LinearLayout
         android:layout_width="match_parent"

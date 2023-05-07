@@ -6,7 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#E8E8E8"
     android:orientation="vertical"
-    tools:context=".MypageFragment">
+    android:paddingBottom="50dp"
+    tools:context=".bottom.MypageFragment">
 
     <ScrollView
         android:layout_width="match_parent"

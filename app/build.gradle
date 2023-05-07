@@ -13,8 +13,8 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "Api_key", '"aN30ZSiyEh53NXC2wXb4d2gP0cAIuP2S1RTH6X10"'
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -65,6 +65,7 @@ dependencies {
     implementation files('lib/navigation-sdk.aar')
     implementation files('lib/tmap-ui-sdk-1.1.aar')
     implementation files('lib/TmapEngineCommonData.aar')
+    implementation files('lib/tmap-sdk-1.2.aar')
 
     // for vsm sdk
     implementation 'com.google.flatbuffers:flatbuffers-java:1.11.0'
@@ -88,7 +89,7 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.0.7'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
 
-
+    
     implementation 'de.hdodenhof:circleimageview:3.1.0' //Circle ImageView
 
     // Import the Firebase BoM

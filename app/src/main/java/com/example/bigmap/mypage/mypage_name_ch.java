@@ -1,14 +1,16 @@
-package com.example.bigmap;
+package com.example.bigmap.mypage;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class mypage_birth_ch extends AppCompatActivity {
+import com.example.bigmap.R;
+
+public class mypage_name_ch extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mypage_birth_ch);
+        setContentView(R.layout.activity_mypage_name_ch);
     }
 }

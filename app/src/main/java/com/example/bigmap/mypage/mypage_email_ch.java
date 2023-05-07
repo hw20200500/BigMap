@@ -1,8 +1,10 @@
-package com.example.bigmap;
+package com.example.bigmap.mypage;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.bigmap.R;
 
 public class mypage_email_ch extends AppCompatActivity {
 

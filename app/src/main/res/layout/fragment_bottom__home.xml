@@ -11,7 +11,7 @@
     app:behavior_hideable="false"
     app:behavior_peekHeight="120dp"
     app:layout_behavior="@string/bottom_sheet_behavior"
-    tools:context=".Bottom_Home">
+    tools:context=".bottom.Bottom_Home">
 
     <LinearLayout
         android:layout_width="match_parent"
