@@ -407,7 +407,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-    public void searching(View v) {
+    public void searching(View view) {
         Intent intent_searching = new Intent(this, Search.class);
         startActivity(intent_searching);
     }
