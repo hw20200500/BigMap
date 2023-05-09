@@ -1,16 +1,281 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="80dp"
+    android:paddingRight="20dp"
+    android:paddingLeft="20dp"
     android:background="#ffffff"
-    tools:context=".BoardFragment">
+    tools:context=".bottom.BoardFragment"
+    android:orientation="vertical"
+    android:weightSum="16">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
+
+
+    </LinearLayout>
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="25dp"
-        android:text="사용자 건의함(게시판)" />
+        android:layout_height="0dp"
+        android:layout_gravity="center_vertical|left"
+        android:layout_weight="1.6"
+        android:clickable="false"
+        android:text="어떤 게 궁금하신가요?"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.75"
+        android:orientation="vertical"
+        android:weightSum="10">
 
-</FrameLayout>
+        <Button
+            android:id="@+id/notice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="공지"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:background="@android:color/transparent"/>
+        <View
+            android:background="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="5px"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="9"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/notice1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="항목1"
+                android:textSize="15sp"/>
+            <View
+                android:background="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="2px"/>
+            <TextView
+                android:id="@+id/notice2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="항목2"
+                android:textSize="15sp"/>
+            <View
+                android:background="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="2px"/>
+            <TextView
+                android:id="@+id/notice3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="항목3"
+                android:textSize="15sp"/>
+            <View
+                android:background="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="2px"/>
+
+
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.75"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+        <Button
+            android:id="@+id/qna"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="Q&amp;A"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:background="@android:color/transparent"/>
+        <View
+            android:background="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="5px"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="9"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/qna1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="항목1"
+                android:textSize="15sp"/>
+            <View
+                android:background="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="2px"/>
+            <TextView
+                android:id="@+id/qna2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="항목2"
+                android:textSize="15sp"/>
+            <View
+                android:background="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="2px"/>
+            <TextView
+                android:id="@+id/qna3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="항목3"
+                android:textSize="15sp"/>
+            <View
+                android:background="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="2px"/>
+
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4.5"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+        <Button
+            android:id="@+id/free"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="자유게시판"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:background="@android:color/transparent"/>
+        <View
+            android:background="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="5px"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="9"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/free1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:text="항목1"
+                android:textSize="15sp"/>
+            <View
+                android:background="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="2px"/>
+            <TextView
+                android:id="@+id/free2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:text="항목2"
+                android:textSize="15sp"/>
+            <View
+                android:background="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="2px"/>
+            <TextView
+                android:id="@+id/free3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:text="항목3"
+                android:textSize="15sp"/>
+            <View
+                android:background="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="2px"/>
+            <TextView
+                android:id="@+id/free4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:text="항목4"
+                android:textSize="15sp"/>
+            <View
+                android:background="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="2px"/>
+            <TextView
+                android:id="@+id/free5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:text="항목5"
+                android:textSize="15sp"/>
+            <View
+                android:background="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="2px"/>
+
+
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"/>
+
+    <Button
+        android:id="@+id/chat"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.7"
+        android:text="채팅 상담하기"
+        android:textSize="15sp"
+        android:background="@drawable/solid_button"
+        />
+
+
+
+</LinearLayout>
