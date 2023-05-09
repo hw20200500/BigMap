@@ -1,5 +1,6 @@
 package com.example.bigmap;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
@@ -56,7 +58,9 @@ import com.tmapmobility.tmap.tmapsdk.ui.util.TmapUISDK;
 import com.tmapmobility.tmap.tmapsdk.ui.view.MapConstant;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -69,16 +73,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     private NavigationFragment navigationFragment;
-
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
-
     private static final String TAG = "Big_Map";
     private final static String CLIENT_ID = "";
     private final static String API_KEY = BuildConfig.Api_key;
     private final static String USER_KEY = "";
     boolean isEDC;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,79 +156,84 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void onClick1(View view){
-        TMapData tmapdata = new TMapData();
-        String strData = "한남대학교";  //위치 변경할 주소
-        ArrayList<Object> tlist = new ArrayList<>();
-        ArrayList<Object> tlist2 = new ArrayList<>();
+    public void nav_truck(List<Object> poi_search){
 
+        Object search_data = poi_search.get(0);
 
+        ArrayList<Object> search_data_list = new ArrayList<>();
+        Collections.addAll(search_data_list, ((String) search_data).split(","));
+        System.out.println(search_data_list.get(0));
+        System.out.println(search_data_list.get(1));
+        System.out.println(search_data_list.get(2));
 
-        //poi데이터 찾아오는함수 (in tmap-sdk-1.2.arr)
-        tmapdata.findAllPOI(strData, new TMapData.OnFindAllPOIListener() {
+        double longi,lati;
+        longi = Double.parseDouble((String) search_data_list.get(1));
+        lati = Double.parseDouble((String) search_data_list.get(2));
+
+        CarOption carOption = new CarOption();
+        carOption.setCarType(TollCarType.LargeTruck);
+        carOption.setOilType(CarOilType.PremiumGasoline);
+        carOption.setHipassOn(true);
+
+        //트럭 경로 요청 하기 위한 추가 정보
+        HashMap<String, String> truckDetailInfo = new HashMap<>();
+
+        truckDetailInfo.put(TruckInfoKey.TruckType.getValue(), TruckType.Truck.toString());
+        truckDetailInfo.put(TruckInfoKey.TruckWeight.getValue(), "2500.0");    // 단위 kg 화물의 무게
+        truckDetailInfo.put(TruckInfoKey.TruckHeight.getValue(), "420.0");     // 단위 cm 화물차 높이
+        truckDetailInfo.put(TruckInfoKey.TruckWidth.getValue(), "250.0");      // 단위 cm 화물차 너비
+        truckDetailInfo.put(TruckInfoKey.TruckLength.getValue(), "1200.0");    // 단위 cm 화물차 길이
+
+        carOption.setTruckInfo(truckDetailInfo);
+
+        //현재 위치
+        Location currentLocation = SDKManager.getInstance().getCurrentPosition();
+        String currentName = VSMCoordinates.getAddressOffline(currentLocation.getLongitude(), currentLocation.getLatitude());
+
+        WayPoint startPoint = new WayPoint(currentName, new MapPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
+
+        //목적지
+        WayPoint endPoint = new WayPoint(search_data_list.get(0).toString(), new MapPoint(longi,lati), "", RequestConstant.RpFlagCode.UNKNOWN);
+
+        //네비게이션 화면 구성
+        navigationFragment.setCarOption(carOption);
+
+        navigationFragment.setRoutePlanType(RoutePlanType.Traffic_Truck);
+
+        //길안내 코드(시작 지점,null,도착 지점,false or true(false 경로 안내 해줌 true 는 경로 안내 안하고 바로 네비시작),TmapUISDK.RouteRequestListener()
+        navigationFragment.requestRoute(startPoint, null, endPoint, false, new TmapUISDK.RouteRequestListener() {
             @Override
-            public void onFindAllPOI(ArrayList<TMapPOIItem> poiItemList) {
+            public void onSuccess() {
+                Log.e(TAG, "requestRoute Success");
+            }
 
-                for (TMapPOIItem item : poiItemList) {
-//                    Log.e("Poi Item", "name:" + item.getPOIName() + " address:" + item.getPOIAddress()+
-//                            " 위도:" + item.getPOIPoint().getLatitude()+", 경도:"+item.getPOIPoint().getLongitude()
-//                    );
-                    tlist.add(item.getPOIName()+","+item.getPOIPoint().getLatitude()+","+item.getPOIPoint().getLongitude());
-
-                }
-                System.out.println(tlist);
-                System.out.println(tlist.get(0));
-                Object tlist3 = tlist.get(0);//데이터 찾아와보는중
-
+            @Override
+            public void onFail(int i, @Nullable String s) {
+                Toast.makeText(MainActivity.this, i + "::" + s, Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onFail " + i + " :: " + s);
+                Log.e(TAG, "onFail " + i + " :: " + s);
             }
         });
+    }
 
-//        CarOption carOption = new CarOption();
-//        carOption.setCarType(TollCarType.LargeTruck);
-//        carOption.setOilType(CarOilType.PremiumGasoline);
-//        carOption.setHipassOn(true);
-//
-//        //트럭 경로 요청하기 위한 추가 정보
-//        HashMap<String, String> truckDetailInfo = new HashMap<>();
-//        truckDetailInfo.put(TruckInfoKey.TruckType.getValue(), TruckType.Truck.toString());
-//
-//        truckDetailInfo.put(TruckInfoKey.TruckWeight.getValue(), "2500.0");    // 단위 kg 화물의 무게
-//        truckDetailInfo.put(TruckInfoKey.TruckHeight.getValue(), "420.0");     // 단위 cm 화물차 높이
-//        truckDetailInfo.put(TruckInfoKey.TruckWidth.getValue(), "250.0");      // 단위 cm 화물차 너비
-//        truckDetailInfo.put(TruckInfoKey.TruckLength.getValue(), "1200.0");    // 단위 cm 화물차 길이
-//        carOption.setTruckInfo(truckDetailInfo);
-//
-//        //현재 위치
-//        Location currentLocation = SDKManager.getInstance().getCurrentPosition();
-//        String currentName = VSMCoordinates.getAddressOffline(currentLocation.getLongitude(), currentLocation.getLatitude());
-//
-//        WayPoint startPoint = new WayPoint(currentName, new MapPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
-//
-//
-//        //목적지
-//        WayPoint endPoint = new WayPoint("천안cgv", new MapPoint(127.109797, 36.8192206), "", RequestConstant.RpFlagCode.UNKNOWN);
-//        //WayPoint endPoint = new WayPoint("강남역", new MapPoint(127.027813, 37.497999), "280181", (byte) 5);
-//
-//
-//        navigationFragment.setCarOption(carOption);
-//
-//        navigationFragment.setRoutePlanType(RoutePlanType.Traffic_Truck);
-//
-//        //길안내 코드(시작지점,null,도착지점,false or true(false 경로 안내 해줌 true 는 경로 안내 안하고 바로 네비시작),TmapUISDK.RouteRequestListener()
-//        navigationFragment.requestRoute(startPoint, null, endPoint, false, new TmapUISDK.RouteRequestListener() {
-//            @Override
-//            public void onSuccess() {
-//                Log.e(TAG, "requestRoute Success");
-//            }
-//
-//            @Override
-//            public void onFail(int i, @Nullable String s) {
-//                Toast.makeText(MainActivity.this, i + "::" + s, Toast.LENGTH_SHORT).show();
-//                Log.e(TAG, "onFail " + i + " :: " + s);
-//                Log.e(TAG, "onFail " + i + " :: " + s);
-//            }
-//        });
+    public void onClick1(View view){
+        TMapData tmapdata = new TMapData();
+        String strData = "천안시청";  //위치 변경할 주소 (검색창에서 여기로 데이터로 전송하면됨)
 
+        tmapdata.findAllPOI(strData, poiItemList -> {
+            List<Object> poiList = new ArrayList<>();
+
+            for (TMapPOIItem item : poiItemList) {
+                Log.d("Poi Item", "name:" + item.getPOIName() + " address:" + item.getPOIAddress()+
+                        " 위도:" + item.getPOIPoint().getLatitude()+", 경도:"+item.getPOIPoint().getLongitude()/*+" 거리:"+item.getDistance(tMapPoint)*/
+                );
+                poiList.add(item.getPOIName()+","+item.getPOIPoint().getLongitude()+","+item.getPOIPoint().getLatitude());
+            }
+            // selectDataList에 데이터 추가
+            runOnUiThread(() -> {
+                nav_truck(poiList);
+            });
+        });
     }
 
     private void checkPermission() {
@@ -261,7 +267,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -278,6 +283,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initUI() {
+
+
         fragmentManager = getSupportFragmentManager();
 
         navigationFragment = TmapUISDK.Companion.getFragment();
@@ -399,7 +406,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+    }
+    public void searching(View v) {
+        Intent intent_searching = new Intent(this, Search.class);
+        startActivity(intent_searching);
     }
 
 }

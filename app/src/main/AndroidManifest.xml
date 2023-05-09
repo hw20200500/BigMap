@@ -2,11 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -18,16 +18,24 @@
         android:theme="@style/Theme.BigMap"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity android:name=".board.board_chat"
-            android:exported="false"/>
-        <activity android:name=".board.board_free"
-            android:exported="false"/>
-        <activity android:name=".board.board_notice"
-            android:exported="false"/>
-        <activity android:name=".board.board_qna"
-            android:exported="false"/>
-        <activity android:name=".board.board_write"
-            android:exported="false"/>
+        <activity
+            android:name=".Search"
+            android:exported="false" />
+        <activity
+            android:name=".board.board_chat"
+            android:exported="false" />
+        <activity
+            android:name=".board.board_free"
+            android:exported="false" />
+        <activity
+            android:name=".board.board_notice"
+            android:exported="false" />
+        <activity
+            android:name=".board.board_qna"
+            android:exported="false" />
+        <activity
+            android:name=".board.board_write"
+            android:exported="false" />
         <activity
             android:name=".mypage.mypage_birth_ch"
             android:exported="false" />
@@ -42,9 +50,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".login_register.WelcomeView"
             android:exported="false" />
