@@ -21,6 +21,10 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.bigmap.bottom.BoardFragment;
+import com.example.bigmap.bottom.Bottom_Favorite;
+import com.example.bigmap.bottom.Bottom_Home;
+import com.example.bigmap.bottom.MypageFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.skt.tmap.TMapData;
