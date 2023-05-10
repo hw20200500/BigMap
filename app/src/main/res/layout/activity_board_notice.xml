@@ -64,10 +64,11 @@
                 android:layout_gravity="center_vertical">
                 <TextView
                     android:id="@+id/view_title"
-                    android:layout_width="330dp"
+                    android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:text="여기는 제목입니다."
                     android:textSize="20sp"
+                    android:layout_marginBottom="5dp"
                     android:textColor="@color/black"
                     android:textStyle="bold"/>
                 <LinearLayout
@@ -95,7 +96,9 @@
             <View
                 android:background="@color/black"
                 android:layout_width="wrap_content"
-                android:layout_height="2px"/>
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_height="3px"/>
 
         </LinearLayout>
 

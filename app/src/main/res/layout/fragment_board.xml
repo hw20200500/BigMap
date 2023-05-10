@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="80dp"
     android:paddingRight="20dp"
     android:paddingLeft="20dp"
     android:background="#ffffff"
@@ -37,7 +36,7 @@
         android:orientation="vertical"
         android:weightSum="10">
 
-        <Button
+        <TextView
             android:id="@+id/notice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,7 +54,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_weight="9"
             android:orientation="vertical"
             >
@@ -65,6 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:layout_marginBottom="5dp"
                 android:text="항목1"
                 android:textSize="15sp"/>
             <View
@@ -76,6 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:layout_marginBottom="5dp"
                 android:text="항목2"
                 android:textSize="15sp"/>
             <View
@@ -87,6 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:layout_marginBottom="5dp"
                 android:text="항목3"
                 android:textSize="15sp"/>
             <View
@@ -109,7 +110,7 @@
         android:orientation="vertical"
         android:weightSum="10">
 
-        <Button
+        <TextView
             android:id="@+id/qna"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -127,7 +128,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_weight="9"
             android:orientation="vertical"
             >
@@ -137,6 +137,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:layout_marginBottom="5dp"
                 android:text="항목1"
                 android:textSize="15sp"/>
             <View
@@ -148,6 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:layout_marginBottom="5dp"
                 android:text="항목2"
                 android:textSize="15sp"/>
             <View
@@ -159,6 +161,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:layout_marginBottom="5dp"
                 android:text="항목3"
                 android:textSize="15sp"/>
             <View
@@ -179,7 +182,7 @@
         android:orientation="vertical"
         android:weightSum="10">
 
-        <Button
+        <TextView
             android:id="@+id/free"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -198,7 +201,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_weight="9"
             android:orientation="vertical">
             <TextView
@@ -206,6 +208,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.2"
+                android:layout_marginBottom="5dp"
                 android:text="항목1"
                 android:textSize="15sp"/>
             <View
@@ -217,6 +220,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.2"
+                android:layout_marginBottom="5dp"
                 android:text="항목2"
                 android:textSize="15sp"/>
             <View
@@ -228,6 +232,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.2"
+                android:layout_marginBottom="5dp"
                 android:text="항목3"
                 android:textSize="15sp"/>
             <View
@@ -239,6 +244,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.2"
+                android:layout_marginBottom="5dp"
                 android:text="항목4"
                 android:textSize="15sp"/>
             <View
@@ -250,6 +256,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.2"
+                android:layout_marginBottom="5dp"
                 android:text="항목5"
                 android:textSize="15sp"/>
             <View
@@ -265,16 +272,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.5"/>
 
-    <Button
-        android:id="@+id/chat"
-        android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.7"
-        android:text="채팅 상담하기"
-        android:textSize="15sp"
-        android:background="@drawable/solid_button"
-        />
+
 
 
 
