@@ -4,89 +4,83 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login">
+    android:padding="20dp"
+    tools:context=".login_register.Login">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:textSize="65dp"
-        android:textStyle="bold"
+        android:adjustViewBounds="true"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/buttom_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/welcome_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/login_welcome_world"
         app:layout_constraintBottom_toTopOf="@+id/login_table"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        app:layout_constraintVertical_bias="0.5" />
 
-    <TableLayout
+    <LinearLayout
         android:id="@+id/login_table"
-        android:layout_width="327dp"
-        android:layout_height="88dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:gravity="center_horizontal"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/welcome_text"
         app:layout_constraintVertical_bias="0.42000002"
         tools:ignore="MissingConstraints">
 
-        <TableRow
+        <EditText
+            android:id="@+id/userEmail"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="  e-mail"
+            android:inputType="textEmailAddress" />
 
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/userimage" />
-
-            <EditText
-                android:id="@+id/userEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="  e-mail"
-                android:inputType="textEmailAddress" />
-
-        </TableRow>
-
-        <TableRow
+        <EditText
+            android:id="@+id/userPassword"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="  비밀번호"
+            android:inputType="textPassword" />
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                app:srcCompat="@android:drawable/ic_lock_lock" />
-
-            <EditText
-                android:id="@+id/userPassword"
-                android:layout_width="283dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="  비밀번호"
-                android:inputType="textPassword" />
-        </TableRow>
-
-    </TableLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/button_login"
-        android:layout_width="327dp"
-        android:layout_height="45dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
         android:layout_marginTop="10dp"
         android:text="로그인"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_table" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="327dp"
+        android:layout_width="match_parent"
         android:layout_height="42dp"
+        android:layout_marginHorizontal="10dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,10 +90,11 @@
             android:id="@+id/button_find_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:backgroundTint="#FFFFFF"
             android:text="아이디 찾기"
-            android:textColor="#003300"/>
+            android:textColor="#003300" />
 
         <Button
             android:id="@+id/button_find_pw"
@@ -109,15 +104,29 @@
             android:backgroundTint="#FFFFFF"
             android:text="비밀번호 찾기"
             android:textColor="#003300" />
-
-        <Button
-            android:id="@+id/button_new_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#FFFFFF"
-            android:text="회원가입"
-            android:textColor="#6200ED" />
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/login_areyou_world"
+        android:layout_marginVertical="10dp"
+        app:layout_constraintBottom_toTopOf="@id/button_new_user"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button_new_user"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:layout_weight="1"
+        android:background="@drawable/login_register_world"
+        android:backgroundTint="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

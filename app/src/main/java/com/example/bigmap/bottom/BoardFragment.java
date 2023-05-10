@@ -1,24 +1,30 @@
-package com.example.bigmap;
+package com.example.bigmap.bottom;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.example.bigmap.R;
+import com.example.bigmap.board.board_chat;
+import com.example.bigmap.board.board_free;
+import com.example.bigmap.board.board_notice;
+import com.example.bigmap.board.board_qna;
 import com.example.bigmap.databinding.FragmentBoardBinding;
 
 
 public class BoardFragment extends Fragment {
     private View view;
 
+   //사용자 건의함 페이지
 
-    //마이페이지
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

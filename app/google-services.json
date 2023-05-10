@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "882475617799",
+    "firebase_url": "https://bigmap-5f377-default-rtdb.firebaseio.com",
+    "project_id": "bigmap-5f377",
+    "storage_bucket": "bigmap-5f377.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882475617799:android:fd76d410d213a82efd24a2",
+        "android_client_info": {
+          "package_name": "com.example.bigmap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "882475617799-n7652udqq0f989ujd4f8ljq54rbh3a00.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bigmap",
+            "certificate_hash": "c192b0f6e36f8378885905df7f7dc484f01dc6e7"
+          }
+        },
+        {
+          "client_id": "882475617799-4boheqonpauc59c9pf0upekrqeqj4htg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2OVLye9n9jqPJOcRiEyCRKH1Q1jASEC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "882475617799-4boheqonpauc59c9pf0upekrqeqj4htg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

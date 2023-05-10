@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="20dp"
     android:orientation="vertical"
-    tools:context=".mypage_phonnumCh">
+    tools:context=".mypage.mypage_phonnumCh">
 
     <TextView
         android:layout_width="wrap_content"

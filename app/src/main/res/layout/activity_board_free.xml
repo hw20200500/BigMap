@@ -7,7 +7,11 @@
     android:layout_marginRight="20dp"
     android:layout_marginBottom="80dp"
     android:background="#ffffff"
+<<<<<<< HEAD
     tools:context=".board_free"
+=======
+    tools:context=".board.board_free"
+>>>>>>> origin/merge
     android:orientation="vertical"
     android:weightSum="9">
 
