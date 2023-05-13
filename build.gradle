@@ -3,6 +3,8 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        // libphonenumber 저장소 추가
+        mavenCentral()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.4.2"

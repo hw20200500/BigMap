@@ -1,11 +1,14 @@
 package com.example.bigmap.login_register;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,24 +20,42 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-//import com.example.bigmap.databinding.ActivityPersonIformBinding;
+
+import com.example.bigmap.MainActivity;
 import com.example.bigmap.R;
+import com.example.bigmap.databinding.ActivityPersonIformBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
+
 
 public class PersonIform extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallBacks;
+    private ActivityPersonIformBinding binding;
+    private String verificationId;
+    private String mVerificationId;
+    private String mResendToken;
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks verificationCallbacks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +71,7 @@ public class PersonIform extends AppCompatActivity {
         EditText editUserMail = findViewById(R.id.userEmail);
         EditText editUserName = findViewById(R.id.userName);
         EditText editUserPhoneNum = findViewById(R.id.userPhoneNum);
-        EditText PhoneCertifNum = findViewById(R.id.phoneCertif_Num);
+        EditText editPhoneCertifNum = findViewById(R.id.phoneCertif_Num);
         EditText userpw = findViewById(R.id.userPassword);
         EditText userpw_check = findViewById(R.id.user_pw_check);
         Spinner spinnerY = findViewById(R.id.userBirth_year);
@@ -70,6 +91,7 @@ public class PersonIform extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position!=0) {
+                    if (editUserMail.length()!=0) editUserMail.getText().clear();
                     editUserMail.append(spinnermails.getSelectedItem().toString());
 //                    binding.userEmail.append(spinnermails.getSelectedItem().toString());
                 }
@@ -182,82 +204,173 @@ public class PersonIform extends AppCompatActivity {
             }
         });
 
+        firebaseAuth.getFirebaseAuthSettings().setAppVerificationDisabledForTesting(true);
         editUserPhoneNum.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 //        binding.userPhoneNum.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 //        EditText phoneNumber = findViewById(R.id.userPhoneNum);
-        Button buttonSend = (Button) findViewById(R.id.button_phoneCertif);
-
+        Button buttonSend = (Button) findViewById(R.id.button_num_send);
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                /*ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.SMS_SEND},Permission_REQUEST_SMS);*/
+            public void onClick(View view) {
+                String userPhoneNum = editUserPhoneNum.getText().toString().trim();
+                // '-' 제거
+                String mWithoutDash = userPhoneNum.replace("-", "");
+
+                // 맨 앞에 있는 '1' 제거
+//                String result = mWithoutDash.replaceFirst("0", "");
+                String phonnum = mWithoutDash;
+
+
+                String phoneNumber = mWithoutDash;
+
+                sendVerificationCode(phonnum);
+                // 전화번호 인증 요청
+                /*PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                        phoneNumber,
+                        60,
+                        TimeUnit.SECONDS,
+                        PersonIform.this,
+                        verificationCallbacks
+                );*/
             }
         });
+        Button buttonCertif = (Button) findViewById(R.id.button_certif);
+        buttonCertif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String verificationCode = editPhoneCertifNum.getText().toString();
+                verifyPhoneNumberWithCode(verificationCode);
+            }
+        });
+
+        verificationCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                // 자동 인증이 완료된 경우 처리
+                String code = phoneAuthCredential.getSmsCode();
+                if (code != null) {
+                    editPhoneCertifNum.setText(code);
+                    verifyPhoneNumberWithCode(code);
+                }
+            }
+
+            @Override
+            public void onVerificationFailed(@NonNull FirebaseException e) {
+                // 인증 실패 처리
+                Log.d(TAG, "get failed with "+ e.getMessage());
+                Toast.makeText(PersonIform.this, "실패: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                // 인증번호가 전송된 경우 처리
+                verificationId = s;
+                Toast.makeText(PersonIform.this, "인증번호가 전송되었습니다", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+
+
+
+
+                /*firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber(phoneNumber, smsCode);
+                PhoneAuthOptions options = PhoneAuthOptions.newBuilder(firebaseAuth)
+                        .setPhoneNumber(phoneNumber)
+                        .setTimeout(60L, TimeUnit.SECONDS)
+                        .setActivity(PersonIform.this)
+                        .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                            @Override
+                            public void onCodeSent(@NonNull String verificationId,
+                                                   @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                                // Save the verification id somewhere
+                                // ...
+
+                                // The corresponding whitelisted code above should be used to complete sign-in.
+                                PersonIform.this.enableUserManuallyInputCode();
+                            }
+
+                            @Override
+                            public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                                // Sign in with the credential
+                                // ...
+                            }
+
+                            @Override
+                            public void onVerificationFailed(@NonNull FirebaseException e) {
+                                // ...
+                            }
+                        })
+                        .build();
+                PhoneAuthProvider.verifyPhoneNumber(options);*/
+
+        Button buttoncancel = (Button) findViewById(R.id.button_cancel);
+        buttoncancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_cancel = new Intent(PersonIform.this, Login.class);
+                startActivity(intent_cancel);
+            }
+        });
+
 
         Button buttonPIFinsh = (Button) findViewById(R.id.button_PI_Finish);
         //회원가입 버튼 클릭: EditText가 모두 채워지지 않았다면 '~을 작성하세요' 문구 출력, 그렇지 않으면 파이어베이스 사용자 정보 및 데이터베이스(파이어스토어)에 회원 정보 저장
         buttonPIFinsh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (editUserMail.length() != 0 && editUserName.length() != 0 && editUserPhoneNum.length() != 0 && PhoneCertifNum.length() != 0 && userpw.length() != 0 && userpw_check.length() != 0 && spinnerD.getSelectedItemPosition() != 0 && spinnerM.getSelectedItemPosition() != 0 && spinnerY.getSelectedItemPosition() != 0) {
+                if (editUserMail.length() != 0 && editUserName.length() != 0 && userpw.length() != 0 && userpw_check.length() != 0 && spinnerD.getSelectedItemPosition() != 0 && spinnerM.getSelectedItemPosition() != 0 && spinnerY.getSelectedItemPosition() != 0&& editUserPhoneNum.length() != 0 && editPhoneCertifNum.length() != 0) {
                    buttonPIFinsh.setEnabled(true);
 
                             //signup(); edittext정보 문자화해서 변수에 저장
-                            String userEmail = editUserMail.getText().toString();
-                            String userPassword = userpw.getText().toString();
-                            String userName = editUserName.getText().toString();
-                            int userBirth_year = Integer.parseInt(spinnerY.getSelectedItem().toString());
-                            int userBirth_month = Integer.parseInt(spinnerM.getSelectedItem().toString());
-                            int userBirth_day = Integer.parseInt(spinnerD.getSelectedItem().toString());
+                    String userEmail = editUserMail.getText().toString();
+                    String userPassword = userpw.getText().toString();
+                    String userName = editUserName.getText().toString();
+
+                    int userBirth_year = Integer.parseInt(spinnerY.getSelectedItem().toString());
+                    int userBirth_month = Integer.parseInt(spinnerM.getSelectedItem().toString());
+                    int userBirth_day = Integer.parseInt(spinnerD.getSelectedItem().toString());
                             /*String userBirth_year = spinnerY.getSelectedItem().toString().trim();
                             String userBirth_month = spinnerM.getSelectedItem().toString().trim();
                             String userBirth_day = spinnerD.getSelectedItem().toString().trim();*/
-                            String userPhoneNum = editUserPhoneNum.getText().toString().trim();
+                    String userPhoneNum = editUserPhoneNum.getText().toString().trim();
 
 
-                            //파이어베이스에 신규계정 등록하기
-                            firebaseAuth.createUserWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(PersonIform.this, new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                    //파이어베이스에 신규계정 등록하기
+                    firebaseAuth.createUserWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(PersonIform.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
 
-                                        //가입 성공시
-                                        if (task.isSuccessful()) {
+                                    //가입 성공시
+                                    if (task.isSuccessful()) {
 
-                                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                                            String email = user.getEmail();
-                                            String uid = user.getUid();
-
-
-                                            //해쉬맵 테이블을 파이어베이스 데이터베이스(파이어스토어)에 저장
-                                            HashMap<Object,Object> hashMap = new HashMap<>();
-
-                                            hashMap.put("email",email);
-                                            hashMap.put("password",userPassword);
-                                            hashMap.put("name",userName);
-                                            hashMap.put("birth_year",userBirth_year);
-                                            hashMap.put("birth_month",userBirth_month);
-                                            hashMap.put("birth_day",userBirth_day);
-                                            hashMap.put("phone_number",userPhoneNum);
-                                            hashMap.put("uid",uid);
+                                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                                        String email = user.getEmail();
+                                        String uid = user.getUid();
 
 
+                                        //해쉬맵 테이블을 파이어베이스 데이터베이스(파이어스토어)에 저장
+                                        HashMap<Object,Object> hashMap = new HashMap<>();
 
-
-//                                            FirebaseDatabase database = FirebaseDatabase.getInstance();
-//                                            DatabaseReference reference = database.getReference("Users");
-//                                            reference.child(userName).setValue(hashMap);
-
+                                        hashMap.put("email",email);
+                                        hashMap.put("password",userPassword);
+                                        hashMap.put("name",userName);
+                                        hashMap.put("birth_year",userBirth_year);
+                                        hashMap.put("birth_month",userBirth_month);
+                                        hashMap.put("birth_day",userBirth_day);
+                                        hashMap.put("phone_number",userPhoneNum);
+                                        hashMap.put("uid",uid);
                                             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
                                             firestore.collection("사용자DB").document(email).set(hashMap);
 
 
                                             //가입이 이루어져을시 가입 화면을 빠져나감.
-                                            Intent intent = new Intent(PersonIform.this, Login.class);
+                                            Toast.makeText(PersonIform.this, "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(PersonIform.this, PersonIform.class);
                                             startActivity(intent);
                                             finish();
-                                            Toast.makeText(PersonIform.this, "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show();
 
                                         } else {
+                                            Log.d(TAG, "get failed with ", task.getException());
                                             Toast.makeText(PersonIform.this, "회원가입 실패", Toast.LENGTH_SHORT).show();
                                             return;  //해당 메소드 진행을 멈추고 빠져나감.
 
@@ -333,14 +446,6 @@ public class PersonIform extends AppCompatActivity {
                                     } else {
                                         if (spinnerD.getSelectedItemPosition() == 0 || spinnerM.getSelectedItemPosition() == 0 || spinnerY.getSelectedItemPosition() == 0) {
                                             Toast.makeText(getApplicationContext(), "생년월일을 선택해주세요.", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            if (editUserPhoneNum.length() == 0) {
-                                                Toast.makeText(getApplicationContext(), "휴대전화 번호를 작성해주세요.", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                if (PhoneCertifNum.length() == 0) {
-                                                    Toast.makeText(getApplicationContext(), "휴대전화를 인증해주세요.", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
                                         }
                                     }
                                 }
@@ -351,6 +456,125 @@ public class PersonIform extends AppCompatActivity {
             }
 
     });
+    }
+    private void sendVerificationCode(String phoneNumber) {
+        try {
+            // 전화번호 유효성 검사 및 E.164 형식으로 변환
+            PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+            Phonenumber.PhoneNumber number = phoneNumberUtil.parse(phoneNumber, "KR"); // 국가 코드에 맞게 변경 필요
+            String formattedPhoneNumber = phoneNumberUtil.format(number, PhoneNumberUtil.PhoneNumberFormat.E164);
+            Toast.makeText(PersonIform.this, formattedPhoneNumber, Toast.LENGTH_SHORT).show();
+
+            // Firebase 인증 요청
+            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                    formattedPhoneNumber,
+                    60,
+                    TimeUnit.SECONDS,
+                    PersonIform.this,
+                    verificationCallbacks
+            );
+        } catch (NumberParseException e) {
+            e.printStackTrace();
+            // 전화번호 형식이 잘못된 경우 에러 처리
+        }
+    }
+
+    private void verifyPhoneNumberWithCode(String verificationCode) {
+        // 사용자가 입력한 인증번호와 Firebase에 전송된 인증번호 일치 여부 확인
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, verificationCode);
+        signInWithPhoneAuthCredential(credential);
+    }
+
+    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        // Firebase 인증 진행
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(PersonIform.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // 인증 성공
+                            Toast.makeText(PersonIform.this, "인증 성공", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // 인증 실패
+                            Log.d(TAG, "get failed with ", task.getException());
+                            Toast.makeText(PersonIform.this, "fail: "+task.getException(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+    private void mCallBacks() {
+
+        mCallBacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+            @Override
+            public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
+                // This callback will be invoked in two situations:
+                // 1 - Instant verification. In some cases the phone number can be instantly
+                //     verified without needing to send or enter a verification code.
+                // 2 - Auto-retrieval. On some devices Google Play services can automatically
+                //     detect the incoming verification SMS and perform verification without
+                //     user action.
+                Log.d(TAG, "onVerificationCompleted:" + credential);
+
+                signInWithPhoneAuthCredential(credential);
+            }
+
+            @Override
+            public void onVerificationFailed(@NonNull FirebaseException e) {
+                // This callback is invoked in an invalid request for verification is made,
+                // for instance if the the phone number format is not valid.
+                Log.w(TAG, "onVerificationFailed", e);
+
+                if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                    // Invalid request
+                } else if (e instanceof FirebaseTooManyRequestsException) {
+                    // The SMS quota for the project has been exceeded
+                } else if (e instanceof FirebaseAuthMissingActivityForRecaptchaException) {
+                    // reCAPTCHA verification attempted with null Activity
+                }
+
+                // Show a message and update the UI
+            }
+
+            @Override
+            public void onCodeSent(@NonNull String verificationId,
+                                   @NonNull PhoneAuthProvider.ForceResendingToken token) {
+                // The SMS verification code has been sent to the provided phone number, we
+                // now need to ask the user to enter the code and then construct a credential
+                // by combining the code with a verification ID.
+                Log.d(TAG, "onCodeSent:" + verificationId);
+
+                // Save verification ID and resending token so we can use them later
+                mVerificationId = verificationId;
+                mResendToken = String.valueOf(token);
+            }
+        };
+        /*mCallBacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                signInProcess(phoneAuthCredential);
+                String sms = phoneAuthCredential.getSmsCode();
+                System.err.println("Check!!!!!!!!!!!!!!! "+sms);
+                if (sms != null){
+                    binding.otpView.setText(sms);
+                }
+            }
+            @Override
+            public void onVerificationFailed(@NonNull FirebaseException e) {
+                Toast.makeText(PersonIform.this, "OTPError "+e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+            @Override
+            public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                super.onCodeSent(s, forceResendingToken);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        verificationId = s;
+                        System.out.println("Verification Id : !!!!!! "+verificationId);
+                    }
+                }, 10000);
+            }
+        };*/
     }
 
 

@@ -110,5 +110,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:10.2.1'
     implementation 'com.google.firebase:firebase-analytics:10.2.1'
     implementation 'com.google.firebase:firebase-database:20.2.1'
+    // libphonenumber 의존성 추가
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.35'
 
 }

@@ -153,7 +153,7 @@ public class Login extends AppCompatActivity {
         newuserButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), UserCheck.class);
+                Intent intent = new Intent(getApplicationContext(), PersonIform.class);
                 startActivity(intent);
             }
         });
