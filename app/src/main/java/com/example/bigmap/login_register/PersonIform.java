@@ -371,7 +371,7 @@ public class PersonIform extends AppCompatActivity {
 
                                             //가입이 이루어져을시 가입 화면을 빠져나감.
                                             Toast.makeText(PersonIform.this, "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(PersonIform.this, Login.class);
+                                            Intent intent = new Intent(PersonIform.this, WelcomeView.class);
                                             startActivity(intent);
                                             finish();
 
