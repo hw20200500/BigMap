@@ -41,579 +41,985 @@
         android:layout_height="10dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/gradient_shadow"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="최근 검색어"
-        android:textSize="18dp"
-        android:textColor="#aaaaaa"
-        android:textStyle="bold"
-        android:layout_marginVertical="10dp"
-        android:layout_marginHorizontal="20dp"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="10dp"
-        android:background="#cccccc"/>
 
     <LinearLayout
-        android:id="@+id/recent_search_layout1"
+        android:id="@+id/loc_inform_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:orientation="vertical">
-        <LinearLayout
 
+        <LinearLayout
+            android:id="@+id/loc_inform_layout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="5dp"
-            android:gravity="center_vertical"
             android:clickable="true"
             android:onClick="go_location"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+            <LinearLayout
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/search_location_icon"
-                app:tint="@color/main_blue"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/recent_search_text1"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="20"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:text="05.08."
-                android:layout_weight="1.2"/>
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/login_x"
-                app:tint="#bbbbbb"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
                 android:clickable="true"
-                android:onClick="delete_text"
-                android:layout_weight="1"/>
+                android:onClick="go_location"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/search_location_icon"
+                    app:tint="@color/main_blue"
+                    android:layout_weight="1"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="20"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/loc_inform_text1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="한남대"/>
+                    <TextView
+                        android:id="@+id/loc_inform_detail1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="대전광역시 대덕구 한남로 70 한남대학교"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginVertical="5dp"
+                        android:textSize="13dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="60"
+                    android:gravity="right"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/loc_categ1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18dp"
+                        android:text="대학교"
+                        />
+                    <TextView
+                        android:id="@+id/dist1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="339m"
+                        android:layout_margin="5dp"
+                        android:textSize="18dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#cccccc"/>
         </LinearLayout>
 
-        <View
+        <LinearLayout
+            android:id="@+id/loc_inform_layout2"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="10dp"
-            android:background="#cccccc"/>
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="go_location"
+            android:orientation="vertical">
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:onClick="go_location"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/search_location_icon"
+                    app:tint="@color/main_blue"
+                    android:layout_weight="1"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="20"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/loc_inform_text2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="한남대"/>
+                    <TextView
+                        android:id="@+id/loc_inform_detail2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="대전광역시 대덕구 한남로 70 한남대학교"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginVertical="5dp"
+                        android:textSize="13dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="60"
+                    android:gravity="right"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/loc_categ2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18dp"
+                        android:text="대학교"
+                        />
+                    <TextView
+                        android:id="@+id/dist2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="339m"
+                        android:layout_margin="5dp"
+                        android:textSize="18dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#cccccc"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/loc_inform_layout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="go_location"
+            android:orientation="vertical">
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:onClick="go_location"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/search_location_icon"
+                    app:tint="@color/main_blue"
+                    android:layout_weight="1"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="20"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/loc_inform_text3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="한남대"/>
+                    <TextView
+                        android:id="@+id/loc_inform_detail3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="대전광역시 대덕구 한남로 70 한남대학교"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginVertical="5dp"
+                        android:textSize="13dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="60"
+                    android:gravity="right"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/loc_categ3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18dp"
+                        android:text="대학교"
+                        />
+                    <TextView
+                        android:id="@+id/dist3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="339m"
+                        android:layout_margin="5dp"
+                        android:textSize="18dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#cccccc"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/loc_inform_layout4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="go_location"
+            android:orientation="vertical">
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:onClick="go_location"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/search_location_icon"
+                    app:tint="@color/main_blue"
+                    android:layout_weight="1"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="20"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/loc_inform_text4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="한남대"/>
+                    <TextView
+                        android:id="@+id/loc_inform_detail4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="대전광역시 대덕구 한남로 70 한남대학교"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginVertical="5dp"
+                        android:textSize="13dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="60"
+                    android:gravity="right"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/loc_categ4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18dp"
+                        android:text="대학교"
+                        />
+                    <TextView
+                        android:id="@+id/dist4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="339m"
+                        android:layout_margin="5dp"
+                        android:textSize="18dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#cccccc"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/loc_inform_layout5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="go_location"
+            android:orientation="vertical">
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:onClick="go_location"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/search_location_icon"
+                    app:tint="@color/main_blue"
+                    android:layout_weight="1"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="20"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/loc_inform_text5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="한남대"/>
+                    <TextView
+                        android:id="@+id/loc_inform_detail5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="대전광역시 대덕구 한남로 70 한남대학교"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginVertical="5dp"
+                        android:textSize="13dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="60"
+                    android:gravity="right"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/loc_categ5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18dp"
+                        android:text="대학교"
+                        />
+                    <TextView
+                        android:id="@+id/dist5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="339m"
+                        android:layout_margin="5dp"
+                        android:textSize="18dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#cccccc"/>
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/recent_search_layout2"
+        android:id="@+id/recent_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <LinearLayout
 
-            android:layout_width="match_parent"
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="5dp"
-            android:gravity="center_vertical"
-            android:clickable="true"
-            android:onClick="go_location"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/search_location_icon"
-                app:tint="@color/main_blue"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/recent_search_text2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:layout_marginLeft="5dp"
-                android:text="한남대"
-                android:layout_weight="20"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:text="05.08."
-                android:layout_weight="1.2"/>
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/login_x"
-                app:tint="#bbbbbb"
-                android:clickable="true"
-                android:onClick="delete_text"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
+            android:text="최근 검색어"
+            android:textSize="18dp"
+            android:textColor="#aaaaaa"
+            android:textStyle="bold"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginVertical="10dp"
+            android:layout_marginBottom="10dp"
             android:background="#cccccc"/>
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/recent_search_layout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
         <LinearLayout
-
+            android:id="@+id/recent_search_layout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="5dp"
-            android:gravity="center_vertical"
-            android:clickable="true"
-            android:onClick="go_location"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+            <LinearLayout
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/search_location_icon"
-                app:tint="@color/main_blue"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/recent_search_text3"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:layout_marginLeft="5dp"
-                android:text="한남대"
-                android:layout_weight="20"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:text="05.08."
-                android:layout_weight="1.2"/>
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/login_x"
-                app:tint="#bbbbbb"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
                 android:clickable="true"
-                android:onClick="delete_text"
-                android:layout_weight="1"/>
+                android:onClick="go_location"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/search_location_icon"
+                    app:tint="@color/main_blue"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/recent_search_text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="한남대"
+                    android:layout_weight="20"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="05.08."
+                    android:layout_weight="1.2"/>
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/login_x"
+                    app:tint="#bbbbbb"
+                    android:clickable="true"
+                    android:onClick="delete_text"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#cccccc"/>
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="10dp"
-            android:background="#cccccc"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/recent_search_layout4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
         <LinearLayout
-
+            android:id="@+id/recent_search_layout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="5dp"
-            android:gravity="center_vertical"
-            android:clickable="true"
-            android:onClick="go_location"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+            <LinearLayout
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/search_location_icon"
-                app:tint="@color/main_blue"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/recent_search_text4"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:layout_marginLeft="5dp"
-                android:text="한남대"
-                android:layout_weight="20"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:text="05.08."
-                android:layout_weight="1.2"/>
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/login_x"
-                app:tint="#bbbbbb"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
                 android:clickable="true"
-                android:onClick="delete_text"
-                android:layout_weight="1"/>
+                android:onClick="go_location"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/search_location_icon"
+                    app:tint="@color/main_blue"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/recent_search_text2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="한남대"
+                    android:layout_weight="20"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="05.08."
+                    android:layout_weight="1.2"/>
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/login_x"
+                    app:tint="#bbbbbb"
+                    android:clickable="true"
+                    android:onClick="delete_text"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#cccccc"/>
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="10dp"
-            android:background="#cccccc"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/recent_search_layout5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
         <LinearLayout
-
+            android:id="@+id/recent_search_layout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="5dp"
-            android:gravity="center_vertical"
-            android:clickable="true"
-            android:onClick="go_location"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+            <LinearLayout
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/search_location_icon"
-                app:tint="@color/main_blue"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/recent_search_text5"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:layout_marginLeft="5dp"
-                android:text="한남대"
-                android:layout_weight="20"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:text="05.08."
-                android:layout_weight="1.2"/>
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/login_x"
-                app:tint="#bbbbbb"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
                 android:clickable="true"
-                android:onClick="delete_text"
-                android:layout_weight="1"/>
+                android:onClick="go_location"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/search_location_icon"
+                    app:tint="@color/main_blue"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/recent_search_text3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="한남대"
+                    android:layout_weight="20"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="05.08."
+                    android:layout_weight="1.2"/>
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/login_x"
+                    app:tint="#bbbbbb"
+                    android:clickable="true"
+                    android:onClick="delete_text"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#cccccc"/>
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="10dp"
-            android:background="#cccccc"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/recent_search_layout6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
         <LinearLayout
-
+            android:id="@+id/recent_search_layout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="5dp"
-            android:gravity="center_vertical"
-            android:clickable="true"
-            android:onClick="go_location"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+            <LinearLayout
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/search_location_icon"
-                app:tint="@color/main_blue"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/recent_search_text6"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:layout_marginLeft="5dp"
-                android:text="한남대"
-                android:layout_weight="20"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:text="05.08."
-                android:layout_weight="1.2"/>
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/login_x"
-                app:tint="#bbbbbb"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
                 android:clickable="true"
-                android:onClick="delete_text"
-                android:layout_weight="1"/>
+                android:onClick="go_location"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/search_location_icon"
+                    app:tint="@color/main_blue"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/recent_search_text4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="한남대"
+                    android:layout_weight="20"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="05.08."
+                    android:layout_weight="1.2"/>
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/login_x"
+                    app:tint="#bbbbbb"
+                    android:clickable="true"
+                    android:onClick="delete_text"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#cccccc"/>
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="10dp"
-            android:background="#cccccc"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/recent_search_layout7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
         <LinearLayout
-
+            android:id="@+id/recent_search_layout5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="5dp"
-            android:gravity="center_vertical"
-            android:clickable="true"
-            android:onClick="go_location"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+            <LinearLayout
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/search_location_icon"
-                app:tint="@color/main_blue"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/recent_search_text7"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:layout_marginLeft="5dp"
-                android:text="한남대"
-                android:layout_weight="20"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:text="05.08."
-                android:layout_weight="1.2"/>
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/login_x"
-                app:tint="#bbbbbb"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
                 android:clickable="true"
-                android:onClick="delete_text"
-                android:layout_weight="1"/>
+                android:onClick="go_location"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/search_location_icon"
+                    app:tint="@color/main_blue"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/recent_search_text5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="한남대"
+                    android:layout_weight="20"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="05.08."
+                    android:layout_weight="1.2"/>
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/login_x"
+                    app:tint="#bbbbbb"
+                    android:clickable="true"
+                    android:onClick="delete_text"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#cccccc"/>
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="10dp"
-            android:background="#cccccc"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/recent_search_layout8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
         <LinearLayout
-
+            android:id="@+id/recent_search_layout6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="5dp"
-            android:gravity="center_vertical"
-            android:clickable="true"
-            android:onClick="go_location"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+            <LinearLayout
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/search_location_icon"
-                app:tint="@color/main_blue"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/recent_search_text8"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:layout_marginLeft="5dp"
-                android:text="한남대"
-                android:layout_weight="20"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:text="05.08."
-                android:layout_weight="1.2"/>
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/login_x"
-                app:tint="#bbbbbb"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
                 android:clickable="true"
-                android:onClick="delete_text"
-                android:layout_weight="1"/>
+                android:onClick="go_location"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/search_location_icon"
+                    app:tint="@color/main_blue"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/recent_search_text6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="한남대"
+                    android:layout_weight="20"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="05.08."
+                    android:layout_weight="1.2"/>
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/login_x"
+                    app:tint="#bbbbbb"
+                    android:clickable="true"
+                    android:onClick="delete_text"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#cccccc"/>
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="10dp"
-            android:background="#cccccc"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/recent_search_layout9"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
         <LinearLayout
-
+            android:id="@+id/recent_search_layout7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="5dp"
-            android:gravity="center_vertical"
-            android:clickable="true"
-            android:onClick="go_location"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+            <LinearLayout
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/search_location_icon"
-                app:tint="@color/main_blue"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/recent_search_text9"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:layout_marginLeft="5dp"
-                android:text="한남대"
-                android:layout_weight="20"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:text="05.08."
-                android:layout_weight="1.2"/>
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/login_x"
-                app:tint="#bbbbbb"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
                 android:clickable="true"
-                android:onClick="delete_text"
-                android:layout_weight="1"/>
+                android:onClick="go_location"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/search_location_icon"
+                    app:tint="@color/main_blue"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/recent_search_text7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="한남대"
+                    android:layout_weight="20"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="05.08."
+                    android:layout_weight="1.2"/>
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/login_x"
+                    app:tint="#bbbbbb"
+                    android:clickable="true"
+                    android:onClick="delete_text"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#cccccc"/>
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="10dp"
-            android:background="#cccccc"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/recent_search_layout10"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
         <LinearLayout
-
+            android:id="@+id/recent_search_layout8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="5dp"
-            android:gravity="center_vertical"
-            android:clickable="true"
-            android:onClick="go_location"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+            <LinearLayout
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/search_location_icon"
-                app:tint="@color/main_blue"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/recent_search_text10"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:layout_marginLeft="5dp"
-                android:text="한남대"
-                android:layout_weight="20"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:text="05.08."
-                android:layout_weight="1.2"/>
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/login_x"
-                app:tint="#bbbbbb"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
                 android:clickable="true"
-                android:onClick="delete_text"
-                android:layout_weight="1"/>
+                android:onClick="go_location"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/search_location_icon"
+                    app:tint="@color/main_blue"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/recent_search_text8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="한남대"
+                    android:layout_weight="20"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="05.08."
+                    android:layout_weight="1.2"/>
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/login_x"
+                    app:tint="#bbbbbb"
+                    android:clickable="true"
+                    android:onClick="delete_text"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#cccccc"/>
         </LinearLayout>
 
-        <View
+        <LinearLayout
+            android:id="@+id/recent_search_layout9"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="10dp"
-            android:background="#cccccc"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:onClick="go_location"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/search_location_icon"
+                    app:tint="@color/main_blue"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/recent_search_text9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="한남대"
+                    android:layout_weight="20"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="05.08."
+                    android:layout_weight="1.2"/>
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/login_x"
+                    app:tint="#bbbbbb"
+                    android:clickable="true"
+                    android:onClick="delete_text"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#cccccc"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/recent_search_layout10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:onClick="go_location"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/search_location_icon"
+                    app:tint="@color/main_blue"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/recent_search_text10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="한남대"
+                    android:layout_weight="20"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="05.08."
+                    android:layout_weight="1.2"/>
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/login_x"
+                    app:tint="#bbbbbb"
+                    android:clickable="true"
+                    android:onClick="delete_text"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#cccccc"/>
+        </LinearLayout>
+
     </LinearLayout>
+
 
 
 </LinearLayout>
