@@ -1,5 +1,6 @@
 package com.example.bigmap;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -41,16 +42,34 @@ import com.skt.tmap.engine.navigation.SDKManager;
 import com.skt.tmap.engine.navigation.network.ndds.CarOilType;
 import com.skt.tmap.engine.navigation.network.ndds.TollCarType;
 import com.skt.tmap.engine.navigation.network.ndds.dto.request.TruckType;
+import com.skt.tmap.engine.navigation.route.RoutePlanType;
 import com.skt.tmap.vsm.coordinates.VSMCoordinates;
+import com.skt.tmap.vsm.data.VSMMapPoint;
+import com.skt.tmap.vsm.map.MapEngine;
+import com.skt.tmap.vsm.map.marker.MarkerImage;
+import com.skt.tmap.vsm.map.marker.VSMMarkerBase;
+import com.skt.tmap.vsm.map.marker.VSMMarkerManager;
+import com.skt.tmap.vsm.map.marker.VSMMarkerPoint;
 import com.tmapmobility.tmap.tmapsdk.ui.data.CarOption;
 import com.tmapmobility.tmap.tmapsdk.ui.data.TruckInfoKey;
+import com.tmapmobility.tmap.tmapsdk.ui.fragment.NavigationFragment;
+import com.tmapmobility.tmap.tmapsdk.ui.util.TmapUISDK;
+import com.tmapmobility.tmap.tmapsdk.ui.view.MapConstant;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 public class MainActivity extends AppCompatActivity {
+
+
 
     private NavigationFragment navigationFragment;
     private FragmentManager fragmentManager;
@@ -60,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private final static String API_KEY = BuildConfig.Api_key;
     private final static String USER_KEY = "";
     boolean isEDC;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,6 +267,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -263,8 +284,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initUI() {
-
-
         fragmentManager = getSupportFragmentManager();
 
         navigationFragment = TmapUISDK.Companion.getFragment();
@@ -386,6 +405,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+    public void searching(View view) {
+        Intent intent_searching = new Intent(MainActivity.this, Search.class);
+        startActivity(intent_searching);
     }
 
 }

@@ -25,11 +25,14 @@
     </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="15dp"
         android:gravity="center_vertical"
+        android:clickable="true"
+        android:onClick="searching"
         android:background="@drawable/shape_searchbar"
         android:orientation="horizontal">
 

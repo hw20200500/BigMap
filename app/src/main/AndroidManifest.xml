@@ -2,11 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -18,20 +20,47 @@
         android:theme="@style/Theme.BigMap"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity android:name=".mypage.mypage_birth_ch"
-            android:exported="false"/>
-        <activity android:name=".mypage.mypage_email_ch"
-            android:exported="false"/>
-        <activity android:name=".mypage.mypage_phonnumCh"
-            android:exported="false"/>
-        <activity android:name=".mypage.mypage_name_ch"
-            android:exported="false"/>
-
+        <activity
+            android:name=".mypage.mypage_pw_check"
+            android:exported="false" />
+        <activity
+            android:name=".mypage.mypage_pw_ch"
+            android:exported="false" />
+        <activity
+            android:name=".Search"
+            android:exported="false"
+            android:label="@string/title_activity_search"
+            android:theme="@style/Theme.BigMap.NoActionBar" />
+        <activity
+            android:name=".board.board_chat"
+            android:exported="false" />
+        <activity
+            android:name=".board.board_free"
+            android:exported="false" />
+        <activity
+            android:name=".board.board_notice"
+            android:exported="false" />
+        <activity
+            android:name=".board.board_qna"
+            android:exported="false" />
+        <activity
+            android:name=".board.board_write"
+            android:exported="false" />
+        <activity
+            android:name=".mypage.mypage_birth_ch"
+            android:exported="false" />
+        <activity
+            android:name=".mypage.mypage_email_ch"
+            android:exported="false" />
+        <activity
+            android:name=".mypage.mypage_name_ch"
+            android:exported="false" />
+        <activity
+            android:name=".mypage.mypage_phonnumCh"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".login_register.WelcomeView"
             android:exported="false" />
@@ -44,27 +73,12 @@
         <activity
             android:name=".login_register.Login"
             android:exported="true">
-             <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".board.board_chat"
-            android:exported="false"/>
-        <activity
-            android:name=".board.board_notice"
-            android:exported="false"/>
-        <activity
-            android:name=".board.board_qna"
-            android:exported="false"/>
-        <activity
-            android:name=".board.board_free"
-            android:exported="false"/>
-        <activity
-            android:name=".board.board_write"
-            android:exported="false"/>
     </application>
 
 </manifest>
