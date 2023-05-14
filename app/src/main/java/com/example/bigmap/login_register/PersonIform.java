@@ -2,10 +2,14 @@ package com.example.bigmap.login_register;
 
 import static android.content.ContentValues.TAG;
 
+import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,10 +24,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-import com.example.bigmap.MainActivity;
 import com.example.bigmap.R;
-import com.example.bigmap.databinding.ActivityPersonIformBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -39,23 +43,24 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
 
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
+import java.util.Random;
 
 
 public class PersonIform extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallBacks;
-    private ActivityPersonIformBinding binding;
     private String verificationId;
     private String mVerificationId;
     private String mResendToken;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks verificationCallbacks;
+    private EditText editPhonenum;
+    private String generatedVerificationCode;
+    private EditText verificationCodeEditText;
+    private static final int SMS_PERMISSION_REQUEST_CODE = 1;
+    private int certif_result=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,8 @@ public class PersonIform extends AppCompatActivity {
         Spinner spinnerM = findViewById(R.id.userBirth_month);
         Spinner spinnerD = findViewById(R.id.userBirth_day);
 
+
+
         //이메일 주소 입력
         Spinner spinnermails = findViewById(R.id.Emailaddr);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.emailaddr, android.R.layout.simple_spinner_item);
@@ -91,7 +98,13 @@ public class PersonIform extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position!=0) {
-                    if (editUserMail.length()!=0) editUserMail.getText().clear();
+                    if (editUserMail.length()!=0) {
+                        String editmail = editUserMail.getText().toString();
+                        if (editmail.contains("@")) {
+                            String[] str = editmail.split("@");
+                            editUserMail.setText(str[0]);
+                        }
+                    }
                     editUserMail.append(spinnermails.getSelectedItem().toString());
 //                    binding.userEmail.append(spinnermails.getSelectedItem().toString());
                 }
@@ -170,7 +183,7 @@ public class PersonIform extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                System.out.println("연도를 선택하세요");
+                System.out.println("연도");
             }
         });
 
@@ -185,7 +198,7 @@ public class PersonIform extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                System.out.println("월을 선택하세요");
+                System.out.println("월");
             }
         });
 
@@ -200,7 +213,7 @@ public class PersonIform extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                System.out.println("일을 선택하세요");
+                System.out.println("일");
             }
         });
 
@@ -209,37 +222,61 @@ public class PersonIform extends AppCompatActivity {
 //        binding.userPhoneNum.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 //        EditText phoneNumber = findViewById(R.id.userPhoneNum);
         Button buttonSend = (Button) findViewById(R.id.button_num_send);
+        verificationCodeEditText = findViewById(R.id.phoneCertif_Num);
+        editPhonenum = findViewById(R.id.userPhoneNum);
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String userPhoneNum = editUserPhoneNum.getText().toString().trim();
                 // '-' 제거
                 String mWithoutDash = userPhoneNum.replace("-", "");
+                Random random = new Random();
+                int randomNumber = random.nextInt(999999);
 
-                // 맨 앞에 있는 '1' 제거
-//                String result = mWithoutDash.replaceFirst("0", "");
-                String phonnum = mWithoutDash;
+                // 인증번호 생성
+                generatedVerificationCode = String.valueOf(randomNumber);
 
+                String sms = "[BigMap]\n전화번호 인증코드 : "+generatedVerificationCode;
+                // SMS 전송 권한 확인
+                if (ContextCompat.checkSelfPermission(PersonIform.this, Manifest.permission.SEND_SMS)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // 권한이 없는 경우 권한 요청
+                    ActivityCompat.requestPermissions(PersonIform.this,
+                            new String[]{Manifest.permission.SEND_SMS},
+                            SMS_PERMISSION_REQUEST_CODE);
+                    Toast.makeText(getApplicationContext(),"인증번호 버튼을 한 번 더 눌러주세요.",Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                String phoneNumber = mWithoutDash;
-
-                sendVerificationCode(phonnum);
-                // 전화번호 인증 요청
-                /*PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                        phoneNumber,
-                        60,
-                        TimeUnit.SECONDS,
-                        PersonIform.this,
-                        verificationCallbacks
-                );*/
+                try {
+                    //전송
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(mWithoutDash, null, sms, null, null);
+                    Toast.makeText(getApplicationContext(), "전송 완료!", Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
             }
         });
+
+
         Button buttonCertif = (Button) findViewById(R.id.button_certif);
         buttonCertif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String verificationCode = editPhoneCertifNum.getText().toString();
-                verifyPhoneNumberWithCode(verificationCode);
+                /*String verificationCode = editPhoneCertifNum.getText().toString();
+                verifyPhoneNumberWithCode(verificationCode);*/
+                // 입력된 인증번호 가져오기
+                String userVerificationCode = verificationCodeEditText.getText().toString();
+                // 인증번호 일치 여부 확인
+                if (userVerificationCode.equals(generatedVerificationCode)) {
+                    Toast.makeText(PersonIform.this, "인증 완료", Toast.LENGTH_SHORT).show();
+                    certif_result = 1;
+                } else {
+                    Toast.makeText(PersonIform.this, "인증번호가 다릅니다.", Toast.LENGTH_SHORT).show();
+                    certif_result = 2;
+                }
             }
         });
 
@@ -263,45 +300,14 @@ public class PersonIform extends AppCompatActivity {
 
             @Override
             public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                Random random = new Random();
+                int randomNumber = random.nextInt(999999);
+                s = String.valueOf(randomNumber);
                 // 인증번호가 전송된 경우 처리
                 verificationId = s;
                 Toast.makeText(PersonIform.this, "인증번호가 전송되었습니다", Toast.LENGTH_SHORT).show();
             }
         };
-
-
-
-
-
-                /*firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber(phoneNumber, smsCode);
-                PhoneAuthOptions options = PhoneAuthOptions.newBuilder(firebaseAuth)
-                        .setPhoneNumber(phoneNumber)
-                        .setTimeout(60L, TimeUnit.SECONDS)
-                        .setActivity(PersonIform.this)
-                        .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                            @Override
-                            public void onCodeSent(@NonNull String verificationId,
-                                                   @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                                // Save the verification id somewhere
-                                // ...
-
-                                // The corresponding whitelisted code above should be used to complete sign-in.
-                                PersonIform.this.enableUserManuallyInputCode();
-                            }
-
-                            @Override
-                            public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                                // Sign in with the credential
-                                // ...
-                            }
-
-                            @Override
-                            public void onVerificationFailed(@NonNull FirebaseException e) {
-                                // ...
-                            }
-                        })
-                        .build();
-                PhoneAuthProvider.verifyPhoneNumber(options);*/
 
         Button buttoncancel = (Button) findViewById(R.id.button_cancel);
         buttoncancel.setOnClickListener(new View.OnClickListener() {
@@ -318,7 +324,7 @@ public class PersonIform extends AppCompatActivity {
         buttonPIFinsh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (editUserMail.length() != 0 && editUserName.length() != 0 && userpw.length() != 0 && userpw_check.length() != 0 && spinnerD.getSelectedItemPosition() != 0 && spinnerM.getSelectedItemPosition() != 0 && spinnerY.getSelectedItemPosition() != 0&& editUserPhoneNum.length() != 0 && editPhoneCertifNum.length() != 0) {
+                if (editUserMail.length() != 0 && editUserName.length() != 0 && userpw.length() != 0 && userpw_check.length() != 0 && spinnerD.getSelectedItemPosition() != 0 && spinnerM.getSelectedItemPosition() != 0 && spinnerY.getSelectedItemPosition() != 0&& editUserPhoneNum.length() != 0 && editPhoneCertifNum.length() != 0 && certif_result ==1) {
                    buttonPIFinsh.setEnabled(true);
 
                             //signup(); edittext정보 문자화해서 변수에 저장
@@ -365,7 +371,7 @@ public class PersonIform extends AppCompatActivity {
 
                                             //가입이 이루어져을시 가입 화면을 빠져나감.
                                             Toast.makeText(PersonIform.this, "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(PersonIform.this, PersonIform.class);
+                                            Intent intent = new Intent(PersonIform.this, Login.class);
                                             startActivity(intent);
                                             finish();
 
@@ -446,6 +452,22 @@ public class PersonIform extends AppCompatActivity {
                                     } else {
                                         if (spinnerD.getSelectedItemPosition() == 0 || spinnerM.getSelectedItemPosition() == 0 || spinnerY.getSelectedItemPosition() == 0) {
                                             Toast.makeText(getApplicationContext(), "생년월일을 선택해주세요.", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            if (editPhonenum.length() == 0) {
+                                                Toast.makeText(getApplicationContext(), "전화번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                if (editPhoneCertifNum.length() == 0) {
+                                                    Toast.makeText(getApplicationContext(), "인증번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    if (certif_result == 0) {
+                                                        Toast.makeText(getApplicationContext(), "인증번호 확인 버튼을 클릭하세요.", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        if (certif_result == 2){
+                                                            Toast.makeText(getApplicationContext(), "인증번호가 다릅니다.", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -457,7 +479,81 @@ public class PersonIform extends AppCompatActivity {
 
     });
     }
-    private void sendVerificationCode(String phoneNumber) {
+
+    private void go_before() {
+        Intent intent_before = new Intent(this, UserCheck.class);
+        startActivity(intent_before);
+    }
+    private void sendVerificationCode(String phoneNum) {
+        // 전화번호 가져오기
+        String phoneNumber = editPhonenum.getText().toString();
+        Random random = new Random();
+        int randomNumber = random.nextInt(999999);
+
+        // 인증번호 생성
+        generatedVerificationCode = String.valueOf(randomNumber);
+
+        // 문자 전송 로직 (여기서는 단순히 Toast 메시지로 대체)
+        PendingIntent Pi = PendingIntent.getActivities(this, 0, new Intent[]{new Intent(PersonIform.this, PersonIform.class)}, 0);
+        SmsManager sms = SmsManager.getDefault();
+        String message = "BigMap의 인증번호는 "+randomNumber+"입니다.";
+        sms.sendTextMessage(phoneNum, null, message, Pi, null);
+        Toast.makeText(this, "인증번호 전송 완료", Toast.LENGTH_SHORT).show();
+    }
+
+    private int verifyCode() {
+        // 입력된 인증번호 가져오기
+        String userVerificationCode = verificationCodeEditText.getText().toString();
+        int result;
+        // 인증번호 일치 여부 확인
+        if (userVerificationCode.equals(generatedVerificationCode)) {
+            Toast.makeText(this, "인증 완료", Toast.LENGTH_SHORT).show();
+            result = 1;
+        } else {
+            Toast.makeText(this, "인증번호가 다릅니다.", Toast.LENGTH_SHORT).show();
+            result = 0;
+        }
+        return result;
+    }
+
+    /*private void sendSms() {
+        // 전화번호 가져오기
+        String phoneNumber = editPhonenum.getText().toString();
+
+        // SMS 전송 권한 확인
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            // 권한이 없는 경우 권한 요청
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.SEND_SMS},
+                    SMS_PERMISSION_REQUEST_CODE);
+            return;
+        }
+
+        // SMS 전송
+        try {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, "안녕하세요", null, null);
+            Toast.makeText(this, "문자가 전송되었습니다.", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "문자 전송에 실패했습니다.", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }*/
+
+    /*@Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == SMS_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 권한이 승인된 경우 SMS 전송
+                sendSms();
+            } else {
+                Toast.makeText(this, "SMS 전송 권한이 필요합니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }*/
+
+    /*private void sendVerificationCode(String phoneNumber) {
         try {
             // 전화번호 유효성 검사 및 E.164 형식으로 변환
             PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
@@ -477,7 +573,7 @@ public class PersonIform extends AppCompatActivity {
             e.printStackTrace();
             // 전화번호 형식이 잘못된 경우 에러 처리
         }
-    }
+    }*/
 
     private void verifyPhoneNumberWithCode(String verificationCode) {
         // 사용자가 입력한 인증번호와 Firebase에 전송된 인증번호 일치 여부 확인

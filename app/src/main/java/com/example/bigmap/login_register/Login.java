@@ -66,6 +66,8 @@ public class Login extends AppCompatActivity {
                         FirebaseUser user = authResult.getUser();
                         String email = user.getEmail();
                         DocumentReference docRef = firestore.collection("사용자DB").document(email);
+                        Email.setText("");
+                        Password.setText("");
                         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -153,7 +155,7 @@ public class Login extends AppCompatActivity {
         newuserButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PersonIform.class);
+                Intent intent = new Intent(getApplicationContext(), UserCheck.class);
                 startActivity(intent);
             }
         });

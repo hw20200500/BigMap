@@ -23,6 +23,8 @@
                 android:layout_width="25dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
+                android:clickable="true"
+                android:onClick="go_before"
                 android:src="@drawable/sign_up_back_icon"/>
 
             <LinearLayout
@@ -45,7 +47,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_gravity="bottom"
                     android:layout_weight="1"
-                    android:src="@drawable/sign_up_sequence3_icon"/>
+                    android:src="@drawable/sign_up_sequence_icon"/>
             </LinearLayout>
 
             <TextView
