@@ -5,42 +5,43 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
-    android:layout_marginBottom="80dp"
     android:background="#ffffff"
     tools:context=".board.board_free"
+
     android:orientation="vertical"
     android:weightSum="9">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_weight="0.7">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/back"
-            android:layout_width="25dp"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:layout_weight="0.3"
-            android:clickable="true"
-            android:onClick="go_before"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/board_back_icon"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"/>
-        <TextView
+            android:src=""/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <Button
             android:id="@+id/write"
-            android:clickable="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:text="글쓰기"
-            android:layout_weight="1"
+            android:textSize="18sp"
+            android:textColor="@color/black"
             android:textStyle="bold"
-            android:textSize="20dp"/>
+            android:background="@android:color/transparent"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src=""/>
 
     </LinearLayout>
     <LinearLayout
@@ -49,113 +50,45 @@
         android:layout_weight="0.4"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/board_main_icon"/>
+            android:text="전체글"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="30sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="자유롭게 얘기해보세요"
+            android:textSize="18sp"/>
 
     </LinearLayout>
-
-    <LinearLayout
+    <Button
+        android:id="@+id/notice"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:background="@drawable/solid_button"
-        android:backgroundTint="@color/main_blue"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/notice"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:text="공지"
-            android:layout_weight="4"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:textColor="#FFF29D"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="이것은 공지글입니다."
-            android:textSize="18dp"
-            android:textStyle="bold"
-            android:layout_weight="1"
-            android:textColor="#ffffff"/>
-
-    </LinearLayout>
-
+        android:text="공지"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.3"/>
+        android:layout_weight="0.7"/>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="7.2"
         android:weightSum="8"
         android:orientation="vertical">
-        <LinearLayout
+
+        <ListView
+            android:id="@+id/free_List"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-
-                    android:layout_gravity="center_vertical">
-                    <TextView
-                        android:id="@+id/view_title"
-                        android:layout_width="330dp"
-                        android:layout_height="wrap_content"
-                        android:text="여기는 제목입니다."
-                        android:textSize="20sp"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"/>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:id="@+id/user"
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:textSize="13sp"
-                            android:textColor="#999999"
-                            android:text="사용자1"/>
-
-                        <TextView
-                            android:id="@+id/time_text_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="시간"
-                            android:textColor="#999999"
-                            android:textSize="13sp" />
-                    </LinearLayout>
-                </LinearLayout>
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
 
-                <ImageView
-                    android:id="@+id/comment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:layout_gravity="center"
-                    android:src="@drawable/board_message_icon"/>
-            </LinearLayout>
-            <View
-                android:background="@color/black"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"/>
-
-
-        </LinearLayout>
-    </ScrollView>
 </LinearLayout>

@@ -6,7 +6,11 @@
     android:layout_marginBottom="80dp"
     android:weightSum="15"
     android:orientation="vertical"
+<<<<<<< HEAD
+    tools:context=".board_chat">
+=======
     tools:context=".board.board_chat">
+>>>>>>> origin/merge
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,6 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="13.3"
+<<<<<<< HEAD
         android:background="#A1C2C6"
         android:orientation="vertical">
 
@@ -47,6 +52,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Chat message" />
+=======
+        android:orientation="vertical">
+
+        <TextView
+
+            android:id="@+id/chatmessage"
+
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+
+            android:background="#A1C2C6"
+
+            android:gravity="left|center_vertical|center_horizontal"
+
+            android:text="Chat message"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+>>>>>>> origin/merge
 
     </LinearLayout>
     <LinearLayout
@@ -62,12 +85,19 @@
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"/>
         <EditText
+<<<<<<< HEAD
             android:id="@+id/edittext"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="9.6"
             android:text="문의하실 내용을 입력해 주세요."/>
+=======
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="9.6"/>
+>>>>>>> origin/merge
         <Button
             android:id="@+id/send_Button"
             android:layout_width="80dp"
