@@ -2,6 +2,7 @@ package com.example.bigmap;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -25,6 +26,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.skt.tmap.TMapData;
 import com.skt.tmap.engine.navigation.SDKManager;
 import com.skt.tmap.engine.navigation.network.RequestConstant;
@@ -53,12 +63,17 @@ public class Search extends AppCompatActivity {
     private NavigationFragment navigationFragment;
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firestore;
+    int num=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         textsearch();
+
+        firebaseAuth = FirebaseAuth.getInstance();
 
         EditText search_bar = (EditText) findViewById(R.id.edittext_search);
         LinearLayout recent_view = (LinearLayout) findViewById(R.id.recent_view);
@@ -142,17 +157,41 @@ public class Search extends AppCompatActivity {
 
                 // TextView에 값을 설정
                 //데이터베이스 연동후 데이터 추가로 구성하게됩니다.
-//                runOnUiThread(() -> {
-//                    TextView textViewSearch1 = findViewById(R.id.recent_search_text1);
-//                    String addressText = poiName;
-//                    textViewSearch1.setText(addressText);
-//                });
+                runOnUiThread(() -> {
+                    // 파이어베이스 저장
+                    firestore = FirebaseFirestore.getInstance();
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    String email = user.getEmail();
+
+                    DocumentReference docR = firestore.collection("최근기록DB").document(email);
+                    TextView textViewSearch1 = findViewById(R.id.recent_search_text1);
+                    String addressText = poiName;
+                    String db_address = poiAddress;
+                    double db_latitude = latitude;
+                    double db_longitude = longitude;
+
+                    String str_num = String.valueOf(num);
+
+
+                    HashMap<Object,Object> hashMap = new HashMap<>();
+
+                    hashMap.put("location_name",addressText);
+                    hashMap.put("address",db_address);
+                    hashMap.put("latitude",db_latitude);
+                    hashMap.put("longitude",db_longitude);
+
+
+                    docR.collection("최근기록").document(str_num).set(hashMap);
+                    textViewSearch1.setText(addressText);
+
+                    num++;
+                });
 
 
                 // 길 안내 시작
-                runOnUiThread(() -> {
-                    nav_truck(poiList);
-                });
+//                runOnUiThread(() -> {
+//                    nav_truck(poiList);
+//                });
             } else {
                 runOnUiThread(() -> Toast.makeText(Search.this, "검색 결과가 없습니다.", Toast.LENGTH_LONG).show());
             }

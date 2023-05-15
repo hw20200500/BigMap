@@ -8,6 +8,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bigmap.R;
+import com.example.bigmap.board.board_write;
 
 public class board_free extends AppCompatActivity {
 
