@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="80dp"
-    android:paddingRight="20dp"
-    android:paddingLeft="20dp"
+    android:layout_marginBottom="80dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     android:background="#FFFFFF"
     android:orientation="vertical"
     android:weightSum="15"
@@ -16,14 +16,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:weightSum="6">
+        android:gravity="center_vertical">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/back"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/back_button"/>
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:clickable="true"
+            android:onClick="go_before"
+            android:layout_weight="0.4"
+            android:src="@drawable/board_back_icon"/>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,9 +35,11 @@
 
         <Button
             android:id="@+id/reg"
-            android:layout_width="90dp"
-            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/solid_button2"
+            android:textSize="15dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="등록" />
     </LinearLayout>
@@ -52,14 +58,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="제목"
+            android:textStyle="bold"
+            android:textColor="#000000"
             android:textSize="25sp"/>
 
-        <TextView
+        <EditText
             android:id="@+id/consul_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="6"
-            android:text="제목입니다."
+            android:hint="제목입니다."
             android:textSize="25sp"/>
 
 
@@ -76,12 +84,12 @@
         android:layout_weight="12"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="내용입니다."
-            android:textSize="15sp"
-            android:paddingTop="10dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="내용입니다."
+            android:textSize="15dp"
+            android:padding="10dp"/>
     </LinearLayout>
 
     <View
@@ -96,15 +104,22 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/image"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/writing_camera_icon"/>
 
         <ImageButton
             android:id="@+id/locker"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/writing_file_icon"/>
     </LinearLayout>
 
 </LinearLayout>

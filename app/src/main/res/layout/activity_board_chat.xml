@@ -39,22 +39,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="13.3"
+        android:background="#A1C2C6"
         android:orientation="vertical">
 
         <TextView
-
             android:id="@+id/chatmessage"
-
             android:layout_width="match_parent"
-
             android:layout_height="match_parent"
-
-            android:background="#A1C2C6"
-
-            android:gravity="left|center_vertical|center_horizontal"
-
-            android:text="Chat message"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:text="Chat message" />
 
     </LinearLayout>
     <LinearLayout
@@ -70,10 +62,12 @@
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"/>
         <EditText
+            android:id="@+id/edittext"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="9.6"/>
+            android:layout_weight="9.6"
+            android:text="문의하실 내용을 입력해 주세요."/>
         <Button
             android:id="@+id/send_Button"
             android:layout_width="80dp"
