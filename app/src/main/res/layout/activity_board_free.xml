@@ -7,7 +7,7 @@
     android:layout_marginRight="20dp"
     android:layout_marginBottom="80dp"
     android:background="#ffffff"
-    tools:context=".board.board_free"
+    tools:context=".board_free"
     android:orientation="vertical"
     android:weightSum="9">
 
