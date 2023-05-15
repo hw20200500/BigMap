@@ -6,7 +6,7 @@
     android:layout_marginBottom="80dp"
     android:weightSum="15"
     android:orientation="vertical"
-    tools:context=".board_chat">
+    tools:context=".board.board_chat">
 
     <LinearLayout
         android:layout_width="match_parent"

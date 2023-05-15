@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,7 +14,7 @@ import com.example.bigmap.board.board_write;
 public class board_free extends AppCompatActivity {
 
     // writeButton을 id를 이용하여 가져옵니다.
-    private Button writeButton;
+    private TextView writeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
