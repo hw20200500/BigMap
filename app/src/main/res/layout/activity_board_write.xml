@@ -103,12 +103,12 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/image"
+            android:id="@+id/camera"
             android:layout_width="50dp"
             android:layout_height="50dp" />
 
         <ImageButton
-            android:id="@+id/locker"
+            android:id="@+id/gallary"
             android:layout_width="50dp"
             android:layout_height="50dp" />
     </LinearLayout>

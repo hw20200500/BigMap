@@ -58,7 +58,7 @@
             android:orientation="vertical"
             >
 
-            <TextView
+            <ListView
                 android:id="@+id/notice1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,31 +70,6 @@
                 android:background="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="2px"/>
-            <TextView
-                android:id="@+id/notice2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:layout_marginBottom="5dp"
-                android:text="항목2"
-                android:textSize="15sp"/>
-            <View
-                android:background="@color/black"
-                android:layout_width="match_parent"
-                android:layout_height="2px"/>
-            <TextView
-                android:id="@+id/notice3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:layout_marginBottom="5dp"
-                android:text="항목3"
-                android:textSize="15sp"/>
-            <View
-                android:background="@color/black"
-                android:layout_width="match_parent"
-                android:layout_height="2px"/>
-
 
         </LinearLayout>
     </LinearLayout>

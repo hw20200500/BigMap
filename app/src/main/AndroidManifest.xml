@@ -54,7 +54,19 @@
            
         </activity>
         <activity
-            android:name=".board_write"
+            android:name=".board.board_notice"
+            android:exported="false"/>
+        <activity
+            android:name=".board.board_write"
+            android:exported="false"/>
+        <activity
+            android:name=".board.board_free"
+            android:exported="false"/>
+        <activity
+            android:name=".board.board_free_detail"
+            android:exported="false"/>
+        <activity
+            android:name=".board.board_qna"
             android:exported="false"/>
     </application>
 

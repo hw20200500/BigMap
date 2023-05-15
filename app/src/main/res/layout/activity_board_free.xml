@@ -71,81 +71,24 @@
         android:layout_height="40dp"
         android:gravity="center"
         android:background="@drawable/solid_button"
-        android:text="공지"
-        android:drawableLeft="@drawable/"/>
+        android:text="공지"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.7"/>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="7.2"
         android:weightSum="8"
         android:orientation="vertical">
-        <LinearLayout
+
+        <ListView
+            android:id="@+id/free_List"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="center_vertical">
-                    <TextView
-                        android:id="@+id/view_title"
-                        android:layout_width="330dp"
-                        android:layout_height="wrap_content"
-                        android:text="여기는 제목입니다."
-                        android:textSize="20sp"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"/>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:id="@+id/user"
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:textSize="13sp"
-                            android:textColor="#999999"
-                            android:text="사용자1"/>
-
-                        <TextView
-                            android:id="@+id/time_text_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            android:text="시간"
-                            android:textColor="#999999"
-                            android:textSize="13sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <ImageButton
-                    android:id="@+id/comment"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"/>
-
-
-
-            </LinearLayout>
-            <View
-                android:background="@color/black"
-                android:layout_width="match_parent"
-                android:layout_height="2.5px"/>
-
-        </LinearLayout>
-
-
-    </ScrollView>
-
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
 
 </LinearLayout>
