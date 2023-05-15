@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,10 +18,13 @@ import androidx.fragment.app.Fragment;
 
 import com.example.bigmap.R;
 import com.example.bigmap.databinding.FragmentBoardBinding;
+import com.example.bigmap.login_register.Login;
 import com.example.bigmap.mypage.mypage_birth_ch;
 import com.example.bigmap.mypage.mypage_email_ch;
 import com.example.bigmap.mypage.mypage_name_ch;
 import com.example.bigmap.mypage.mypage_phonnumCh;
+import com.example.bigmap.mypage.mypage_pw_ch;
+import com.example.bigmap.mypage.mypage_pw_check;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -141,5 +145,38 @@ public class MypageFragment extends Fragment {
                 startActivity(intent); // Intent 실행
             }
         });
+
+        LinearLayout password_ch = view.findViewById(R.id.password_ch);
+        password_ch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_pw = new Intent(getActivity(), mypage_pw_check.class);
+                startActivity(intent_pw);
+            }
+        });
+
+        TextView logout = view.findViewById(R.id.logout);
+        TextView user_withdrawal = view.findViewById(R.id.user_withdrawal);
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_logout = new Intent(getActivity(), Login.class);
+                firebaseAuth.signOut();
+                startActivity(intent_logout);
+            }
+        });
+
+        user_withdrawal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_logout = new Intent(getActivity(), Login.class);
+                docRef.delete();
+                user.delete();
+                Toast.makeText(getContext(), "회원 탈퇴되었습니다.", Toast.LENGTH_SHORT).show();
+                startActivity(intent_logout);
+            }
+        });
     }
+
 }

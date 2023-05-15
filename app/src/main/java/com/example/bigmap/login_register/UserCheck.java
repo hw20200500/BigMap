@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.airbnb.lottie.L;
 import com.example.bigmap.R;
 import com.example.bigmap.databinding.ActivityUserCheckBinding;
 
@@ -39,5 +40,10 @@ public class UserCheck extends AppCompatActivity {
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         });
+    }
+
+    private void go_before() {
+        Intent intent_before = new Intent(this, Login.class);
+        startActivity(intent_before);
     }
 }

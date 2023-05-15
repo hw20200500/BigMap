@@ -66,6 +66,8 @@ public class Login extends AppCompatActivity {
                         FirebaseUser user = authResult.getUser();
                         String email = user.getEmail();
                         DocumentReference docRef = firestore.collection("사용자DB").document(email);
+                        Email.setText("");
+                        Password.setText("");
                         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
