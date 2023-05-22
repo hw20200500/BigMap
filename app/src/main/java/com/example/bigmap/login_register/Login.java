@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bigmap.MainActivity;
 import com.example.bigmap.R;
+import com.example.bigmap.mapview;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -87,7 +88,7 @@ public class Login extends AppCompatActivity {
                                 }
                             }
                         });
-                        Intent intent = new Intent(Login.this, MainActivity.class);
+                        Intent intent = new Intent(Login.this, mapview.class);
                         startActivity(intent);
                     }
                 }).addOnFailureListener(new OnFailureListener() {

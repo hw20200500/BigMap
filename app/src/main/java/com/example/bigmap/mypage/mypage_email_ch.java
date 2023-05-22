@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.bigmap.MainActivity;
 import com.example.bigmap.R;
+import com.example.bigmap.mapview;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -111,7 +112,7 @@ public class mypage_email_ch extends AppCompatActivity {
                     user.updateEmail(ch_email);
 
                     Toast.makeText(mypage_email_ch.this, "이메일이 변경되었습니다.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(mypage_email_ch.this, MainActivity.class);
+                    Intent intent = new Intent(mypage_email_ch.this, mapview.class);
 
                     startActivity(intent);
 
