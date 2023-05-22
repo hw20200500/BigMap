@@ -142,6 +142,8 @@ public class mapview extends AppCompatActivity
                 long elapsedTime = System.currentTimeMillis() - startTime;
 
                 if (elapsedTime < 100) {
+
+                    // 터치한 화면의 장소(tMapPoint)를 위도, 경도를 변환하기
                     final double[] latitude_loc = {tMapPoint.getLatitude()};
                     final double[] longitude_loc = {tMapPoint.getLongitude()};
 
