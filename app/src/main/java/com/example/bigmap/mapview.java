@@ -82,18 +82,16 @@ public class mapview extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapview);
 
-//        checkPermission();
-
         tMapView = new TMapView(mapview.this);
         tmaplayout = findViewById(R.id.tmap_layout);
         tmaplayout.addView(tMapView);
         tMapView.setSKTMapApiKey(API_KEY);
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
 
 
-        // 위치 관리자(LocationManager) 초기화
+        // tmap 위치 관리자(LocationManager) 초기화
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
 
         // 위치 권한 확인
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -107,6 +105,7 @@ public class mapview extends AppCompatActivity
             requestLocationUpdates();
         }
 
+        // '내 위치' 버튼, 클릭시 사용자의 위치 정보를 받아와서 해당 위치로 지도의 중심지 이동하기 (몇번 실행했으나 될 때도 있고, 안될 때도 있음. 수정 필요)
         ImageView location_bttn = findViewById(R.id.locationImage);
         location_bttn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,29 +115,127 @@ public class mapview extends AppCompatActivity
             }
         });
 
-        /*tmapgps.setProvider(tmapgps.PROVIDER_GPS); //gps로 현 위치를 잡습니다.
-        tmapgps.openGps();
-
-          화면중심을 단말의 현재위치로 이동 */
-//        tMapView.setTrackingMode(true);
-//        tMapView.setSightVisible(true);
-        // 핸들러 초기화
+        initnav();
 
 
-        // 클릭 이벤트 설정
-        /*tMapView.setOnClickListener(new View.OnClickListener() {
+
+
+        handler = new Handler(Looper.getMainLooper());
+
+        // 사용자가 지도의 특정 위치 클릭시 해당 위치의 정보(poi data) 가져와서 저장하고,
+        // 해당 정보를 Bottom_LocationInform으로 보내서 ottom_LocationInform에서 해당 정보를 보여줄 수 있도록 하는 코드
+        // 'click'이 아닌, 'pressdown & up'으로 구성되어있기에 지도 이동, 확대 등의 제스쳐와 차이점을 주기 위해서 타이머 사용. 화면에 손가락이 닿았다가 때었을 때 0.1초 이내일 경우에만 위치 정보가 반응하도록 설정.
+        tMapView.setOnClickListenerCallback(new TMapView.OnClickListenerCallback() {
             @Override
-            public void onClick(View v) {
-                // 클릭한 위치의 위도, 경도 가져오기
-                TMapPoint tMapPoint = tMapView.getLocationPoint();
-                double latitude = tMapPoint.getLatitude();
-                double longitude = tMapPoint.getLongitude();
-
-                // 위도, 경도 출력
-                Toast.makeText(mapview.this, "위도: " + latitude + ", 경도: " + longitude, Toast.LENGTH_SHORT).show();
+            public void onPressDown(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, TMapPoint tMapPoint, PointF pointF) {
+                // 터치 시작 시 시간 기록
+                startTime = System.currentTimeMillis();
+                // 타이머 시작
+                startTimer();
             }
-        });*/
 
+            @Override
+            public void onPressUp(ArrayList<TMapMarkerItem> arrayList3, ArrayList<TMapPOIItem> arrayList1, TMapPoint tMapPoint, PointF pointF) {
+                // 타이머 종료
+                stopTimer();
+                // 시간 측정
+                long elapsedTime = System.currentTimeMillis() - startTime;
+
+                if (elapsedTime < 100) {
+                    final double[] latitude_loc = {tMapPoint.getLatitude()};
+                    final double[] longitude_loc = {tMapPoint.getLongitude()};
+
+                    TMapData tMapData = new TMapData();
+                    // TMapData에서 해당 위치와 가장 가까운 장소 검색
+
+                    tMapData.convertGpsToAddress(latitude_loc[0], longitude_loc[0], new TMapData.OnConvertGPSToAddressListener() {
+                        @Override
+                        public void onConverGPSToAddress(String s) {
+                            String address = s;
+                            Log.d(TAG, "주소 : "+s);
+
+                            tMapData.findAllPOI(s, new TMapData.OnFindAllPOIListener() {
+                                @Override
+                                public void onFindAllPOI(ArrayList<TMapPOIItem> poiItems) {
+                                    if(poiItems!=null) {
+                                        TMapPOIItem tMapPOIItem = poiItems.get(0);
+
+                                        poiName_loc = tMapPOIItem.getPOIName();
+                                        poiAddress_loc = s;
+                                        latitude = tMapPOIItem.getPOIPoint().getLatitude();
+                                        longitude = tMapPOIItem.getPOIPoint().getLongitude();
+
+                                        Log.d(TAG, "장소명: "+poiName_loc+" /장소: "+poiAddress_loc+" /위도: "+latitude+" /경도: "+longitude);
+
+                                        HashMap <Object, Object> poiList = new HashMap<>();
+                                        poiList.put("loc_name", poiName_loc);
+                                        poiList.put("loc_addr", poiAddress_loc);
+                                        poiList.put("loc_lat", latitude);
+                                        poiList.put("loc_lon", longitude);
+                                    } else {
+                                        findViewById(R.id.loc_layout).setVisibility(View.GONE);
+                                        bottomNavigationView.setVisibility(View.VISIBLE);
+                                        findViewById(R.id.main_content).setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+
+                    // 위치 정보 bottom_sheet(Bottom_LocationInform) 관련 코드 (위의 홈 fragment 코드와 유사)
+                    FrameLayout loc_layout = findViewById(R.id.loc_layout);
+                    findViewById(R.id.loc_layout).setVisibility(View.VISIBLE);
+                    int screenHeight = getResources().getDisplayMetrics().heightPixels;
+
+                    BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(loc_layout);
+                    bottomSheetBehavior.setPeekHeight(getResources().getDimensionPixelSize(R.dimen.main_layout_height));
+                    bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+                        @Override
+                        public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+                            int bottomSheetHeight = 400;
+                            if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                                bottomSheetHeight = (int) (bottomSheet.getHeight()) - 150;
+                            }
+                            int mainLayoutHeight = screenHeight - bottomSheetHeight;
+                            tmaplayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
+                        }
+
+                        @Override
+                        public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                            int bottomSheetHeight = (int) (bottomSheet.getHeight() * slideOffset);
+                            int mainLayoutHeight = screenHeight - bottomSheetHeight;
+                            tmaplayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
+                        }
+                    });
+                    findViewById(R.id.loc_layout).setVisibility(View.VISIBLE);
+
+                    bundle = new Bundle();
+                    bundle.putString("loc_name", poiName_loc);
+                    bundle.putString("loc_addr", poiAddress_loc);
+                    bundle.putDouble("loc_lat", latitude);
+                    bundle.putDouble("loc_lon", longitude);
+
+                    Bottom_LocationInform bottom_locationInform = new Bottom_LocationInform();
+                    bottom_locationInform.setArguments(bundle);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.loc_layout, bottom_locationInform).commit();
+
+                    bottomNavigationView.setVisibility(View.GONE);
+                    findViewById(R.id.main_content).setVisibility(View.GONE);
+
+
+                } else {
+                    findViewById(R.id.loc_layout).setVisibility(View.GONE);
+                    bottomNavigationView.setVisibility(View.VISIBLE);
+                    findViewById(R.id.main_content).setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+    // 홈 화면 fragment 관련 코드(이전 MainActivity와 동일)
+    private void initnav(){
         FrameLayout bottomSheet = findViewById(R.id.main_content);
         int screenHeight = getResources().getDisplayMetrics().heightPixels;
 
@@ -202,139 +299,9 @@ public class mapview extends AppCompatActivity
 
         });
 
-
-
-        handler = new Handler(Looper.getMainLooper());
-
-
-
-        tMapView.setOnClickListenerCallback(new TMapView.OnClickListenerCallback() {
-            @Override
-            public void onPressDown(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, TMapPoint tMapPoint, PointF pointF) {
-
-
-                // 터치 시작 시 시간 기록
-                startTime = System.currentTimeMillis();
-
-                // 타이머 시작
-                startTimer();
-
-            }
-
-            @Override
-            public void onPressUp(ArrayList<TMapMarkerItem> arrayList3, ArrayList<TMapPOIItem> arrayList1, TMapPoint tMapPoint, PointF pointF) {
-
-                // 타이머 종료
-                stopTimer();
-
-                // 시간 측정
-                long elapsedTime = System.currentTimeMillis() - startTime;
-
-                if (elapsedTime < 100) {
-                    final double[] latitude_loc = {tMapPoint.getLatitude()};
-                    final double[] longitude_loc = {tMapPoint.getLongitude()};
-
-
-//                    TMapPoint tMapPoint_location = new TMapPoint(latitude, longitude);
-//                    Toast.makeText(mapview.this, "위도: " + latitude_loc + ", 경도: " + longitude_loc, Toast.LENGTH_SHORT).show();
-
-                    TMapData tMapData = new TMapData();
-                    // TMapData에서 해당 위치와 가장 가까운 장소 검색
-
-                    tMapData.convertGpsToAddress(latitude_loc[0], longitude_loc[0], new TMapData.OnConvertGPSToAddressListener() {
-                        @Override
-                        public void onConverGPSToAddress(String s) {
-                            String address = s;
-                            Log.d(TAG, "주소 : "+s);
-
-//                            Toast.makeText(mapview.this, "주소 : "+s, Toast.LENGTH_SHORT).show();
-
-                            tMapData.findAllPOI(s, new TMapData.OnFindAllPOIListener() {
-                                @Override
-                                public void onFindAllPOI(ArrayList<TMapPOIItem> poiItems) {
-                                    if(poiItems!=null) {
-                                        TMapPOIItem tMapPOIItem = poiItems.get(0);
-
-                                        poiName_loc = tMapPOIItem.getPOIName();
-                                        poiAddress_loc = s;
-                                        latitude = tMapPOIItem.getPOIPoint().getLatitude();
-                                        longitude = tMapPOIItem.getPOIPoint().getLongitude();
-
-
-
-                                        Log.d(TAG, "장소명: "+poiName_loc+" /장소: "+poiAddress_loc+" /위도: "+latitude+" /경도: "+longitude);
-
-                                        HashMap <Object, Object> poiList = new HashMap<>();
-                                        poiList.put("loc_name", poiName_loc);
-                                        poiList.put("loc_addr", poiAddress_loc);
-                                        poiList.put("loc_lat", latitude);
-                                        poiList.put("loc_lon", longitude);
-                                    } else {
-                                        findViewById(R.id.loc_layout).setVisibility(View.GONE);
-                                        bottomNavigationView.setVisibility(View.VISIBLE);
-                                        findViewById(R.id.main_content).setVisibility(View.VISIBLE);
-                                    }
-                                }
-                            });
-                        }
-                    });
-
-
-                    FrameLayout loc_layout = findViewById(R.id.loc_layout);
-                    findViewById(R.id.loc_layout).setVisibility(View.VISIBLE);
-                    int screenHeight = getResources().getDisplayMetrics().heightPixels;
-
-                    BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(loc_layout);
-                    bottomSheetBehavior.setPeekHeight(getResources().getDimensionPixelSize(R.dimen.main_layout_height));
-                    bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-                        @Override
-                        public void onStateChanged(@NonNull View bottomSheet, int newState) {
-
-                            int bottomSheetHeight = 400;
-                            if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                                bottomSheetHeight = (int) (bottomSheet.getHeight()) - 150;
-                            }
-                            int mainLayoutHeight = screenHeight - bottomSheetHeight;
-                            tmaplayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
-                        }
-
-                        @Override
-                        public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                            int bottomSheetHeight = (int) (bottomSheet.getHeight() * slideOffset);
-                            int mainLayoutHeight = screenHeight - bottomSheetHeight;
-                            tmaplayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
-                        }
-                    });
-                    findViewById(R.id.loc_layout).setVisibility(View.VISIBLE);
-
-                    bundle = new Bundle();
-                    bundle.putString("loc_name", poiName_loc);
-                    bundle.putString("loc_addr", poiAddress_loc);
-                    bundle.putDouble("loc_lat", latitude);
-                    bundle.putDouble("loc_lon", longitude);
-
-                    Bottom_LocationInform bottom_locationInform = new Bottom_LocationInform();
-                    bottom_locationInform.setArguments(bundle);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.loc_layout, bottom_locationInform).commit();
-
-                    bottomNavigationView.setVisibility(View.GONE);
-                    findViewById(R.id.main_content).setVisibility(View.GONE);
-
-
-
-
-
-                    // 위도, 경도 출력
-//                            Toast.makeText(mapview.this, "위도: " + latitude + ", 경도: " + longitude, Toast.LENGTH_SHORT).show();
-                } else {
-                    findViewById(R.id.loc_layout).setVisibility(View.GONE);
-                    bottomNavigationView.setVisibility(View.VISIBLE);
-                    findViewById(R.id.main_content).setVisibility(View.VISIBLE);
-                }
-            }
-        });
     }
 
+    // 타이머 함수
     private void startTimer() {
         if (timer == null) {
             timer = new Timer();
@@ -355,6 +322,7 @@ public class mapview extends AppCompatActivity
         }
     }
 
+    // 사용자 위치 받아올 때 사용되는 함수들
     private void requestLocationUpdates() {
         // 위치 정보 업데이트 요청
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -371,11 +339,8 @@ public class mapview extends AppCompatActivity
         latitude = location.getLatitude();
         longitude = location.getLongitude();
 
-//        Toast.makeText(this, "위치: "+latitude + ", " + longitude, Toast.LENGTH_SHORT).show();
-
-        // 현재 위치로 지도 중심 설정
-
         if(num==0) {
+            // 현재 위치로 지도 중심 설정
             tMapView.setCenterPoint(latitude, longitude);
             tMapView.setZoomLevel(15);
             num++;
@@ -444,16 +409,11 @@ public class mapview extends AppCompatActivity
     private class FindAroundNamePOIListenerCallback {
     }
 
+    // 검색창 함수
     public void searching(View view) {
         Intent intent_searching = new Intent(mapview.this, Search.class);
         startActivity(intent_searching);
     }
 
 
-    /*@Override
-    public void onLocationChange(Location location) {
-        if (m_bTrackingMode) {
-            tMapView.setLocationPoint(location.getLongitude(), location.getLatitude());
-        }
-    }*/
 }

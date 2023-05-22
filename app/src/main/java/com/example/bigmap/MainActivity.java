@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Bottom_LocationInform에서 보낸 위치 정보 가져와서 String & Double 변수에 저장하기
         Intent intent_getiform = getIntent();
         loc_name = intent_getiform.getStringExtra("loc_name");
         loc_lat = intent_getiform.getDoubleExtra("loc_lat", 0);
@@ -134,10 +135,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 Log.e(TAG, "success initialize");
+
+                //bottom_locationinform에서 받아온 위치 정보 List에 저장하기
                 List<Object> poiList = new ArrayList<>();
                 poiList.add(loc_name+","+loc_lon+","+loc_lat);
                 Log.d(TAG, "위도: "+loc_lat+" 경도: "+loc_lon);
-                // selectDataList에 데이터 추가
+
+                // nav_truck 실행
                 runOnUiThread(() -> {
                     nav_truck(poiList);
                 });
