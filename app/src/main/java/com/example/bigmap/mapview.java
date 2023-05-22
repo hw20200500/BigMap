@@ -146,8 +146,8 @@ public class mapview extends AppCompatActivity
                     final double[] longitude_loc = {tMapPoint.getLongitude()};
 
                     TMapData tMapData = new TMapData();
-                    // TMapData에서 해당 위치와 가장 가까운 장소 검색
 
+                    // 위도, 경도로 주소 찾기
                     tMapData.convertGpsToAddress(latitude_loc[0], longitude_loc[0], new TMapData.OnConvertGPSToAddressListener() {
                         @Override
                         public void onConverGPSToAddress(String s) {
@@ -158,6 +158,8 @@ public class mapview extends AppCompatActivity
                                 @Override
                                 public void onFindAllPOI(ArrayList<TMapPOIItem> poiItems) {
                                     if(poiItems!=null) {
+
+                                        // 찾은 주소 및 장소 정보 저장하기
                                         TMapPOIItem tMapPOIItem = poiItems.get(0);
 
                                         poiName_loc = tMapPOIItem.getPOIName();
