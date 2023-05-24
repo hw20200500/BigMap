@@ -1,5 +1,6 @@
 package com.example.bigmap;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -22,6 +23,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+//import com.example.bigmap.bottom.BoardFragment;
 import com.example.bigmap.bottom.BoardFragment;
 import com.example.bigmap.bottom.Bottom_Favorite;
 import com.example.bigmap.bottom.Bottom_Home;
@@ -30,13 +32,20 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.skt.tmap.TMapData;
 import com.skt.tmap.TMapTapi;
+import com.skt.tmap.TMapView;
+import com.skt.tmap.engine.navigation.SDKConstant;
+import com.skt.tmap.engine.navigation.SDKLocationInitParam;
+import com.skt.tmap.engine.navigation.location.TmapLocationManager;
+import com.skt.tmap.engine.navigation.location.TmapLocationService;
 import com.skt.tmap.engine.navigation.network.RequestConstant;
 import com.skt.tmap.engine.navigation.network.ndds.NddsDataType;
 import com.skt.tmap.engine.navigation.route.RoutePlanType;
 import com.skt.tmap.engine.navigation.route.data.MapPoint;
 import com.skt.tmap.engine.navigation.route.data.WayPoint;
+import com.skt.tmap.overlay.TMapLocationLayer;
 import com.skt.tmap.poi.TMapPOIItem;
 import com.tmapmobility.tmap.tmapsdk.ui.fragment.NavigationFragment;
+import com.tmapmobility.tmap.tmapsdk.ui.util.TmapSdkPreferences;
 import com.tmapmobility.tmap.tmapsdk.ui.util.TmapUISDK;
 import com.skt.tmap.engine.navigation.SDKManager;
 import com.skt.tmap.engine.navigation.network.ndds.CarOilType;
@@ -79,6 +88,11 @@ public class MainActivity extends AppCompatActivity {
     private final static String API_KEY = BuildConfig.Api_key;
     private final static String USER_KEY = "";
     boolean isEDC;
+    String loc_name;
+    String loc_addr;
+    Double loc_lat;
+    Double loc_lon;
+    int num = 0;
 
 
     @Override
@@ -86,81 +100,23 @@ public class MainActivity extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE); //타이틀 바 제거 코드 입니다.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Bottom_LocationInform에서 보낸 위치 정보 가져와서 String & Double 변수에 저장하기
+        Intent intent_getiform = getIntent();
+        loc_name = intent_getiform.getStringExtra("loc_name");
+        loc_lat = intent_getiform.getDoubleExtra("loc_lat", 0);
+        loc_lon = intent_getiform.getDoubleExtra("loc_lon", 0);
+
         checkPermission();
-        initnav();
     }
-    private void initnav(){
-        FrameLayout bottomSheet = findViewById(R.id.main_content);
-        FrameLayout mainLayout = findViewById(R.id.tmapUILayout);
-        int screenHeight = getResources().getDisplayMetrics().heightPixels;
 
-
-        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        bottomSheetBehavior.setPeekHeight(getResources().getDimensionPixelSize(R.dimen.main_layout_height));
-        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-
-                int bottomSheetHeight = 400;
-                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                    bottomSheetHeight = (int) (bottomSheet.getHeight())-150;
-                }
-                int mainLayoutHeight = screenHeight - bottomSheetHeight;
-                mainLayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                int bottomSheetHeight = (int) (bottomSheet.getHeight() * slideOffset);
-                int mainLayoutHeight = screenHeight - bottomSheetHeight;
-                mainLayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
-            }
-        });
-
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavi);
-        getSupportFragmentManager().beginTransaction().add(R.id.main_content,new Bottom_Home()).commit();
-        //바텀 네비게이션뷰 안의 아이템 설정
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    //item을 클릭시 id값을 가져와 FrameLayout에 fragment.xml띄우기
-                    case R.id.item_home:
-                        findViewById(R.id.main_frame).setVisibility(View.INVISIBLE);
-                        findViewById(R.id.main_content).setVisibility(View.VISIBLE);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new Bottom_Home()).commit();
-
-                        break;
-                    case R.id.item_star:
-                        findViewById(R.id.main_frame).setVisibility(View.INVISIBLE);
-                        findViewById(R.id.main_content).setVisibility(View.VISIBLE);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new Bottom_Favorite()).commit();
-
-                        break;
-                    case R.id.item_viewList:
-                        findViewById(R.id.main_frame).setVisibility(View.VISIBLE);
-                        findViewById(R.id.main_content).setVisibility(View.INVISIBLE);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new BoardFragment()).commit();
-                        break;
-                    case R.id.item_mine:
-                        findViewById(R.id.main_frame).setVisibility(View.VISIBLE);
-                        findViewById(R.id.main_content).setVisibility(View.INVISIBLE);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new MypageFragment()).commit();
-                        break;
-                }
-                return true;
-            }
-
-        });
-
-    }
 
 
     private void checkPermission() {
 
         if (checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
             initUI();
             initUISDK();
         } else {
@@ -179,6 +135,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 Log.e(TAG, "success initialize");
+
+                //bottom_locationinform에서 받아온 위치 정보 List에 저장하기
+                List<Object> poiList = new ArrayList<>();
+                poiList.add(loc_name+","+loc_lon+","+loc_lat);
+                Log.d(TAG, "위도: "+loc_lat+" 경도: "+loc_lon);
+
+                // nav_truck 실행
+                runOnUiThread(() -> {
+                    nav_truck(poiList);
+                });
             }
 
             @Override
@@ -328,25 +294,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void onClick1(View view){
-        TMapData tmapdata = new TMapData();
-        String strData = "천안시청";  //위치 변경할 주소 (검색창에서 여기로 데이터로 전송하면됨)
-
-        tmapdata.findAllPOI(strData, poiItemList -> {
-            List<Object> poiList = new ArrayList<>();
-
-            for (TMapPOIItem item : poiItemList) {
-                Log.d("Poi Item", "name:" + item.getPOIName() + " address:" + item.getPOIAddress()+
-                        " 위도:" + item.getPOIPoint().getLatitude()+", 경도:"+item.getPOIPoint().getLongitude()/*+" 거리:"+item.getDistance(tMapPoint)*/
-                );
-                poiList.add(item.getPOIName()+","+item.getPOIPoint().getLongitude()+","+item.getPOIPoint().getLatitude());
-            }
-            // selectDataList에 데이터 추가
-            runOnUiThread(() -> {
-                nav_truck(poiList);
-            });
-        });
-    }
     public void nav_truck(List<Object> poi_search){
 
         Object search_data = poi_search.get(0);
@@ -410,5 +357,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent_searching = new Intent(MainActivity.this, Search.class);
         startActivity(intent_searching);
     }
+
 
 }

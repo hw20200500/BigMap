@@ -9,7 +9,7 @@
     android:padding="16dp"
     android:background="@drawable/shape_layout"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="120dp"
+    app:behavior_peekHeight="150dp"
     app:layout_behavior="@string/bottom_sheet_behavior"
     tools:context=".bottom.Bottom_Favorite">
 

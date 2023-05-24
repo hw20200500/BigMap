@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.bigmap.MainActivity;
 import com.example.bigmap.R;
+import com.example.bigmap.mapview;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -47,7 +48,7 @@ public class mypage_name_ch extends AppCompatActivity {
                     docref.update("name", name);
 
                     Toast.makeText(mypage_name_ch.this, "이름이 변경되었습니다.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(mypage_name_ch.this, MainActivity.class);
+                    Intent intent = new Intent(mypage_name_ch.this, mapview.class);
                     startActivity(intent);
 
                 }

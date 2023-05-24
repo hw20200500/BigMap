@@ -17,6 +17,7 @@ import com.example.bigmap.MainActivity;
 import com.example.bigmap.R;
 import com.example.bigmap.login_register.Login;
 import com.example.bigmap.login_register.PersonIform;
+import com.example.bigmap.mapview;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -136,7 +137,7 @@ public class mypage_birth_ch extends AppCompatActivity {
                     docref.update("birth_day", userBirth_day);
 
                     Toast.makeText(mypage_birth_ch.this, "생년월일이 변경되었습니다.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(mypage_birth_ch.this, MainActivity.class);
+                    Intent intent = new Intent(mypage_birth_ch.this, mapview.class);
                     startActivity(intent);
 
                 }

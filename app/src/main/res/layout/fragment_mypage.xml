@@ -256,14 +256,195 @@
 
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/user_car_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape_headlist"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="차량 정보"
+                            android:layout_marginVertical="10dp"
+                            android:layout_marginHorizontal="20dp"
+                            android:textSize="20dp"
+                            android:textColor="#ffffff"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="10dp"/>
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/person_icon"
+                            android:layout_marginHorizontal="10dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+
+                            android:text="높이"
+                            android:textSize="15dp"
+                            android:textStyle="bold"
+                            android:id="@+id/car_height"/>
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="50dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/shape_button"
+                            android:text="수정"
+                            android:id="@+id/button_heightC"
+                            android:clickable="true"
+                            android:textColor="#999999" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:background="#cccccc"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/phone_icon"
+                            android:layout_marginHorizontal="10dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:text="높이"
+                            android:textSize="15dp"
+                            android:textStyle="bold"
+                            android:id="@+id/car_weight"/>
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="50dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/shape_button"
+                            android:text="수정"
+                            android:id="@+id/button_weightC"
+                            android:clickable="true"
+                            android:textColor="#999999" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:background="#cccccc"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/mail_icon"
+                            android:layout_marginHorizontal="10dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:text="너비"
+                            android:textSize="15dp"
+                            android:textStyle="bold"
+                            android:id="@+id/car_width"/>
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="50dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/shape_button"
+                            android:text="수정"
+                            android:id="@+id/button_widthC"
+                            android:clickable="true"
+                            android:textColor="#999999" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:background="#cccccc"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/calendar_icon"
+                            android:layout_marginHorizontal="10dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:text="길이"
+                            android:textSize="15dp"
+                            android:textStyle="bold"
+                            android:id="@+id/car_length"/>
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="50dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/shape_button"
+                            android:text="수정"
+                            android:id="@+id/button_lengthC"
+                            android:clickable="true"
+                            android:textColor="#999999" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/user_inform_box"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="40dp"
                     android:background="@drawable/shape"
-                    android:orientation="vertical"
-                    android:layout_marginVertical="15dp">
+                    android:orientation="vertical">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
