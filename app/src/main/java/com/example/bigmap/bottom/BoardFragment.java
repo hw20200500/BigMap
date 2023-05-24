@@ -18,10 +18,11 @@ import android.widget.TextView;
 import com.example.bigmap.R;
 import com.example.bigmap.board.board_chat;
 import com.example.bigmap.board.board_free;
-import com.example.bigmap.board.board_free_detail;
 import com.example.bigmap.board.board_notice;
 import com.example.bigmap.board.board_qna;
 import com.example.bigmap.databinding.FragmentBoardBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Collections;
