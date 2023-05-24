@@ -35,7 +35,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="13sp"
                         android:textColor="#999999"
-                        android:text="사용자1"/>
+                        android:text="관리"/>
 
                     <TextView
                         android:id="@+id/time_text_view"
@@ -47,14 +47,6 @@
                         android:textSize="13sp" />
                 </LinearLayout>
             </LinearLayout>
-
-            <ImageButton
-                android:id="@+id/comment"
-                android:layout_width="50dp"
-                android:layout_height="50dp"/>
-
-
-
         </LinearLayout>
         <View
             android:background="@color/black"
