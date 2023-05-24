@@ -18,6 +18,7 @@
         android:theme="@style/Theme.BigMap"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+<<<<<<<<< Temporary merge branch 1
         <activity
             android:name=".mypage_birth_ch"
             android:exported="false" />
@@ -30,8 +31,33 @@
         <activity
             android:name=".mypage_phonnumCh"
             android:exported="false" />
+=========
+        <activity android:name=".mypage.mypage_birth_ch"
+            android:exported="false"/>
+        <activity android:name=".mypage.mypage_email_ch"
+            android:exported="false"/>
+        <activity android:name=".mypage.mypage_phonnumCh"
+            android:exported="false"/>
+        <activity android:name=".mypage.mypage_name_ch"
+            android:exported="false"/>
+
+>>>>>>>>> Temporary merge branch 2
         <activity
             android:name=".MainActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".login_register.WelcomeView"
+            android:exported="false" />
+        <activity
+            android:name=".login_register.PersonIform"
+            android:exported="false" />
+        <activity
+            android:name=".login_register.UserCheck"
+            android:exported="false" />
+        <activity
+            android:name=".login_register.Login"
             android:exported="true">
              <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,33 +66,40 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".WelcomeView"
-            android:exported="false" />
+            android:name=".board.board_chat"
+            android:exported="false"/>
         <activity
-            android:name=".PersonIform"
-            android:exported="false" />
+            android:name=".board.board_notice"
+            android:exported="false"/>
         <activity
-            android:name=".UserCheck"
-            android:exported="false" />
+            android:name=".board.board_qna"
+            android:exported="false"/>
         <activity
+<<<<<<<<< Temporary merge branch 1
             android:name=".Login"
             android:exported="false">
            
         </activity>
         <activity
-            android:name=".board.board_notice"
+            android:name=".board_chat"
             android:exported="false"/>
         <activity
-            android:name=".board.board_write"
+            android:name=".board_notice"
             android:exported="false"/>
         <activity
+            android:name=".board_qna"
+            android:exported="false"/>
+        <activity
+            android:name=".board_free"
+            android:exported="false"/>
+        <activity
+            android:name=".board_write"
+=========
             android:name=".board.board_free"
             android:exported="false"/>
         <activity
-            android:name=".board.board_free_detail"
-            android:exported="false"/>
-        <activity
-            android:name=".board.board_qna"
+            android:name=".board.board_write"
+>>>>>>>>> Temporary merge branch 2
             android:exported="false"/>
     </application>
 

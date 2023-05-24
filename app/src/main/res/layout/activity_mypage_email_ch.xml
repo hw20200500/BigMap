@@ -23,14 +23,12 @@
         android:layout_marginTop="20dp"/>
 
     <EditText
-        android:id="@+id/userName"
+        android:id="@+id/userEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:padding="10dp"
         android:hint="메일 주소 입력"
-        android:inputType="text"
-        android:maxLength="13"/>
+        android:inputType="text"/>
 
     <Button
         android:layout_width="match_parent"

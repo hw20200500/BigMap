@@ -8,12 +8,21 @@
     android:padding="20dp"
     tools:context=".mypage.mypage_birth_ch">
 
+    <ImageView
+        android:id="@+id/button_before"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:clickable="true"
+        android:onClick="go_before"
+        android:src="@drawable/sign_up_back_icon"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="생년월일을 선택하세요."
         android:textSize="20dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="30dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -32,8 +41,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/vew_bolder"
+            android:layout_weight="2.5"
+            android:background="@drawable/shape"
             android:orientation="horizontal">
 
             <Spinner
@@ -47,8 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_weight="1.6"
-            android:background="@drawable/vew_bolder"
+            android:layout_weight="3"
+            android:background="@drawable/shape"
             android:orientation="horizontal">
 
             <Spinner
@@ -62,8 +71,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_weight="1.6"
-            android:background="@drawable/vew_bolder"
+            android:layout_weight="3"
+            android:background="@drawable/shape"
             android:orientation="horizontal">
 
             <Spinner
