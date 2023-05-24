@@ -1,5 +1,7 @@
 # BigMap
 
+디자인 UI/UX 확인 링크 -> https://xd.adobe.com/view/bf6167fc-78c9-4765-a8d6-2dbcea0ef45a-ea32/
+
 1. 페이지 명
 페이지 역할 : [레이아웃(xml) 이름/java 이름]
 - 로그인 페이지 : activity_login/Login
