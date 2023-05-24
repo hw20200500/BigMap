@@ -37,10 +37,6 @@
             android:value="YOUR_API_KEY" />
 
         <activity
-            android:name=".googlemap"
-            android:exported="false"
-            android:label="@string/title_activity_googlemap" />
-        <activity
             android:name=".mapview_clone"
             android:exported="false"></activity>
         <activity
