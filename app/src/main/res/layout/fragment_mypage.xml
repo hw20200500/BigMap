@@ -342,7 +342,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="5"
-                            android:text="높이"
+                            android:text="무게"
                             android:textSize="15dp"
                             android:textStyle="bold"
                             android:id="@+id/car_weight"/>
