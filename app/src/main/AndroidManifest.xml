@@ -53,9 +53,7 @@
             android:exported="false"
             android:label="@string/title_activity_search"
             android:theme="@style/Theme.BigMap.NoActionBar" />
-        <activity
-            android:name=".board.board_chat"
-            android:exported="false" />
+
         <activity
             android:name=".board.board_free"
             android:exported="false" />
@@ -67,6 +65,53 @@
             android:exported="false" />
         <activity
             android:name=".board.board_write"
+            android:exported="false" />
+        <activity
+            android:name=".board.board_free_detail"
+            android:exported="false" />
+        <activity android:name=".board.board_notice_detail"
+            android:exported="false"/>
+        <activity
+            android:name=".board.board_qna_detail"
+            android:exported="false" />
+        <activity
+            android:name=".board.comment_Adapter"
+            android:exported="false" />
+        <activity
+            android:name=".board.freelist_Adapter"
+            android:exported="false" />
+        <activity
+            android:name=".board.freelist_item"
+            android:exported="false" />
+        <activity
+            android:name=".board.FrontFreeAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".board.FrontFreeItem"
+            android:exported="false" />
+        <activity
+            android:name=".board.FrontNoticeItem"
+            android:exported="false" />
+        <activity
+            android:name=".board.FrontNoticeAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".board.FrontQnaItem"
+            android:exported="false" />
+        <activity
+            android:name=".board.FrontQnaAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".board.noticelist_Adapter"
+            android:exported="false" />
+        <activity
+            android:name=".board.qnalist_Adapter"
+            android:exported="false" />
+        <activity
+            android:name=".board.noticelist_item"
+            android:exported="false" />
+        <activity
+            android:name=".board.qnalist_item"
             android:exported="false" />
         <activity
             android:name=".mypage.mypage_birth_ch"
@@ -101,6 +146,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

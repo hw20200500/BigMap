@@ -11,28 +11,29 @@ public class freelist_item {
         this.timeStr = time;
     }
 
-    public void setTitle(String title){
-        titleStr = title;
-    }
-    public void setUser(String user){
-        userStr = user;
-    }
-    public void setTime(String time){
-        timeStr = time;
-    }
-
     public String getTitle()
     {
-        return this.titleStr;
+        return titleStr;
     }
 
     public String getUser()
     {
-        return this.userStr;
+        return userStr;
     }
 
     public String getTime()
     {
-        return this.timeStr;
+        return timeStr;
     }
+
+    public void setTitle(String title){
+        this.titleStr=title;
+    }
+    public void setUser(String user){
+        this.userStr = user;
+    }
+    public void setTime(String time){
+        this.timeStr = time;
+    }
+
 }

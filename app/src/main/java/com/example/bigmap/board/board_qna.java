@@ -1,6 +1,7 @@
 package com.example.bigmap.board;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,5 +13,8 @@ public class board_qna extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_qna);
+
+        ImageView backButton = findViewById(R.id.back);
+        backButton.setOnClickListener(v -> onBackPressed());
     }
 }
