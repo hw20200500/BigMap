@@ -2,6 +2,8 @@ package com.example.bigmap;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +32,7 @@ import com.example.bigmap.bottom.MypageFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.skt.tmap.TMapData;
+import com.skt.tmap.TMapPoint;
 import com.skt.tmap.TMapTapi;
 import com.skt.tmap.engine.navigation.network.RequestConstant;
 import com.skt.tmap.engine.navigation.network.ndds.NddsDataType;
@@ -329,25 +332,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void onClick1(View view){
-        TMapData tmapdata = new TMapData();
-        String strData = "천안시청";  //위치 변경할 주소 (검색창에서 여기로 데이터로 전송하면됨)
-
-        tmapdata.findAllPOI(strData, poiItemList -> {
-            List<Object> poiList = new ArrayList<>();
-
-            for (TMapPOIItem item : poiItemList) {
-                Log.d("Poi Item", "name:" + item.getPOIName() + " address:" + item.getPOIAddress()+
-                        " 위도:" + item.getPOIPoint().getLatitude()+", 경도:"+item.getPOIPoint().getLongitude()/*+" 거리:"+item.getDistance(tMapPoint)*/
-                );
-                poiList.add(item.getPOIName()+","+item.getPOIPoint().getLongitude()+","+item.getPOIPoint().getLatitude());
-            }
-            // selectDataList에 데이터 추가
-            runOnUiThread(() -> {
-                nav_truck(poiList);
-            });
-        });
-    }
     public void nav_truck(List<Object> poi_search){
 
         Object search_data = poi_search.get(0);
@@ -406,6 +390,67 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "onFail " + i + " :: " + s);
             }
         });
+    }
+    private TMapPoint getCurrentLocation() {
+        // SDKManager를 사용하여 현재 위치를 가져옵니다.
+        Location currentLocation = SDKManager.getInstance().getCurrentPosition();
+        double latitude = currentLocation.getLatitude();
+        double longitude = currentLocation.getLongitude();
+        return new TMapPoint(latitude, longitude);
+    }
+    private void findpoi(String data){
+        // 현재 위치를 가져오는 메서드를 호출하여 현재 위치를 얻습니다.
+        TMapPoint currentLocation = getCurrentLocation();
+        // TMapData 객체를 생성합니다.
+        TMapData tMapData = new TMapData();
+
+        tMapData.findAroundNamePOI(currentLocation,data, 3, 50, new TMapData.OnFindAroundNamePOIListener() {
+            @Override
+            public void onFindAroundNamePOI(ArrayList<TMapPOIItem> poiItems) {
+                if (poiItems != null){
+                    for (TMapPOIItem poiItem : poiItems) {
+                        String markerID = poiItem.getPOIName(); // 마커 ID 설정
+                        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.poi); // 마커 아이콘
+                        VSMMarkerPoint marker = new VSMMarkerPoint(markerID);
+
+                        marker.setIcon(MarkerImage.fromBitmap(icon));
+                        marker.setShowPriority(MapConstant.MarkerRenderingPriority.DEFAULT_PRIORITY);
+                        marker.setText(poiItem.getPOIName());
+
+                        TMapPoint poiLocation = poiItem.getPOIPoint();
+                        VSMMapPoint position = new VSMMapPoint(poiLocation.getLongitude(), poiLocation.getLatitude());
+                        marker.setPosition(position);
+
+                        VSMMarkerManager markerManager = navigationFragment.getMapView().getMarkerManager();
+                        if (markerManager != null) {
+                            markerManager.addMarker(marker);
+                        } else {
+                            Log.e(TAG, "마커 매니저 NULL");
+                        }
+                    }
+                }
+                else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "근처에 " + data + "가 없습니다", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+    public void onClick1(View view){
+        findpoi("주유소");
+    }
+    public void onClick2(View view){
+        findpoi("주차장");
+    }
+    public void onClick3(View view){
+        VSMMarkerManager markerManager = navigationFragment.getMapView().getMarkerManager();
+        if (markerManager != null) {
+            markerManager.removeMarkerAll();
+        }
     }
     public void searching(View view) {
         Intent intent_searching = new Intent(MainActivity.this, Search.class);

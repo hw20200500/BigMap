@@ -15,14 +15,6 @@
         android:layout_marginBottom="120dp"
         android:layout_below="@+id/main_content">
 
-
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="bottom"
-            android:text="test"
-            android:onClick="onClick1"/>
-
     </FrameLayout>
 
     <LinearLayout
@@ -42,7 +34,7 @@
             android:layout_height="50dp"
             android:padding="8dp"
             android:clickable="true"
-            android:src="@drawable/menu_icon"/>
+            android:src="@drawable/menu_icon" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -50,16 +42,37 @@
             android:text="장소, 버스, 지하철, 주소 검색"
             android:layout_marginLeft="10dp"
             android:textSize="20dp"
-            android:textColor="#bbbbbb"/>
-
+            android:textColor="#bbbbbb" />
 
     </LinearLayout>
 
+    <Button
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_gravity="top"
+        android:layout_marginTop="65dp"
+        android:layout_marginStart="20dp"
+        android:text="주유소"
+        android:onClick="onClick1" />
 
+    <Button
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_gravity="top"
+        android:layout_marginTop="65dp"
+        android:layout_marginStart="110dp"
+        android:text="주차장"
+        android:onClick="onClick2" />
+    <Button
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_gravity="top"
+        android:layout_marginTop="65dp"
+        android:layout_marginStart="200dp"
+        android:text="핀삭제"
+        android:onClick="onClick3" />
 
-
-
-<!--    홈, 즐겨찾기 페이지 bottomsheet frame -->
+    <!-- 홈, 즐겨찾기 페이지 bottomsheet frame -->
     <FrameLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
@@ -82,12 +95,12 @@
         android:background="#fff"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_navi_menu"/>
+        app:menu="@menu/bottom_navi_menu" />
 
-    <!--    게시판, 마이페이지 frame-->
+    <!-- 게시판, 마이페이지 frame -->
     <FrameLayout
         android:id="@+id/main_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
