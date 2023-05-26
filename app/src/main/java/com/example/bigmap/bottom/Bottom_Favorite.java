@@ -88,15 +88,19 @@ public class Bottom_Favorite extends Fragment {
                                         latitude = document.getDouble("latitude");
                                         longitude = document.getDouble("longitude");
 
-
+                                        // Sub 불러와서 linearlayout 여러개 복제하는 코드
                                         Sub n_layout = new Sub(getActivity().getApplicationContext());
+
+                                        // n_layout(=fragment_favorite_sub) 복제본을 넣을 즐겨찾기(fragment_bottom__favorite.xml) 내부 장소
                                         LinearLayout bookmarks_list = view.findViewById(R.id.bookmarks_list);
 
+                                        // fragment_favorite_sub에 있는 텍스트뷰 아이디 갖고와서 파이어스토어에 저장된 데이터들 넣어서 출력하기
                                         TextView bookmarks_title = n_layout.findViewById(R.id.bookmarks_title);
                                         TextView bookmarks_addr = n_layout.findViewById(R.id.bookmarks_addr);
                                         bookmarks_title.setText(title);
                                         bookmarks_addr.setText(addr);
 
+                                        // 파이어스토어 데이터를 넣어서 새로 제작한 n_layout(=fragment_favorite_sub) 즐겨찾기(fragment_bottom__favorite.xml)에 있는 bookmarks_list에 추가하기
                                         bookmarks_list.addView(n_layout);
                                     }
 
