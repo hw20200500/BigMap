@@ -1,6 +1,7 @@
 package com.example.bigmap.board;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,13 +56,28 @@ public class freelist_Adapter extends BaseAdapter {
         userTextView.setText(item.getUser());
         timeTextView.setText(item.getTime());
 
+        // 클릭 이벤트 처리
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 해당 아이템의 postId 가져오기
+                String postId = item.getPostId();
+
+                // board_free_detail 액티비티로 이동하면서 postId 값을 전달
+                Intent intent = new Intent(context, board_free_detail.class);
+                intent.putExtra("postId", postId);
+                context.startActivity(intent);
+            }
+        });
+
         return convertView;
     }
 
-    public void addItem(String title, String user, String time) {
-        freelist_item item = new freelist_item(title, user, time);
+    public void addItem(String postId, String title, String user, String time) {
+        freelist_item item = new freelist_item(postId, title, user, time);
         listViewItemList.add(item);
         notifyDataSetChanged();
     }
+
 
 }

@@ -102,8 +102,7 @@ public class BoardFragment extends Fragment {
     private void loadLatestPosts() {
         // 자유게시판 최신 게시물 가져오기 (최대 5개)
         firestore.collection("게시판DB")
-                .whereEqualTo("게시판 종류", "자유게시판")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .orderBy("작성_시간_날짜", Query.Direction.DESCENDING)
                 .limit(5)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {freeItemList.clear();
@@ -119,9 +118,8 @@ public class BoardFragment extends Fragment {
                             Toast.LENGTH_SHORT).show();
                 });
         // 공지사항 최신 게시물 가져오기 (최대 3개)
-        firestore.collection("게시판DB")
-                .whereEqualTo("게시판 종류", "공지사항")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
+        firestore.collection("공지사항DB")
+                .orderBy("작성_시간_날짜", Query.Direction.DESCENDING)
                 .limit(3)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -137,9 +135,8 @@ public class BoardFragment extends Fragment {
                 });
 
         // Q&A 최신 게시물 가져오기 (최대 3개)
-        firestore.collection("게시판DB")
-                .whereEqualTo("게시판 종류", "Q&A")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
+        firestore.collection("qnaDB")
+                .orderBy("작성_시간_날짜", Query.Direction.DESCENDING)
                 .limit(3)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {

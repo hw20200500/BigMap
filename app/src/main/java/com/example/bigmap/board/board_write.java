@@ -34,7 +34,6 @@ public class board_write extends AppCompatActivity {
         setContentView(R.layout.activity_board_write);
 
         db = FirebaseFirestore.getInstance();
-        
 
         EditText edit_view_title = findViewById(R.id.view_title);
         EditText edit_View_Text = findViewById(R.id.editText);
@@ -61,28 +60,20 @@ public class board_write extends AppCompatActivity {
             String email = user.getEmail();
             DocumentReference userRef = db.collection("사용자DB").document(email);
 
-
             if (user == null) {
                 Toast.makeText(getApplicationContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
                 return;
             }
-
-
 
             // 현재 시간 가져오기
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = formatter.format(calendar.getTime());
 
-
-
             HashMap<String, Object> post = new HashMap<>();
             post.put("제목", view_title);
             post.put("내용", view_Text);
             post.put("작성_시간_날짜", time);
-
-
-
 
             userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -91,22 +82,23 @@ public class board_write extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             String name = document.getString("name");
+                            String email = document.getString("email");
                             post.put("작성자", name);
+                            post.put("email", email);
 
                             // 게시글 등록
                             db.collection("게시판DB")
-                                    .document(email)
-                                    .set(post)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    .add(post) // 등록하면서 postId가 생성됨
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                         @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
+                                        public void onComplete(@NonNull Task<DocumentReference> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(board_write.this, "글이 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show();
                                                 Intent intent = new Intent(board_write.this, board_free.class);
                                                 startActivity(intent);
                                                 finish();
                                             } else {
-                                                Toast.makeText(board_write.this, "글을 등록하지 못했습니다.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(board_write.this, "글을 등록하지못했습니다.", Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     })

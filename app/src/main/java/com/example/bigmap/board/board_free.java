@@ -1,6 +1,5 @@
 package com.example.bigmap.board;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,12 +10,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.bigmap.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -33,7 +28,6 @@ public class board_free extends AppCompatActivity {
     private FirebaseFirestore db;
     private Button writeButton;
     private static final String TAG = "board_free";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +67,7 @@ public class board_free extends AppCompatActivity {
 
         ImageView backButton = findViewById(R.id.back);
         backButton.setOnClickListener(v -> onBackPressed());
-
     }
-
 
     private void fetchLatestPosts() {
         db.collection("게시판DB")
@@ -85,11 +77,11 @@ public class board_free extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         itemList.clear();
                         for (QueryDocumentSnapshot document : task.getResult()) {
+                            String postId = document.getId(); // Firestore 문서의 postId 가져오기
                             String title = document.getString("제목");
                             String user = document.getString("작성자");
                             String time = document.getString("작성_시간_날짜");
-                            freelist_item item = new freelist_item(title, user, time);
-                            Log.d(TAG, "제목: "+title);
+                            freelist_item item = new freelist_item(postId, title, user, time);
                             itemList.add(item);
                         }
                         adapter.notifyDataSetChanged();
@@ -98,6 +90,4 @@ public class board_free extends AppCompatActivity {
                     }
                 });
     }
-
-
 }

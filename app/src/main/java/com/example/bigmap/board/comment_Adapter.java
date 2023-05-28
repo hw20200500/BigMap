@@ -10,18 +10,18 @@ import android.widget.TextView;
 import com.example.bigmap.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class comment_Adapter extends BaseAdapter {
-    private List<Map<String, String>> listViewItemList = new ArrayList<>();
+    private List<comment_item> listViewItemList = new ArrayList<>();
     private Context context;
 
-    public comment_Adapter(Context context, List<Map<String, String>> itemList) {
+    public comment_Adapter(Context context, List<comment_item> itemList) {
         this.context = context;
         this.listViewItemList = itemList;
     }
+
 
     @Override
     public int getCount() {
@@ -45,27 +45,23 @@ public class comment_Adapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.commentlist_item, parent, false);
         }
 
-        TextView userTextView = convertView.findViewById(R.id.user);
+        comment_item item = listViewItemList.get(position);
+
+        TextView userTextView = convertView.findViewById(R.id.commentuser);
         TextView commentTextView = convertView.findViewById(R.id.comment);
         TextView timeTextView = convertView.findViewById(R.id.time_text_view);
 
-        Map<String, String> comment = listViewItemList.get(position);
-        String user = comment.get("user");
-        String commentText = comment.get("comment");
-        String time = comment.get("timestamp");
 
-        userTextView.setText(user);
-        commentTextView.setText(commentText);
-        timeTextView.setText(time);
+        userTextView.setText(item.getUser());
+        commentTextView.setText(item.getComment());
+        timeTextView.setText(item.getTime());
 
         return convertView;
     }
 
     public void addItem(String user, String comment, String time) {
-        Map<String, String> commentMap = new HashMap<>();
-        commentMap.put("user", user);
-        commentMap.put("comment", comment);
-        commentMap.put("timestamp", time);
-        listViewItemList.add(commentMap);
+        comment_item item = new comment_item(user, comment, time);
+        listViewItemList.add(item);
+        notifyDataSetChanged();
     }
 }
