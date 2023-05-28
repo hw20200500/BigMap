@@ -261,9 +261,10 @@
                     android:id="@+id/user_car_box"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
                     android:background="@drawable/shape"
                     android:orientation="vertical"
-                    android:layout_marginTop="10dp">
+                    >
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

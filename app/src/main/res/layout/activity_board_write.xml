@@ -16,31 +16,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:gravity="center_vertical">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/back"
-            android:layout_width="30dp"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:clickable="true"
-            android:onClick="go_before"
-            android:layout_weight="0.4"
-            android:src="@drawable/board_back_icon"/>
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/login_backright_icon"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"/>
 
         <Button
             android:id="@+id/reg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="90dp"
+            android:layout_height="35dp"
             android:background="@drawable/solid_button2"
-            android:textSize="15dp"
-            android:layout_weight="1"
             android:gravity="center"
             android:text="등록" />
     </LinearLayout>
@@ -59,66 +52,50 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="제목"
-            android:textStyle="bold"
-            android:textColor="#000000"
             android:textSize="25sp"/>
 
         <EditText
-            android:id="@+id/consul_title"
+            android:id="@+id/view_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="6"
             android:hint="제목입니다."
-            android:textSize="25sp"/>
+            android:background="@null"
+            android:textSize="25sp"
+            android:textColor="#999999"/>
 
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
         android:layout_height="2px"
         android:background="@color/black" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="12"
         android:orientation="vertical">
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:hint="내용입니다."
-            android:textSize="15dp"
-            android:padding="10dp"/>
-    </LinearLayout>
+            android:textColor="#999999"
+            android:background="@null"
+            android:textSize="15sp"
+            android:paddingTop="10dp"/>
+    </ScrollView>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2px"
         android:background="@color/black" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/image"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/writing_camera_icon"/>
-
-        <ImageButton
-            android:id="@+id/locker"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/writing_file_icon"/>
-    </LinearLayout>
 
 </LinearLayout>

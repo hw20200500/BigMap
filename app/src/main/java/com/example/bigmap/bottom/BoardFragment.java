@@ -2,81 +2,157 @@ package com.example.bigmap.bottom;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
 import com.example.bigmap.R;
-import com.example.bigmap.board.board_chat;
 import com.example.bigmap.board.board_free;
 import com.example.bigmap.board.board_notice;
 import com.example.bigmap.board.board_qna;
-import com.example.bigmap.databinding.FragmentBoardBinding;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoardFragment extends Fragment {
-    private View view;
+    private ListView freeList;
+    private ListView noticeList;
+    private ListView qnaList;
+    private ArrayAdapter<String> freeAdapter;
+    private ArrayAdapter<String> noticeAdapter;
+    private ArrayAdapter<String> qnaAdapter;
+    private List<String> freeItemList;
+    private List<String> noticeItemList;
+    private List<String> qnaItemList;
 
-   //사용자 건의함 페이지
+    private FirebaseFirestore firestore;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_board, container, false);
 
-        FragmentBoardBinding binding = FragmentBoardBinding.inflate(getLayoutInflater());
+        firestore = FirebaseFirestore.getInstance();
 
-        return inflater.inflate(R.layout.fragment_board, container, false);
-    }
+        freeList = view.findViewById(R.id.free_List);
+        noticeList = view.findViewById(R.id.notice_List);
+        qnaList = view.findViewById(R.id.qna_List);
 
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        freeItemList = new ArrayList<>();
+        noticeItemList = new ArrayList<>();
+        qnaItemList = new ArrayList<>();
 
+        freeAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, freeItemList);
+        noticeAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, noticeItemList);
+        qnaAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, qnaItemList);
 
-        Button chatButton = view.findViewById(R.id.chat); // 버튼 id로 찾음
-        Button qnaButton = view.findViewById(R.id.qna);
-        Button noticeButton = view.findViewById(R.id.notice);
-        Button freeButton = view.findViewById(R.id.free);
+        freeList.setAdapter(freeAdapter);
+        noticeList.setAdapter(noticeAdapter);
+        qnaList.setAdapter(qnaAdapter);
 
-        chatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), board_chat.class); // 다른 Activity로 이동할 Intent 생성
-                startActivity(intent); // Intent 실행
-            }
-        });
-
-        freeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), board_free.class); // 다른 Activity로 이동할 Intent 생성
-                startActivity(intent); // Intent 실행
-            }
-        });
+        TextView noticeButton = view.findViewById(R.id.notice);
+        TextView qnaButton = view.findViewById(R.id.qna);
+        TextView freeButton = view.findViewById(R.id.free);
 
         noticeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), board_notice.class); // 다른 Activity로 이동할 Intent 생성
-                startActivity(intent); // Intent 실행
+                // 공지사항 화면으로 전환
+                Intent intent = new Intent(getActivity(), board_notice.class);
+                startActivity(intent);
             }
         });
 
         qnaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), board_qna.class); // 다른 Activity로 이동할 Intent 생성
-                startActivity(intent); // Intent 실행
+                // Q&A 화면으로 전환
+                Intent intent = new Intent(getActivity(), board_qna.class);
+                startActivity(intent);
             }
         });
 
+        freeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 자유게시판 화면으로 전환
+                Intent intent = new Intent(getActivity(), board_free.class);
+                startActivity(intent);
+            }
+        });
 
+        // 최신 게시물 가져오기
+        loadLatestPosts();
+
+        return view;
     }
+
+    private void loadLatestPosts() {
+        // 자유게시판 최신 게시물 가져오기 (최대 5개)
+        firestore.collection("게시판DB")
+                .whereEqualTo("게시판 종류", "자유게시판")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .limit(5)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {freeItemList.clear();
+                    for(QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots)
+                    {
+                        String title=documentSnapshot.getString("제목");
+                        freeItemList.add(title);
+                    }
+                    freeAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), "자유게시판 게시물을 가져오는데 실패했습니다.",
+                            Toast.LENGTH_SHORT).show();
+                });
+        // 공지사항 최신 게시물 가져오기 (최대 3개)
+        firestore.collection("게시판DB")
+                .whereEqualTo("게시판 종류", "공지사항")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .limit(3)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    noticeItemList.clear();
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        String title = documentSnapshot.getString("제목");
+                        noticeItemList.add(title);
+                    }
+                    noticeAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), "공지사항 게시물을 가져오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
+                });
+
+        // Q&A 최신 게시물 가져오기 (최대 3개)
+        firestore.collection("게시판DB")
+                .whereEqualTo("게시판 종류", "Q&A")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .limit(3)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    qnaItemList.clear();
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        String title = documentSnapshot.getString("제목");
+                        qnaItemList.add(title);
+                    }
+                    qnaAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), "Q&A 게시물을 가져오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
+                });
+    }
+
 }
