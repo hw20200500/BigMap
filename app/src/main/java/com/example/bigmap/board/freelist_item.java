@@ -1,39 +1,39 @@
 package com.example.bigmap.board;
 
 public class freelist_item {
-    private String titleStr;
-    private String userStr;
-    private String timeStr;
+    private String 제목;
+    private String 작성자;
+    private String 작성_시간_날짜;
 
     public freelist_item(String title, String user, String time){
-        this.titleStr = title;
-        this.userStr = user;
-        this.timeStr = time;
+        this.제목 = title;
+        this.작성자 = user;
+        this.작성_시간_날짜 = time;
     }
 
     public String getTitle()
     {
-        return titleStr;
+        return 제목;
     }
 
     public String getUser()
     {
-        return userStr;
+        return 작성자;
     }
 
     public String getTime()
     {
-        return timeStr;
+        return 작성_시간_날짜;
     }
 
     public void setTitle(String title){
-        this.titleStr=title;
+        this.제목=title;
     }
     public void setUser(String user){
-        this.userStr = user;
+        this.작성자 = user;
     }
     public void setTime(String time){
-        this.timeStr = time;
+        this.작성_시간_날짜 = time;
     }
 
 }

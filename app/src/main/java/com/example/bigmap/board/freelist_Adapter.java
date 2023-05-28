@@ -61,5 +61,7 @@ public class freelist_Adapter extends BaseAdapter {
     public void addItem(String title, String user, String time) {
         freelist_item item = new freelist_item(title, user, time);
         listViewItemList.add(item);
+        notifyDataSetChanged();
     }
+
 }

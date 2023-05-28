@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class board_free extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // writeButton을 id를 이용하여 가져옵니다.
+        // writeButton를 id를 이용하여 가져옵니다.
         writeButton = findViewById(R.id.write);
         //글쓰기 버튼 클릭시 이동
         writeButton.setOnClickListener(view -> {
@@ -78,22 +79,22 @@ public class board_free extends AppCompatActivity {
 
     private void fetchLatestPosts() {
         db.collection("게시판DB")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
-
+                .orderBy("작성_시간_날짜", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         itemList.clear();
-                        for (DocumentSnapshot document : task.getResult()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
                             String title = document.getString("제목");
                             String user = document.getString("작성자");
-                            String time = document.getString("작성 시간/날짜");
+                            String time = document.getString("작성_시간_날짜");
                             freelist_item item = new freelist_item(title, user, time);
+                            Log.d(TAG, "제목: "+title);
                             itemList.add(item);
                         }
                         adapter.notifyDataSetChanged();
                     } else {
-                        Log.d(TAG, "Error getting documents: ", task.getException());
+                        Log.d(TAG, "새로고침을 실패하였습니다. ", task.getException());
                     }
                 });
     }
