@@ -141,10 +141,18 @@ public class MainActivity extends AppCompatActivity {
                 poiList.add(loc_name+","+loc_lon+","+loc_lat);
                 Log.d(TAG, "위도: "+loc_lat+" 경도: "+loc_lon);
 
-                // nav_truck 실행
-                runOnUiThread(() -> {
-                    nav_truck(poiList);
-                });
+                if(loc_name == null ||loc_lat == 0.0 || loc_lon == 0.0){
+                    runOnUiThread(() -> {
+                        Toast.makeText(MainActivity.this, "비정상적인 길안내입니다 ", Toast.LENGTH_SHORT).show();
+                    });
+                }
+                else{
+                    // nav_truck 실행
+                    runOnUiThread(() -> {
+                        nav_truck(poiList);
+                    });
+                }
+
             }
 
             @Override
@@ -294,6 +302,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     public void nav_truck(List<Object> poi_search){
 
         Object search_data = poi_search.get(0);
@@ -317,9 +326,9 @@ public class MainActivity extends AppCompatActivity {
         HashMap<String, String> truckDetailInfo = new HashMap<>();
 
         truckDetailInfo.put(TruckInfoKey.TruckType.getValue(), TruckType.Truck.toString());
-        truckDetailInfo.put(TruckInfoKey.TruckWeight.getValue(), "2500.0");    // 단위 kg 화물의 무게
         truckDetailInfo.put(TruckInfoKey.TruckHeight.getValue(), "420.0");     // 단위 cm 화물차 높이
-        truckDetailInfo.put(TruckInfoKey.TruckWidth.getValue(), "250.0");      // 단위 cm 화물차 너비
+        truckDetailInfo.put(TruckInfoKey.TruckWeight.getValue(), "2500.0");    // 단위 kg 화물의 무게
+        truckDetailInfo.put(TruckInfoKey.TruckWidth.getValue(),  "250.0");     // 단위 cm 화물차 너비
         truckDetailInfo.put(TruckInfoKey.TruckLength.getValue(), "1200.0");    // 단위 cm 화물차 길이
 
         carOption.setTruckInfo(truckDetailInfo);
@@ -329,10 +338,10 @@ public class MainActivity extends AppCompatActivity {
         String currentName = VSMCoordinates.getAddressOffline(currentLocation.getLongitude(), currentLocation.getLatitude());
 
         WayPoint startPoint = new WayPoint(currentName, new MapPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
-
+//        System.out.println("start:"+startPoint.getMapPoint().getLatitude()+","+startPoint.getMapPoint().getLongitude());
         //목적지
         WayPoint endPoint = new WayPoint(search_data_list.get(0).toString(), new MapPoint(longi,lati), "", RequestConstant.RpFlagCode.UNKNOWN);
-
+//        System.out.println("end:"+endPoint.getMapPoint().getLatitude()+","+endPoint.getMapPoint().getLongitude());
         //네비게이션 화면 구성
         navigationFragment.setCarOption(carOption);
 

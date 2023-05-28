@@ -13,6 +13,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.location.Location;
 import android.location.LocationListener;
@@ -43,6 +45,8 @@ import com.skt.tmap.TMapGpsManager;
 import com.skt.tmap.TMapPoint;
 import com.skt.tmap.TMapTapi;
 import com.skt.tmap.TMapView;
+import com.skt.tmap.engine.navigation.SDKManager;
+import com.skt.tmap.overlay.TMapLayer;
 import com.skt.tmap.overlay.TMapMarkerItem;
 import com.skt.tmap.poi.TMapPOIItem;
 import com.tmapmobility.tmap.tmapsdk.ui.util.TmapUISDK;
@@ -105,13 +109,15 @@ public class mapview extends AppCompatActivity
             requestLocationUpdates();
         }
 
+
         // '내 위치' 버튼, 클릭시 사용자의 위치 정보를 받아와서 해당 위치로 지도의 중심지 이동하기 (몇번 실행했으나 될 때도 있고, 안될 때도 있음. 수정 필요)
         ImageView location_bttn = findViewById(R.id.locationImage);
         location_bttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 num = 0;
-                requestLocationUpdates();
+                tMapView.setCenterPoint(latitude, longitude);
+                tMapView.setZoomLevel(15);
             }
         });
 
@@ -409,8 +415,54 @@ public class mapview extends AppCompatActivity
             }
         }
     };
+    public void onClick1(View v){
 
-    private class FindAroundNamePOIListenerCallback {
+        findpoi("주유소");
+    }
+    public void onClick2(View v){
+        findpoi("주차장");
+    }
+    public void onClick3(View v){
+        findpoi("카페");
+    }
+
+    private void deletepoint(TMapMarkerItem markerItem){
+        tMapView.removeTMapMarkerItem(markerItem.getId());
+    }
+
+    private TMapPoint getCurrentLocation() {
+        return new TMapPoint(latitude, longitude);
+    }
+    private void addMapMarker(TMapPoint point, String title, Bitmap icon) {
+        TMapMarkerItem markerItem = new TMapMarkerItem();
+        markerItem.setTMapPoint(point);
+        markerItem.setId(title);
+        markerItem.setIcon(icon);
+        if (tMapView.getMarkerItemFromId(markerItem.getId()) != null) {
+            deletepoint(markerItem);
+        }else{
+            tMapView.addTMapMarkerItem(markerItem);
+        }
+
+    }
+
+    private void findpoi(String data){
+        // 현재 위치를 가져오는 메서드를 호출하여 현재 위치를 얻습니다.
+        TMapPoint currentLocation = getCurrentLocation();
+        // TMapData 객체를 생성합니다.
+        TMapData tMapData = new TMapData();
+
+        tMapData.findAroundNamePOI(currentLocation,data, 3, 50, new TMapData.OnFindAroundNamePOIListener() {
+            @Override
+            public void onFindAroundNamePOI(ArrayList<TMapPOIItem> poiItems) {
+                for (TMapPOIItem poiItem : poiItems) {
+                    TMapPoint point = poiItem.getPOIPoint();
+                    String title = poiItem.getPOIName();
+                    Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.poi);
+                    addMapMarker(point, title, icon);
+                }
+            }
+        });
     }
 
     // 검색창 함수

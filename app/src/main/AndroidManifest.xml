@@ -85,6 +85,9 @@
             android:name=".mypage.mypage_phonnumCh"
             android:exported="false" />
         <activity
+            android:name=".mypage.mypage_truckinfo_ch"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity

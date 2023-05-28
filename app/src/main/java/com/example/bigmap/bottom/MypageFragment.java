@@ -25,6 +25,7 @@ import com.example.bigmap.mypage.mypage_name_ch;
 import com.example.bigmap.mypage.mypage_phonnumCh;
 import com.example.bigmap.mypage.mypage_pw_ch;
 import com.example.bigmap.mypage.mypage_pw_check;
+import com.example.bigmap.mypage.mypage_truckinfo_ch;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -64,11 +65,50 @@ public class MypageFragment extends Fragment {
         TextView user_email_small = view.findViewById(R.id.user_email);
         TextView user_phone = view.findViewById(R.id.user_phoneNum);
         TextView user_birth = view.findViewById(R.id.user_birth);
+        TextView user_truck_height = view.findViewById(R.id.car_height);
+        TextView user_truck_weight = view.findViewById(R.id.car_weight);
+        TextView user_truck_width = view.findViewById(R.id.car_width);
+        TextView user_truck_length = view.findViewById(R.id.car_length);
+
 
         // user에 현재 로그인되어있는 사용자 정보 저장
         FirebaseUser user = firebaseAuth.getCurrentUser();
         // 사용자 정보에 저장되어 있는 email 갖고오기 (이거는 Authentication에 저장되어 있는 정보만 사용 가능. 그 이외 (예: 전화번호, 실명이름, 생년월일 등)는 사용 불가)
         String email = user.getEmail();
+
+        DocumentReference docRef2 = firestore.collection("화물차DB").document(email);
+        docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    System.out.println("document:"+document);
+                    if (document.exists()) {
+                        int height = document.getLong("높이").intValue();
+                        int weight = document.getLong("무게").intValue();
+                        int width = document.getLong("너비").intValue();
+                        int length = document.getLong("길이").intValue();
+
+                        user_truck_height.setText("높이:"+height+"cm");
+                        user_truck_weight.setText("무게:"+weight+"kg");
+                        user_truck_width.setText("너비:"+width+"cm");
+                        user_truck_length.setText("길이:"+length+"cm");
+
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 
         // 파이어스토어 데이터베이스 가져오는 코드
         DocumentReference docRef = firestore.collection("사용자DB").document(email);
@@ -85,7 +125,7 @@ public class MypageFragment extends Fragment {
                         int birthY = document.getLong("birth_year").intValue();
                         int birthM = document.getLong("birth_month").intValue();
                         int birthD = document.getLong("birth_day").intValue();
-//                        int age = document.getLong("age").intValue();
+
 
                         // 가져온 데이터 화면에 출력하기(이미 있는 텍스트뷰 내용을 해당 데이터 값으로 수정)
                         user_name.setText(name+"님");
@@ -113,7 +153,15 @@ public class MypageFragment extends Fragment {
         Button button_phoneC = view.findViewById(R.id.button_phoneC);
         Button button_emailC = view.findViewById(R.id.button_emailC);
         Button button_birthC = view.findViewById(R.id.button_birthC);
+        Button button_truckC = view.findViewById(R.id.button_truckC);
 
+        button_truckC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), mypage_truckinfo_ch.class); // 다른 Activity로 이동할 Intent 생성
+                startActivity(intent); // Intent 실행
+            }
+        });
         button_nameC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
