@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -28,8 +29,16 @@ import com.example.bigmap.bottom.BoardFragment;
 import com.example.bigmap.bottom.Bottom_Favorite;
 import com.example.bigmap.bottom.Bottom_Home;
 import com.example.bigmap.bottom.MypageFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.skt.tmap.TMapData;
 import com.skt.tmap.TMapTapi;
 import com.skt.tmap.TMapView;
@@ -94,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
     Double loc_lon;
     int num = 0;
 
+    ImageView imageView;
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 else{
                     // nav_truck 실행
                     runOnUiThread(() -> {
-                        nav_truck(poiList);
+                        truck_info(poiList);
                     });
                 }
 
@@ -302,8 +315,64 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void truck_info(List<Object> poi_search){
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        // 사용자 정보에 저장되어 있는 email 갖고오기 (이거는 Authentication에 저장되어 있는 정보만 사용 가능. 그 이외 (예: 전화번호, 실명이름, 생년월일 등)는 사용 불가)
+        String email = user.getEmail();
 
-    public void nav_truck(List<Object> poi_search){
+        final String[] height1 = new String[1];
+        final String[] weight1 = new String[1];
+        final String[] width1 = new String[1];
+        final String[] length1 = new String[1];
+
+
+        DocumentReference docRef2 = firestore.collection("화물차DB").document(email);
+        docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    System.out.println("document:"+document);
+                    if (document.exists()) {
+                        String height = document.getLong("높이").toString();
+                        String weight = document.getLong("무게").toString();
+                        String width = document.getLong("너비").toString();
+                        String length = document.getLong("길이").toString();
+                        height1[0] = height;
+                        weight1[0] = weight;
+                        width1[0] = width;
+                        length1[0] = length;
+
+                        List<String> truckinfo = new ArrayList<>();
+                        truckinfo.add(0,height1[0]);
+                        truckinfo.add(1,weight1[0]);
+                        truckinfo.add(2,width1[0]);
+                        truckinfo.add(3,length1[0]);
+                        System.out.println(truckinfo);
+
+                        runOnUiThread(() -> {
+                            nav_truck(poi_search,truckinfo);
+                        });
+
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+//
+    }
+
+
+    public void nav_truck(List<Object> poi_search,List<String> truck_info){
 
         Object search_data = poi_search.get(0);
 
@@ -322,14 +391,17 @@ public class MainActivity extends AppCompatActivity {
         carOption.setOilType(CarOilType.PremiumGasoline);
         carOption.setHipassOn(true);
 
+
+
+
         //트럭 경로 요청 하기 위한 추가 정보
         HashMap<String, String> truckDetailInfo = new HashMap<>();
 
         truckDetailInfo.put(TruckInfoKey.TruckType.getValue(), TruckType.Truck.toString());
-        truckDetailInfo.put(TruckInfoKey.TruckHeight.getValue(), "420.0");     // 단위 cm 화물차 높이
-        truckDetailInfo.put(TruckInfoKey.TruckWeight.getValue(), "2500.0");    // 단위 kg 화물의 무게
-        truckDetailInfo.put(TruckInfoKey.TruckWidth.getValue(),  "250.0");     // 단위 cm 화물차 너비
-        truckDetailInfo.put(TruckInfoKey.TruckLength.getValue(), "1200.0");    // 단위 cm 화물차 길이
+        truckDetailInfo.put(TruckInfoKey.TruckHeight.getValue(), truck_info.get(0));     // 단위 cm 화물차 높이
+        truckDetailInfo.put(TruckInfoKey.TruckWeight.getValue(), truck_info.get(1));    // 단위 kg 화물의 무게
+        truckDetailInfo.put(TruckInfoKey.TruckWidth.getValue(),  truck_info.get(2));     // 단위 cm 화물차 너비
+        truckDetailInfo.put(TruckInfoKey.TruckLength.getValue(), truck_info.get(3));    // 단위 cm 화물차 길이
 
         carOption.setTruckInfo(truckDetailInfo);
 
@@ -338,11 +410,11 @@ public class MainActivity extends AppCompatActivity {
         String currentName = VSMCoordinates.getAddressOffline(currentLocation.getLongitude(), currentLocation.getLatitude());
 
         WayPoint startPoint = new WayPoint(currentName, new MapPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
-//        System.out.println("start:"+startPoint.getMapPoint().getLatitude()+","+startPoint.getMapPoint().getLongitude());
+        System.out.println("start:"+startPoint.getMapPoint().getLatitude()+","+startPoint.getMapPoint().getLongitude());
         //목적지
         WayPoint endPoint = new WayPoint(search_data_list.get(0).toString(), new MapPoint(longi,lati), "", RequestConstant.RpFlagCode.UNKNOWN);
-//        System.out.println("end:"+endPoint.getMapPoint().getLatitude()+","+endPoint.getMapPoint().getLongitude());
-        //네비게이션 화면 구성
+        System.out.println("end:"+endPoint.getMapPoint().getLatitude()+","+endPoint.getMapPoint().getLongitude());
+//        네비게이션 화면 구성
         navigationFragment.setCarOption(carOption);
 
         navigationFragment.setRoutePlanType(RoutePlanType.Traffic_Truck);

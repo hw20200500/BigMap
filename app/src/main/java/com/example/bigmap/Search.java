@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
@@ -36,6 +38,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.skt.tmap.TMapData;
+import com.skt.tmap.TMapPoint;
 import com.skt.tmap.engine.navigation.SDKManager;
 import com.skt.tmap.engine.navigation.network.RequestConstant;
 import com.skt.tmap.engine.navigation.network.ndds.CarOilType;
@@ -52,11 +55,13 @@ import com.tmapmobility.tmap.tmapsdk.ui.fragment.NavigationFragment;
 import com.tmapmobility.tmap.tmapsdk.ui.util.TmapUISDK;
 
 import org.checkerframework.checker.units.qual.A;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Search extends AppCompatActivity {
     private EditText editTextSearch;
@@ -65,13 +70,15 @@ public class Search extends AppCompatActivity {
     private FragmentTransaction transaction;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
+    TMapData tmapdata = new TMapData();
+    int count = 0;
     int num=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        textsearch();
+        System.out.println("실행함");
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -79,63 +86,74 @@ public class Search extends AppCompatActivity {
         LinearLayout recent_view = (LinearLayout) findViewById(R.id.recent_view);
         LinearLayout loc_inform_view = (LinearLayout) findViewById(R.id.loc_inform_view);
 
-        // edittext의 상태 동적 할당 받음 -> edittext에 글자 입력하면 위치 관련 정보 레이아웃이 보이도록함
-        // -> 입력한 글자가 없으면 최근 검색어 레이아웃이 보이도록 함.
-        search_bar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                String search_text = s.toString();
-                if (search_text.isEmpty()) {
-                    recent_view.setVisibility(View.VISIBLE);
-                    loc_inform_view.setVisibility(View.GONE);
-                }
-                else {
-                    recent_view.setVisibility(View.GONE);
-                    loc_inform_view.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String search_text = s.toString();
-                if (search_text.isEmpty()) {
-                    recent_view.setVisibility(View.VISIBLE);
-                    loc_inform_view.setVisibility(View.GONE);
-                }
-                else {
-                    recent_view.setVisibility(View.GONE);
-                    loc_inform_view.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String search_text = s.toString();
-                if (search_text.isEmpty()) {
-                    recent_view.setVisibility(View.VISIBLE);
-                    loc_inform_view.setVisibility(View.GONE);
-                }
-                else {
-                    recent_view.setVisibility(View.GONE);
-                    loc_inform_view.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-    }
-    private void textsearch(){
-        // EditText를 ID로 찾아와 변수에 할당
         editTextSearch = findViewById(R.id.edittext_search);
 
         // 검색 버튼 또는 엔터 키를 눌렀을 때 동작하도록 설정
         editTextSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH || (keyEvent != null && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    String searchText = editTextSearch.getText().toString();
-                    performSearch(searchText);
-                    return true;
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                    System.out.println("엔터누름");
+                    handled = true;
                 }
-                return false;
+                return handled;
+            }
+        });
+
+//        // edittext의 상태 동적 할당 받음 -> edittext에 글자 입력하면 위치 관련 정보 레이아웃이 보이도록함
+//        // -> 입력한 글자가 없으면 최근 검색어 레이아웃이 보이도록 함.
+//        search_bar.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                String search_text = s.toString();
+//                if (search_text.isEmpty()) {
+//                    recent_view.setVisibility(View.VISIBLE);
+//                    loc_inform_view.setVisibility(View.GONE);
+//                } else {
+//                    recent_view.setVisibility(View.GONE);
+//                    loc_inform_view.setVisibility(View.VISIBLE);
+//                }
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                String search_text = s.toString();
+//                if (search_text.isEmpty()) {
+//                    recent_view.setVisibility(View.VISIBLE);
+//                    loc_inform_view.setVisibility(View.GONE);
+//                } else {
+//                    recent_view.setVisibility(View.GONE);
+//                    loc_inform_view.setVisibility(View.VISIBLE);
+//                }
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                String search_text = s.toString();
+//                if (search_text.isEmpty()) {
+//                    recent_view.setVisibility(View.VISIBLE);
+//                    loc_inform_view.setVisibility(View.GONE);
+//                } else {
+//                    recent_view.setVisibility(View.GONE);
+//                    loc_inform_view.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
+    }
+
+
+
+    private void poisearch(String searchText){
+        TMapData tmapdata = new TMapData();
+        tmapdata.findAllPOI(searchText, 5, new TMapData.OnFindAllPOIListener() {
+            @Override
+            public void onFindAllPOI(ArrayList<TMapPOIItem> poiitems) {
+                for(int i = 0;i<poiitems.size();i++){
+                    TMapPOIItem poiItem = poiitems.get(i);
+                    System.out.println(i+":"+poiItem.getPOIName());
+                }
+
             }
         });
     }
@@ -191,7 +209,6 @@ public class Search extends AppCompatActivity {
                 runOnUiThread(() -> Toast.makeText(Search.this, "검색 결과가 없습니다.", Toast.LENGTH_LONG).show());
             }
 
-
         });
     }
 
@@ -201,7 +218,7 @@ public class Search extends AppCompatActivity {
     }
 
     public void go_location() {
-        List<Object> objects = new ArrayList<>();
+//        List<Object> objects = new ArrayList<>();
     }
 
 }

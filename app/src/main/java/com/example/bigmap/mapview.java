@@ -57,6 +57,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.IntStream;
 
 public class mapview extends AppCompatActivity
         implements LocationListener {
@@ -70,6 +71,8 @@ public class mapview extends AppCompatActivity
     TMapView tMapView;
     double latitude;
     double longitude;
+    double loc_latitude;//터치위치 gps(위,경도)
+    double loc_longitude;
     private Timer timer;
     private Handler handler;
     private long startTime;
@@ -117,14 +120,10 @@ public class mapview extends AppCompatActivity
             public void onClick(View view) {
                 num = 0;
                 tMapView.setCenterPoint(latitude, longitude);
-                tMapView.setZoomLevel(15);
             }
         });
 
         initnav();
-
-
-
 
         handler = new Handler(Looper.getMainLooper());
 
@@ -172,16 +171,16 @@ public class mapview extends AppCompatActivity
 
                                         poiName_loc = tMapPOIItem.getPOIName();
                                         poiAddress_loc = s;
-                                        latitude = tMapPOIItem.getPOIPoint().getLatitude();
-                                        longitude = tMapPOIItem.getPOIPoint().getLongitude();
+                                        loc_latitude = tMapPOIItem.getPOIPoint().getLatitude();
+                                        loc_longitude = tMapPOIItem.getPOIPoint().getLongitude();
 
-                                        Log.d(TAG, "장소명: "+poiName_loc+" /장소: "+poiAddress_loc+" /위도: "+latitude+" /경도: "+longitude);
+                                        Log.d(TAG, "장소명: "+poiName_loc+" /장소: "+poiAddress_loc+" /위도: "+loc_latitude+" /경도: "+loc_longitude);
 
                                         HashMap <Object, Object> poiList = new HashMap<>();
                                         poiList.put("loc_name", poiName_loc);
                                         poiList.put("loc_addr", poiAddress_loc);
-                                        poiList.put("loc_lat", latitude);
-                                        poiList.put("loc_lon", longitude);
+                                        poiList.put("loc_lat", loc_latitude);
+                                        poiList.put("loc_lon", loc_longitude);
                                     } else {
                                         findViewById(R.id.loc_layout).setVisibility(View.GONE);
                                         bottomNavigationView.setVisibility(View.VISIBLE);
@@ -224,8 +223,8 @@ public class mapview extends AppCompatActivity
                     bundle = new Bundle();
                     bundle.putString("loc_name", poiName_loc);
                     bundle.putString("loc_addr", poiAddress_loc);
-                    bundle.putDouble("loc_lat", latitude);
-                    bundle.putDouble("loc_lon", longitude);
+                    bundle.putDouble("loc_lat", loc_latitude);
+                    bundle.putDouble("loc_lon", loc_longitude);
 
                     Bottom_LocationInform bottom_locationInform = new Bottom_LocationInform();
                     bottom_locationInform.setArguments(bundle);
@@ -355,7 +354,19 @@ public class mapview extends AppCompatActivity
             tMapView.setZoomLevel(15);
             num++;
         }
+        // 핑(마커) 추가
+        if(tMapView.getMarkerItemFromId("현재위치") != null){
+            tMapView.removeTMapMarkerItem("현재위치");
+        }
 
+        TMapMarkerItem markerItem = new TMapMarkerItem();
+        TMapPoint point = new TMapPoint(latitude, longitude);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.main_gps);
+        markerItem.setTMapPoint(point);
+        markerItem.setId("현재위치");
+        markerItem.setIcon(icon);
+
+        tMapView.addTMapMarkerItem(markerItem);
 
     }
 
@@ -416,7 +427,6 @@ public class mapview extends AppCompatActivity
         }
     };
     public void onClick1(View v){
-
         findpoi("주유소");
     }
     public void onClick2(View v){
@@ -424,6 +434,11 @@ public class mapview extends AppCompatActivity
     }
     public void onClick3(View v){
         findpoi("카페");
+    }
+
+    public void onClick4(View v){
+        Intent intent = new Intent(mapview.this,Test.class);
+        startActivity(intent);
     }
 
     private void deletepoint(TMapMarkerItem markerItem){
@@ -470,6 +485,8 @@ public class mapview extends AppCompatActivity
         Intent intent_searching = new Intent(mapview.this, Search.class);
         startActivity(intent_searching);
     }
+
+
 
 
 }
