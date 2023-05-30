@@ -45,7 +45,6 @@ import com.skt.tmap.engine.navigation.route.RoutePlanType;
 import com.skt.tmap.engine.navigation.route.data.MapPoint;
 import com.skt.tmap.engine.navigation.route.data.WayPoint;
 import com.skt.tmap.poi.TMapPOIItem;
-import com.skt.tmap.vsm.coordinates.VSMCoordinates;
 import com.tmapmobility.tmap.tmapsdk.ui.data.CarOption;
 import com.tmapmobility.tmap.tmapsdk.ui.data.TruckInfoKey;
 import com.tmapmobility.tmap.tmapsdk.ui.fragment.NavigationFragment;
@@ -238,9 +237,9 @@ public class Search extends AppCompatActivity {
 
         //현재 위치
         Location currentLocation = SDKManager.getInstance().getCurrentPosition();
-        String currentName = VSMCoordinates.getAddressOffline(currentLocation.getLongitude(), currentLocation.getLatitude());
+//        String currentName = VSMCoordinates.getAddressOffline(currentLocation.getLongitude(), currentLocation.getLatitude());
 
-        WayPoint startPoint = new WayPoint(currentName, new MapPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
+        WayPoint startPoint = new WayPoint("", new MapPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
 
         //목적지
         WayPoint endPoint = new WayPoint(search_data_list.get(0).toString(), new MapPoint(longi,lati), "", RequestConstant.RpFlagCode.UNKNOWN);

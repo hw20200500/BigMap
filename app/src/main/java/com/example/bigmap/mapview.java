@@ -13,6 +13,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.location.Location;
 import android.location.LocationListener;
@@ -36,8 +37,19 @@ import com.example.bigmap.bottom.Bottom_Favorite;
 import com.example.bigmap.bottom.Bottom_Home;
 import com.example.bigmap.bottom.Bottom_LocationInform;
 import com.example.bigmap.bottom.MypageFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.AggregateQuery;
+import com.google.firebase.firestore.AggregateQuerySnapshot;
+import com.google.firebase.firestore.AggregateSource;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.skt.tmap.TMapData;
 import com.skt.tmap.TMapGpsManager;
 import com.skt.tmap.TMapPoint;
@@ -63,17 +75,22 @@ public class mapview extends AppCompatActivity
     private final static String USER_KEY = "";
     boolean isEDC;
     private LocationManager locationManager;
-    TMapView tMapView;
+    public static TMapView tMapView;
     double latitude;
     double longitude;
     private Timer timer;
     private Handler handler;
     private long startTime;
+    double latitude_user;
+    double longitude_user;
     FrameLayout tmaplayout;
     String poiName_loc;
     String poiAddress_loc;
     int num = 0;
     int num_loc_layout = 0;
+
+    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firestore;
     Bundle bundle;
 
     @Override
@@ -81,6 +98,11 @@ public class mapview extends AppCompatActivity
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE); //타이틀 바 제거 코드 입니다.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapview);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String email = user.getEmail();
 
         tMapView = new TMapView(mapview.this);
         tmaplayout = findViewById(R.id.tmap_layout);
@@ -117,6 +139,58 @@ public class mapview extends AppCompatActivity
 
         initnav();
 
+
+
+
+
+        // 즐겨찾기 마커 표시
+        DocumentReference docR = firestore.collection("즐겨찾기DB").document(email);
+
+        // 데이터베이스에 데이터가 몇 개 있는지 확인하는 코드
+        Query query1 = docR.collection("즐겨찾기");
+        AggregateQuery countQuery1 = query1.count();
+        countQuery1.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<AggregateQuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    // Count fetched successfully
+                    AggregateQuerySnapshot snapshot = task.getResult();
+                    // 데이터베이스에 저장된 데이터의 개수 num에 저장
+                    String number = String.valueOf(snapshot.getCount());
+                    num = Integer.parseInt(number);
+
+                    for (int j=0; j<=num; j++) {
+                        Log.d("TAG", "j: "+j);
+                        DocumentReference read_doc = docR.collection("즐겨찾기").document(String.valueOf(j));
+                        int finalJ = j;
+                        read_doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if(document.exists()) {
+                                        String read_name = document.getString("location_name");
+                                        double read_lat = document.getDouble("latitude");
+                                        double read_lon = document.getDouble("longitude");
+
+                                        TMapMarkerItem marker = new TMapMarkerItem();
+                                        marker.setId("marker"+ finalJ);
+                                        marker.setTMapPoint(read_lat, read_lon);
+                                        marker.setIcon(BitmapFactory.decodeResource(getResources(),R.drawable.search_bookmark2_icon));
+                                        tMapView.addTMapMarkerItem(marker);
+                                    }
+
+                                } else {
+                                    Log.d("TAG", "get failed with ", task.getException());
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    Log.d(TAG, "Count failed: ", task.getException());
+                }
+            }
+        });
 
 
 
@@ -192,9 +266,11 @@ public class mapview extends AppCompatActivity
                     findViewById(R.id.loc_layout).setVisibility(View.VISIBLE);
                     int screenHeight = getResources().getDisplayMetrics().heightPixels;
 
-                    BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(loc_layout);
-                    bottomSheetBehavior.setPeekHeight(getResources().getDimensionPixelSize(R.dimen.main_layout_height));
-                    bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+
+
+                    BottomSheetBehavior bottomSheetBehavior_loc = BottomSheetBehavior.from(loc_layout);
+                    bottomSheetBehavior_loc.setPeekHeight(getResources().getDimensionPixelSize(R.dimen.main_layout_height));
+                    bottomSheetBehavior_loc.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
                         @Override
                         public void onStateChanged(@NonNull View bottomSheet, int newState) {
 
@@ -236,6 +312,8 @@ public class mapview extends AppCompatActivity
                 }
             }
         });
+
+
     }
 
     // 홈 화면 fragment 관련 코드(이전 MainActivity와 동일)
@@ -246,7 +324,9 @@ public class mapview extends AppCompatActivity
 
         BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setPeekHeight(getResources().getDimensionPixelSize(R.dimen.main_layout_height));
+
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
 
@@ -340,12 +420,12 @@ public class mapview extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
+        latitude_user = location.getLatitude();
+        longitude_user = location.getLongitude();
 
         if(num==0) {
             // 현재 위치로 지도 중심 설정
-            tMapView.setCenterPoint(latitude, longitude);
+            tMapView.setCenterPoint(latitude_user, longitude_user);
             tMapView.setZoomLevel(15);
             num++;
         }
@@ -417,6 +497,10 @@ public class mapview extends AppCompatActivity
     public void searching(View view) {
         Intent intent_searching = new Intent(mapview.this, Search.class);
         startActivity(intent_searching);
+    }
+
+    public interface DataPassListener {
+        void onDataPass(String data);
     }
 
 

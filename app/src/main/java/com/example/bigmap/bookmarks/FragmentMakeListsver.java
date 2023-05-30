@@ -1,4 +1,4 @@
-package com.example.bigmap.bookmark;
+package com.example.bigmap.bookmarks;
 
 import android.os.Bundle;
 

@@ -8,6 +8,7 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@drawable/shape_layout"
+    android:layout_marginBottom="90dp"
     app:behavior_hideable="false"
     app:behavior_peekHeight="150dp"
     app:layout_behavior="@string/bottom_sheet_behavior"

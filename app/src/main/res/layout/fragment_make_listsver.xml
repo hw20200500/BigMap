@@ -7,7 +7,7 @@
     android:padding="24dp"
     android:orientation="vertical"
     android:background="@drawable/shape_layout"
-    tools:context=".bookmark.FragmentMakeListsver">
+    tools:context=".bookmarks.FragmentMakeListsver">
 
     <TextView
         android:id="@+id/bookmark_title"
