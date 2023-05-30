@@ -429,7 +429,7 @@ public class mapview extends AppCompatActivity
             // 현재 위치로 지도 중심 설정
             tMapView.setCenterPoint(latitude, longitude);
             tMapView.setZoomLevel(15);
-            num++;
+            num=1;
         }
         // 핑(마커) 추가
         if(tMapView.getMarkerItemFromId("현재위치") != null){
