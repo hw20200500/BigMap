@@ -95,7 +95,6 @@ public class Search extends AppCompatActivity {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEARCH){
                     System.out.println("엔터누름");
-                    performSearch(editTextSearch.getText().toString());
                     handled = true;
                 }
                 return handled;
