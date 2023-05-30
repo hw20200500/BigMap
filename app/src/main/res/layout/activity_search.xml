@@ -33,7 +33,8 @@
             android:textStyle="bold"
             android:hint="장소, 주소 검색"
             android:imeOptions="actionSearch"
-            android:imeActionLabel="검색" />
+            android:imeActionLabel="검색"
+            android:inputType="text"/>
     </LinearLayout>
 
     <View

@@ -49,6 +49,9 @@
             android:name=".mypage.mypage_pw_ch"
             android:exported="false" />
         <activity
+            android:name=".Test"
+            android:exported="false" />
+        <activity
             android:name=".Search"
             android:exported="false"
             android:label="@string/title_activity_search"
@@ -124,6 +127,9 @@
             android:exported="false" />
         <activity
             android:name=".mypage.mypage_phonnumCh"
+            android:exported="false" />
+        <activity
+            android:name=".mypage.mypage_truckinfo_ch"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

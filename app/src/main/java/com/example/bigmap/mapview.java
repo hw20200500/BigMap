@@ -13,6 +13,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.location.Location;
@@ -55,6 +56,8 @@ import com.skt.tmap.TMapGpsManager;
 import com.skt.tmap.TMapPoint;
 import com.skt.tmap.TMapTapi;
 import com.skt.tmap.TMapView;
+import com.skt.tmap.engine.navigation.SDKManager;
+import com.skt.tmap.overlay.TMapLayer;
 import com.skt.tmap.overlay.TMapMarkerItem;
 import com.skt.tmap.poi.TMapPOIItem;
 import com.tmapmobility.tmap.tmapsdk.ui.util.TmapUISDK;
@@ -65,6 +68,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.IntStream;
 
 public class mapview extends AppCompatActivity
         implements LocationListener {
@@ -78,6 +82,8 @@ public class mapview extends AppCompatActivity
     public static TMapView tMapView;
     double latitude;
     double longitude;
+    double loc_latitude;//터치위치 gps(위,경도)
+    double loc_longitude;
     private Timer timer;
     private Handler handler;
     private long startTime;
@@ -133,7 +139,7 @@ public class mapview extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 num = 0;
-                requestLocationUpdates();
+                tMapView.setCenterPoint(latitude, longitude);
             }
         });
 
@@ -240,16 +246,16 @@ public class mapview extends AppCompatActivity
 
                                         poiName_loc = tMapPOIItem.getPOIName();
                                         poiAddress_loc = s;
-                                        latitude = tMapPOIItem.getPOIPoint().getLatitude();
-                                        longitude = tMapPOIItem.getPOIPoint().getLongitude();
+                                        loc_latitude = tMapPOIItem.getPOIPoint().getLatitude();
+                                        loc_longitude = tMapPOIItem.getPOIPoint().getLongitude();
 
-                                        Log.d(TAG, "장소명: "+poiName_loc+" /장소: "+poiAddress_loc+" /위도: "+latitude+" /경도: "+longitude);
+                                        Log.d(TAG, "장소명: "+poiName_loc+" /장소: "+poiAddress_loc+" /위도: "+loc_latitude+" /경도: "+loc_longitude);
 
                                         HashMap <Object, Object> poiList = new HashMap<>();
                                         poiList.put("loc_name", poiName_loc);
                                         poiList.put("loc_addr", poiAddress_loc);
-                                        poiList.put("loc_lat", latitude);
-                                        poiList.put("loc_lon", longitude);
+                                        poiList.put("loc_lat", loc_latitude);
+                                        poiList.put("loc_lon", loc_longitude);
                                     } else {
                                         findViewById(R.id.loc_layout).setVisibility(View.GONE);
                                         bottomNavigationView.setVisibility(View.VISIBLE);
@@ -294,8 +300,8 @@ public class mapview extends AppCompatActivity
                     bundle = new Bundle();
                     bundle.putString("loc_name", poiName_loc);
                     bundle.putString("loc_addr", poiAddress_loc);
-                    bundle.putDouble("loc_lat", latitude);
-                    bundle.putDouble("loc_lon", longitude);
+                    bundle.putDouble("loc_lat", loc_latitude);
+                    bundle.putDouble("loc_lon", loc_longitude);
 
                     Bottom_LocationInform bottom_locationInform = new Bottom_LocationInform();
                     bottom_locationInform.setArguments(bundle);
@@ -312,8 +318,6 @@ public class mapview extends AppCompatActivity
                 }
             }
         });
-
-
     }
 
     // 홈 화면 fragment 관련 코드(이전 MainActivity와 동일)
@@ -324,9 +328,7 @@ public class mapview extends AppCompatActivity
 
         BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setPeekHeight(getResources().getDimensionPixelSize(R.dimen.main_layout_height));
-
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
 
@@ -420,16 +422,28 @@ public class mapview extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
-        latitude_user = location.getLatitude();
-        longitude_user = location.getLongitude();
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
 
         if(num==0) {
             // 현재 위치로 지도 중심 설정
-            tMapView.setCenterPoint(latitude_user, longitude_user);
+            tMapView.setCenterPoint(latitude, longitude);
             tMapView.setZoomLevel(15);
             num++;
         }
+        // 핑(마커) 추가
+        if(tMapView.getMarkerItemFromId("현재위치") != null){
+            tMapView.removeTMapMarkerItem("현재위치");
+        }
 
+        TMapMarkerItem markerItem = new TMapMarkerItem();
+        TMapPoint point = new TMapPoint(latitude, longitude);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.main_gps);
+        markerItem.setTMapPoint(point);
+        markerItem.setId("현재위치");
+        markerItem.setIcon(icon);
+
+        tMapView.addTMapMarkerItem(markerItem);
 
     }
 
@@ -489,8 +503,58 @@ public class mapview extends AppCompatActivity
             }
         }
     };
+    public void onClick1(View v){
+        findpoi("주유소");
+    }
+    public void onClick2(View v){
+        findpoi("주차장");
+    }
+    public void onClick3(View v){
+        findpoi("카페");
+    }
 
-    private class FindAroundNamePOIListenerCallback {
+    public void onClick4(View v){
+        Intent intent = new Intent(mapview.this,Test.class);
+        startActivity(intent);
+    }
+
+    private void deletepoint(TMapMarkerItem markerItem){
+        tMapView.removeTMapMarkerItem(markerItem.getId());
+    }
+
+    private TMapPoint getCurrentLocation() {
+        return new TMapPoint(latitude, longitude);
+    }
+    private void addMapMarker(TMapPoint point, String title, Bitmap icon) {
+        TMapMarkerItem markerItem = new TMapMarkerItem();
+        markerItem.setTMapPoint(point);
+        markerItem.setId(title);
+        markerItem.setIcon(icon);
+        if (tMapView.getMarkerItemFromId(markerItem.getId()) != null) {
+            deletepoint(markerItem);
+        }else{
+            tMapView.addTMapMarkerItem(markerItem);
+        }
+
+    }
+
+    private void findpoi(String data){
+        // 현재 위치를 가져오는 메서드를 호출하여 현재 위치를 얻습니다.
+        TMapPoint currentLocation = getCurrentLocation();
+        // TMapData 객체를 생성합니다.
+        TMapData tMapData = new TMapData();
+
+        tMapData.findAroundNamePOI(currentLocation,data, 3, 50, new TMapData.OnFindAroundNamePOIListener() {
+            @Override
+            public void onFindAroundNamePOI(ArrayList<TMapPOIItem> poiItems) {
+                for (TMapPOIItem poiItem : poiItems) {
+                    TMapPoint point = poiItem.getPOIPoint();
+                    String title = poiItem.getPOIName();
+                    Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.poi);
+                    addMapMarker(point, title, icon);
+                }
+            }
+        });
     }
 
     // 검색창 함수
