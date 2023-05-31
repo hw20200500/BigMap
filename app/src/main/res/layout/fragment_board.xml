@@ -22,7 +22,7 @@
         android:layout_weight="1.6"
         android:clickable="false"
         android:text="어떤 게 궁금하신가요?"
-        android:textColor="@color/black"
+        android:textColor="#999999"
         android:textSize="30sp"
         android:textStyle="bold" />
 
@@ -115,7 +115,7 @@
             android:id="@+id/free"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_weight="1"
+            android:layout_weight="0.4"
             android:gravity="left"
             android:text="자유게시판"
             android:layout_marginBottom="5dp"
@@ -132,7 +132,7 @@
         <ListView
             android:id="@+id/free_List"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:divider="@color/black"
             android:dividerHeight="2px"
             android:scrollbars="none"

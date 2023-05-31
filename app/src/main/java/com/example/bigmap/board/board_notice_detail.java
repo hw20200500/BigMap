@@ -31,7 +31,7 @@ public class board_notice_detail extends AppCompatActivity {
         backButton.setOnClickListener(v -> onBackPressed());
     }
 
-    Button btn_comment_reg = findViewById(R.id.btn_comment_reg);
+
 
 
 

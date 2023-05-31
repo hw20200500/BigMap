@@ -103,7 +103,7 @@ public class BoardFragment extends Fragment {
         // 자유게시판 최신 게시물 가져오기 (최대 5개)
         firestore.collection("게시판DB")
                 .orderBy("작성_시간_날짜", Query.Direction.DESCENDING)
-                .limit(5)
+                .limit(3)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {freeItemList.clear();
                     for(QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots)
@@ -120,7 +120,7 @@ public class BoardFragment extends Fragment {
         // 공지사항 최신 게시물 가져오기 (최대 3개)
         firestore.collection("공지사항DB")
                 .orderBy("작성_시간_날짜", Query.Direction.DESCENDING)
-                .limit(3)
+                .limit(2)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     noticeItemList.clear();
@@ -137,7 +137,7 @@ public class BoardFragment extends Fragment {
         // Q&A 최신 게시물 가져오기 (최대 3개)
         firestore.collection("qnaDB")
                 .orderBy("작성_시간_날짜", Query.Direction.DESCENDING)
-                .limit(3)
+                .limit(2)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     qnaItemList.clear();
