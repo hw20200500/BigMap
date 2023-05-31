@@ -191,7 +191,8 @@ public class mapview extends AppCompatActivity
                                 }
                             }
                         });
-                    }
+                    } num = 0;
+
                 } else {
                     Log.d(TAG, "Count failed: ", task.getException());
                 }
@@ -319,6 +320,8 @@ public class mapview extends AppCompatActivity
             }
         });
     }
+
+
 
     // 홈 화면 fragment 관련 코드(이전 MainActivity와 동일)
     private void initnav(){
