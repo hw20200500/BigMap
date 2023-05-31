@@ -4,58 +4,84 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.bigmap.R;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class board_notice extends AppCompatActivity {
 
-    private ListView noticeList;
-    private ArrayAdapter<String> noticeAdapter;
-    private List<String> noticeItemList;
+    private ListView listView;
+    private freelist_Adapter adapter;
+    private List<freelist_item> itemList;
+    private FirebaseFirestore db;
+
+    private static final String TAG = "board_notice";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_notice);
 
-        noticeList = findViewById(R.id.notice_List);
-        noticeItemList = new ArrayList<>();
-        noticeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, noticeItemList);
-        noticeList.setAdapter(noticeAdapter);
+        listView = findViewById(R.id.notice_List);
+        itemList = new ArrayList<>();
+        adapter = new freelist_Adapter(board_notice.this, itemList);
+        listView.setAdapter(adapter);
 
-        // 공지사항 아이템 클릭 이벤트 처리
-        noticeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = noticeItemList.get(position);
-                Toast.makeText(board_notice.this, "Selected Item: " + selectedItem, Toast.LENGTH_SHORT).show();
-                // 클릭된 아이템
-                noticeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        String selectedItem = noticeItemList.get(position);
-                        // 선택된 아이템의 정보를 다른 액티비티로 전달하기 위한 인텐트 생성
-                        Intent intent = new Intent(board_notice.this, board_free_detail.class);
-                        intent.putExtra("selectedItem", selectedItem); // 선택된 아이템의 정보를 인텐트에 추가
+        // Firestore 초기화
+        db = FirebaseFirestore.getInstance();
 
-                        startActivity(intent); // 다른 액티비티로 전환
-                    }
-                });
-            }
+        // 최신 게시글 가져오기
+        fetchLatestPosts();
+
+        // 리스트뷰 아이템 클릭 이벤트 처리
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            // 클릭한 아이템의 동작 정의
+            freelist_item selectedItem = itemList.get(position);
+            // 클릭한 아이템에 대한 동작 구현
+            Intent intent = new Intent(getApplicationContext(), board_free_detail.class);
+            intent.putExtra("title", selectedItem.getTitle());
+            intent.putExtra("user", selectedItem.getUser());
+            intent.putExtra("time", selectedItem.getTime());
+            startActivity(intent);
         });
+
+
 
         ImageView backButton = findViewById(R.id.back);
         backButton.setOnClickListener(v -> onBackPressed());
+    }
 
+    private void fetchLatestPosts() {
+        db.collection("공지사항DB")
+                .orderBy("작성_시간_날짜", Query.Direction.DESCENDING)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        itemList.clear();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String postId = document.getId(); // Firestore 문서의 postId 가져오기
+                            String title = document.getString("제목");
+                            String user = document.getString("작성자");
+                            String time = document.getString("작성_시간_날짜");
+                            freelist_item item = new freelist_item(postId, title, user, time);
+                            itemList.add(item);
+                        }
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        Log.d(TAG, "새로고침을 실패하였습니다. ", task.getException());
+                    }
+                });
     }
 }

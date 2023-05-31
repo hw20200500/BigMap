@@ -4,57 +4,60 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.example.bigmap.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class FrontFreeAdapter extends ArrayAdapter<String> {
-    private List<String> itemList;
+public class FrontFreeAdapter extends BaseAdapter {
+    private Context context;
+    private List<FrontFreeItem> listViewItemList;
 
-    public FrontFreeAdapter(@NonNull Context context, int resource, @NonNull List<String> itemList) {
-        super(context, resource, itemList);
-        this.itemList = itemList;
+    public FrontFreeAdapter(Context context, List<FrontFreeItem> itemList) {
+        this.context=context;
+        this.listViewItemList = itemList;
     }
 
     @Override
     public int getCount() {
-        // 최대 3개의 아이템만 표시
-        return Math.min(super.getCount(), 5);
+        return listViewItemList.size();
     }
 
-
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View view = convertView;
-        ViewHolder holder;
+    public Object getItem(int position) {
+        return listViewItemList.get(position);
+    }
 
-        if (view == null) {
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            view = inflater.inflate(R.layout.front_free_item, null);
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-            holder = new ViewHolder();
-            holder.titleTextView = view.findViewById(R.id.view_title);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        Context context = parent.getContext();
 
-            view.setTag(holder);
-        } else {
-            holder = (ViewHolder) view.getTag();
+        if (convertView == null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            convertView = inflater.inflate(R.layout.front_free_item, parent, false);
         }
 
-        String title = itemList.get(position);
+        FrontFreeItem item = listViewItemList.get(position);
 
-        holder.titleTextView.setText(title);
+        TextView titleTextView = convertView.findViewById(R.id.view_title);
 
-        return view;
+        titleTextView.setText(item.getTitle());
+
+        return convertView;
     }
 
-    private static class ViewHolder {
-        TextView titleTextView;
+    public void addItem(String title) {
+        FrontFreeItem item = new FrontFreeItem(title);
+        listViewItemList.add(item);
+        notifyDataSetChanged();
     }
+
 }
