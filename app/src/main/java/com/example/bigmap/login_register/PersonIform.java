@@ -219,8 +219,6 @@ public class PersonIform extends AppCompatActivity {
 
         firebaseAuth.getFirebaseAuthSettings().setAppVerificationDisabledForTesting(true);
         editUserPhoneNum.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-//        binding.userPhoneNum.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-//        EditText phoneNumber = findViewById(R.id.userPhoneNum);
         Button buttonSend = (Button) findViewById(R.id.button_num_send);
         verificationCodeEditText = findViewById(R.id.phoneCertif_Num);
         editPhonenum = findViewById(R.id.userPhoneNum);

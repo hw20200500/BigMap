@@ -20,7 +20,18 @@
         android:theme="@style/Theme.BigMap"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".login_register.foundPw"
+            android:exported="false" />
+        <activity
+            android:name=".login_register.foundId"
+            android:exported="false" />
+        <activity
+            android:name=".login_register.Login_pwfind"
+            android:exported="false" />
+        <activity
+            android:name=".login_register.Login_idfind"
+            android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -38,10 +49,10 @@
 
         <activity
             android:name=".mapview_clone"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".mapview"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".mypage.mypage_pw_check"
             android:exported="false" />
@@ -56,7 +67,6 @@
             android:exported="false"
             android:label="@string/title_activity_search"
             android:theme="@style/Theme.BigMap.NoActionBar" />
-
         <activity
             android:name=".board.board_free"
             android:exported="false" />
@@ -72,8 +82,9 @@
         <activity
             android:name=".board.board_free_detail"
             android:exported="false" />
-        <activity android:name=".board.board_notice_detail"
-            android:exported="false"/>
+        <activity
+            android:name=".board.board_notice_detail"
+            android:exported="false" />
         <activity
             android:name=".board.board_qna_detail"
             android:exported="false" />
@@ -152,7 +163,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

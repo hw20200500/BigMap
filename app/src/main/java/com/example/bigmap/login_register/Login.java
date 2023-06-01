@@ -15,7 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.bigmap.MainActivity;
 import com.example.bigmap.R;
 import com.example.bigmap.mapview;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -97,58 +96,6 @@ public class Login extends AppCompatActivity {
                         Toast.makeText(Login.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
-                //php파일이 연결된 링크로 가서 데이터베이스에 접근. 만일 데이터베이스에 없는 이메일 주소, 비밀번호이거나, 사용자의 이메일 주소와 비밀번호가 일치하지 않는 경우, 경고 문구 출력, 그렇지 않으면 로그인 완료.
-                /*StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://172.30.1.17/login_bigmap.php",
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-
-
-                                JSONObject jsonObject = null;
-                                try {
-                                    jsonObject = new JSONObject(response);
-                                } catch (JSONException e) {
-                                    throw new RuntimeException(e);
-                                }
-
-                                try {
-                                    if (jsonObject.getString("status").equals("success")) {
-                                        // Login successful, go to home activity
-                                        JSONObject userData = jsonObject.getJSONObject("data");
-                                        String userName = userData.getString("userName");
-                                        String userEmail = userData.getString("userEmail");
-                                        String userPhoneNum = userData.getString("userPhoneNum");
-                                        Intent intent = new Intent(Login.this, MainActivity.class);
-                                        startActivity(intent);
-                                    } else {
-                                        // Login failed, show error message
-                                        Toast.makeText(Login.this, "이메일 주소 혹은 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                progressDialog.dismiss();
-                                Toast.makeText(Login.this, "Error occurred: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }) {
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String> params = new HashMap<>();
-                        params.put("userEmail", userEmail);
-                        params.put("userPassword", userPassword);
-                        return params;
-                    }
-                };
-
-                RequestQueue requestQueue = Volley.newRequestQueue(Login.this);
-                requestQueue.add(stringRequest);*/
             }
         });
 
@@ -160,6 +107,26 @@ public class Login extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button bttn_idfind = findViewById(R.id.button_find_id);
+        Button bttn_pwfind = findViewById(R.id.button_find_pw);
+
+        bttn_idfind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent_id = new Intent(Login.this, Login_idfind.class);
+                startActivity(intent_id);
+            }
+        });
+
+        bttn_pwfind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent_pw = new Intent(Login.this, Login_pwfind.class);
+                startActivity(intent_pw);
+            }
+        });
     }
 
-    }
+
+}
