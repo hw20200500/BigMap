@@ -1,5 +1,7 @@
 package com.example.bigmap.bottom;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -19,8 +21,11 @@ import androidx.fragment.app.Fragment;
 
 import com.example.bigmap.R;
 import com.example.bigmap.bookmarks.Sub;
+import com.example.bigmap.login_register.Login_idfind;
+import com.example.bigmap.login_register.foundId;
 import com.example.bigmap.mapview;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +37,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.skt.tmap.TMapView;
 import com.skt.tmap.overlay.TMapMarkerItem;
 
@@ -73,32 +79,118 @@ public class Bottom_Favorite extends Fragment {
         DocumentReference docR = firestore.collection("즐겨찾기DB").document(email);
         TMapMarkerItem marker_bookmarker = new TMapMarkerItem();
 
-        // Sub 불러와서 linearlayout 여러개 복제하는 코드
 
-
-
-
-        /*n_layout.findViewById(R.id.sub_lists).setOnClickListener(new View.OnClickListener() {
+        Task<QuerySnapshot> docRef = firestore.collection("즐겨찾기DB").document(email).collection("즐겨찾기").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onClick(View view) {
-//                String b_title= (String) bookmarks_title.getText();
-                FrameLayout loc_layout = ((mapview) getActivity()).findViewById(R.id.loc_layout);
-                FrameLayout main_content = ((mapview) getActivity()).findViewById(R.id.main_content);
-                main_content.setVisibility(View.GONE);
-                loc_layout.setVisibility(View.VISIBLE);
-                bundle = new Bundle();
-                *//*bundle.putString("loc_name", b_title);
-                bundle.putString("loc_addr", b_title);*//*
-                bundle.putDouble("loc_lat", latitude);
-                bundle.putDouble("loc_lon", longitude);
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
+                    title = ds.getString("location_name");
+                    addr = ds.getString("address");
+                    latitude = ds.getDouble("latitude");
+                    longitude = ds.getDouble("longitude");
 
-                Bottom_LocationInform bottom_locationInform = new Bottom_LocationInform();
-                bottom_locationInform.setArguments(bundle);
-                ((mapview) getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.loc_layout, bottom_locationInform).commit();
+                    String id = ds.getId();
+
+                    n_layout = new Sub(getActivity().getApplicationContext());
+
+                    // n_layout(=fragment_favorite_sub) 복제본을 넣을 즐겨찾기(fragment_bottom__favorite.xml) 내부 장소
+                    bookmarks_list = view.findViewById(R.id.bookmarks_list);
+                    TextView bookmarks_title = n_layout.findViewById(R.id.bookmarks_title);
+                    TextView bookmarks_addr = n_layout.findViewById(R.id.bookmarks_addr);
+
+                    // fragment_favorite_sub에 있는 텍스트뷰 아이디 갖고와서 파이어스토어에 저장된 데이터들 넣어서 출력하기
+
+                    bookmarks_title.setText(title);
+                    bookmarks_addr.setText(addr);
+
+                    LinearLayout lists = n_layout.findViewById(R.id.sub_lists);
+                    lists.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String bookmarks_title_str = (String) bookmarks_title.getText();
+//                                                Toast.makeText(getActivity().getApplicationContext(), "클릭 장소: "+bookmarks_title_str+" 넘버: "+j_str, Toast.LENGTH_SHORT).show();
+
+                            DocumentReference get_doc = docR.collection("즐겨찾기").document(id);
+                            get_doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    DocumentSnapshot document_get = task.getResult();
+                                    get_title = document_get.getString("location_name");
+                                    get_addr = document_get.getString("address");
+                                    get_latitude = document_get.getDouble("latitude");
+                                    get_longitude = document_get.getDouble("longitude");
+
+                                    bundle = new Bundle();
+                                    bundle.putString("loc_name", get_title);
+                                    bundle.putString("loc_addr", get_addr);
+                                    bundle.putDouble("loc_lat", get_latitude);
+                                    bundle.putDouble("loc_lon", get_longitude);
+
+                                    Bottom_LocationInform bottom_locationInform = new Bottom_LocationInform();
+                                    bottom_locationInform.setArguments(bundle);
+                                    ((mapview) getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.loc_layout, bottom_locationInform).commit();
+
+                                    TMapView tMapView = ((mapview) getActivity()).tMapView;
+                                    tMapView.setCenterPoint(get_latitude, get_longitude, true);
+
+
+                                    String mk_id = marker_bookmarker.getId();
+                                    Log.d(getTag(), "즐겨찾기 마커: "+mk_id);
+
+                                    if (mk_id!=null && mk_id.equals("bookmarker")) {
+                                        tMapView.removeTMapMarkerItem("bookmarker");
+                                    }
+                                    marker_bookmarker.setId("bookmarker");
+                                    marker_bookmarker.setTMapPoint(get_latitude, get_longitude);
+                                    marker_bookmarker.setIcon(BitmapFactory.decodeResource(getResources(),R.drawable.search_gps_icon));
+                                    tMapView.addTMapMarkerItem(marker_bookmarker);
+
+                                    FrameLayout loc_layout = ((mapview) getActivity()).findViewById(R.id.loc_layout);
+                                    FrameLayout main_content = ((mapview) getActivity()).findViewById(R.id.main_content);
+                                    main_content.setVisibility(View.GONE);
+                                    loc_layout.setVisibility(View.VISIBLE);
+                                    FrameLayout tmaplayout = ((mapview) getActivity()).findViewById(R.id.tmap_layout);
+
+
+                                    BottomSheetBehavior bottomSheetBehavior_loc = BottomSheetBehavior.from(loc_layout);
+                                    bottomSheetBehavior_loc.setPeekHeight(getResources().getDimensionPixelSize(R.dimen.main_layout_height));
+                                    int screenHeight = getResources().getDisplayMetrics().heightPixels;
+
+                                    int mainLayoutHeight = screenHeight - 400;
+                                    tmaplayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
+
+                                    bottomSheetBehavior_loc.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+                                        @Override
+                                        public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+                                            int bottomSheetHeight = 400;
+                                            if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                                                bottomSheetHeight = (int) (bottomSheet.getHeight()) - 150;
+                                            }
+                                            int mainLayoutHeight = screenHeight - bottomSheetHeight;
+                                            tmaplayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
+                                        }
+
+                                        @Override
+                                        public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                                            int bottomSheetHeight = (int) (bottomSheet.getHeight() * slideOffset);
+                                            int mainLayoutHeight = screenHeight - bottomSheetHeight;
+                                            tmaplayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
+                                        }
+                                    });
+
+
+                                }
+                            });
+                        }
+                    });
+
+                    // 파이어스토어 데이터를 넣어서 새로 제작한 n_layout(=fragment_favorite_sub) 즐겨찾기(fragment_bottom__favorite.xml)에 있는 bookmarks_list에 추가하기
+                    bookmarks_list.addView(n_layout);
+                }
+
             }
-        });*/
-
-
+        });
 
 
         // 데이터베이스에 데이터가 몇 개 있는지 확인하는 코드
@@ -118,7 +210,8 @@ public class Bottom_Favorite extends Fragment {
                     list_num.setText(String.valueOf(num)+"개");
                     Log.d(getTag(), "num: " + num);
 
-                    for (int j=0; j<=num; j++) {
+
+                    /*for (int j=0; j<=num; j++) {
                         Log.d("TAG", "j: "+j);
                         DocumentReference read_doc = docR.collection("즐겨찾기").document(String.valueOf(j));
                         int finalJ = j;
@@ -237,7 +330,7 @@ public class Bottom_Favorite extends Fragment {
                                 }
                             }
                         });
-                    }
+                    }*/
 
                 } else {
                     Log.d(getTag(), "Count failed: ", task.getException());

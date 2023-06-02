@@ -39,6 +39,7 @@ import com.example.bigmap.bottom.Bottom_Home;
 import com.example.bigmap.bottom.Bottom_LocationInform;
 import com.example.bigmap.bottom.MypageFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -51,6 +52,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.skt.tmap.TMapData;
 import com.skt.tmap.TMapGpsManager;
 import com.skt.tmap.TMapPoint;
@@ -152,52 +154,24 @@ public class mapview extends AppCompatActivity
         // 즐겨찾기 마커 표시
         DocumentReference docR = firestore.collection("즐겨찾기DB").document(email);
 
-        // 데이터베이스에 데이터가 몇 개 있는지 확인하는 코드
-        Query query1 = docR.collection("즐겨찾기");
-        AggregateQuery countQuery1 = query1.count();
-        countQuery1.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
+        Task<QuerySnapshot> docRef = docR.collection("즐겨찾기").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<AggregateQuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    // Count fetched successfully
-                    AggregateQuerySnapshot snapshot = task.getResult();
-                    // 데이터베이스에 저장된 데이터의 개수 num에 저장
-                    String number = String.valueOf(snapshot.getCount());
-                    num = Integer.parseInt(number);
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
+                    String loc_name = ds.getString("location_name");
+                    String loc_addr = ds.getString("address");
+                    Double loc_lat = ds.getDouble("latitude");
+                    Double loc_lon = ds.getDouble("longitude");
 
-                    for (int j=0; j<=num; j++) {
-                        Log.d("TAG", "j: "+j);
-                        DocumentReference read_doc = docR.collection("즐겨찾기").document(String.valueOf(j));
-                        int finalJ = j;
-                        read_doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if(document.exists()) {
-                                        String read_name = document.getString("location_name");
-                                        double read_lat = document.getDouble("latitude");
-                                        double read_lon = document.getDouble("longitude");
-
-                                        TMapMarkerItem marker = new TMapMarkerItem();
-                                        marker.setId("marker"+ finalJ);
-                                        marker.setTMapPoint(read_lat, read_lon);
-                                        marker.setIcon(BitmapFactory.decodeResource(getResources(),R.drawable.search_bookmark2_icon));
+                    TMapMarkerItem marker = new TMapMarkerItem();
+                    marker.setId("marker_"+ loc_name);
+                    marker.setTMapPoint(loc_lat, loc_lon);
+                    marker.setIcon(BitmapFactory.decodeResource(getResources(),R.drawable.search_bookmark2_icon));
                                         tMapView.addTMapMarkerItem(marker);
-                                    }
-
-                                } else {
-                                    Log.d("TAG", "get failed with ", task.getException());
-                                }
-                            }
-                        });
-                    } num = 0;
-
-                } else {
-                    Log.d(TAG, "Count failed: ", task.getException());
                 }
             }
         });
+
 
 
 

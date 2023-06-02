@@ -82,8 +82,29 @@ public class Bottom_LocationInform extends Fragment {
         loc_title.setText(title);
         loc_addr.setText(addr);
 
+
+        Task<QuerySnapshot> docRef = docR.collection("즐겨찾기").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
+                    String loc_name = ds.getString("location_name");
+                    String loc_addr = ds.getString("address");
+                    Double loc_lat = ds.getDouble("latitude");
+                    Double loc_lon = ds.getDouble("longitude");
+
+                    if (loc_name.equals(title)) {
+                        star.setImageResource(R.drawable.location_fill_star);
+                        Log.d(getTag(), "즐겨찾기: "+loc_name);
+                    } else {
+                        Log.d(getTag(), "즐겨찾기 X");
+                        Log.d(getTag(), "이름: "+ loc_name);
+                    }
+                }
+            }
+        });
+
         // 데이터베이스에 데이터가 몇 개 있는지 확인하는 코드
-        Query query = docR.collection("즐겨찾기");
+        /*Query query = docR.collection("즐겨찾기");
         AggregateQuery countQuery = query.count();
         countQuery.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
             @Override
@@ -129,7 +150,7 @@ public class Bottom_LocationInform extends Fragment {
                     Log.d(getTag(), "Count failed: ", task.getException());
                 }
             }
-        });
+        });*/
 
         Button bttn_start = view.findViewById(R.id.bttn_start);
         Button bttn_dest = view.findViewById(R.id.bttn_dest);
