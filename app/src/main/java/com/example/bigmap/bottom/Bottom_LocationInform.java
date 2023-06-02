@@ -1,9 +1,7 @@
 package com.example.bigmap.bottom;
 
-import static com.airbnb.lottie.L.TAG;
-
 import android.content.Intent;
-import android.nfc.Tag;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,9 +18,10 @@ import android.widget.TextView;
 
 import com.example.bigmap.MainActivity;
 import com.example.bigmap.R;
+import com.example.bigmap.mapview;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.AggregateQuery;
@@ -32,6 +31,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.skt.tmap.TMapView;
+import com.skt.tmap.overlay.TMapMarkerItem;
 
 import java.util.HashMap;
 
@@ -39,7 +41,12 @@ public class Bottom_LocationInform extends Fragment {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
+    int del_num;
     int num;
+    Double latitude;
+    Double longitude;
+    boolean exist = false;
+    String del_name;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,8 +74,8 @@ public class Bottom_LocationInform extends Fragment {
         // mapview에서 받아온 위치 정보(이름, 주소, 위경도) 가져와서 문자열 및 double 변수에 저장
         String title = this.getArguments().getString("loc_name");
         String addr = this.getArguments().getString("loc_addr");
-        Double latitude = this.getArguments().getDouble("loc_lat");
-        Double longitude = this.getArguments().getDouble("loc_lon");
+        latitude = this.getArguments().getDouble("loc_lat");
+        longitude = this.getArguments().getDouble("loc_lon");
         //"loc_lon", longitude
 
         // 장소 이름, 주소는 각각 textview에 저장
@@ -161,19 +168,58 @@ public class Bottom_LocationInform extends Fragment {
 
         // 즐겨찾기 버튼
         star.setOnClickListener(new View.OnClickListener() {
+            TMapMarkerItem marker = new TMapMarkerItem();
+            TMapView tMapView = ((mapview) getActivity()).tMapView;
             @Override
             public void onClick(View view) {
 
-                star.setImageResource(R.drawable.location_fill_star);
-                // 파이어베이스 저장
-                HashMap<Object,Object> hashMap = new HashMap<>();
-                hashMap.put("location_name",title);
-                hashMap.put("address",addr);
-                hashMap.put("latitude",latitude);
-                hashMap.put("longitude",longitude);
+                if (exist==false) {
+                    star.setImageResource(R.drawable.location_fill_star);
+                    // 파이어베이스 저장
+                    HashMap<Object,Object> hashMap = new HashMap<>();
+                    hashMap.put("location_name",title);
+                    hashMap.put("address",addr);
+                    hashMap.put("latitude",latitude);
+                    hashMap.put("longitude",longitude);
+
+                    docR.collection("즐겨찾기").document(String.valueOf(num)).set(hashMap);
 
 
-                docR.collection("즐겨찾기").document(String.valueOf(num)).set(hashMap);
+
+                    marker.setId("marker");
+                    marker.setTMapPoint(latitude, longitude);
+                    marker.setIcon(BitmapFactory.decodeResource(getResources(),R.drawable.search_bookmark2_icon));
+                    tMapView.addTMapMarkerItem(marker);
+                    exist=true;
+                } else {
+                    star.setImageResource(R.drawable.location_inform_star_empty);
+
+                    for (int i = 0; i<=num; i++) {
+                        int finalI = i;
+                        docR.collection("즐겨찾기").document(String.valueOf(i)).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        String get_locname = document.getString("location_name");
+                                        if (get_locname.equals(title)) {
+                                            del_num = finalI;
+                                            Log.d(getTag(), "del_num: "+del_num);
+                                            docR.collection("즐겨찾기").document(String.valueOf(del_num)).delete();
+                                            String id = "marker"+String.valueOf(del_num);
+                                            tMapView.removeTMapMarkerItem(id);
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
+                    }
+
+                }
+
+
 //                num++;
             }
         });

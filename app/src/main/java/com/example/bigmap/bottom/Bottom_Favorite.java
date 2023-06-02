@@ -114,6 +114,8 @@ public class Bottom_Favorite extends Fragment {
                     // 데이터베이스에 저장된 데이터의 개수 num에 저장
                     String number = String.valueOf(snapshot.getCount());
                     num = Integer.parseInt(number);
+                    TextView list_num = view.findViewById(R.id.list_num);
+                    list_num.setText(String.valueOf(num)+"개");
                     Log.d(getTag(), "num: " + num);
 
                     for (int j=0; j<=num; j++) {
