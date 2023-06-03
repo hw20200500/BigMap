@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_sub_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@drawable/shape_home"
+    android:gravity="center_vertical"
+    tools:context=".bottom.fragment_home_sub">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/text_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="주유소 / 휴게소"
+        android:textStyle="bold"
+        android:textSize="18dp"/>
+    <TextView
+        android:id="@+id/text_addr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="주소 작성하기"
+        android:layout_marginTop="8dp"
+        android:textSize="16dp"/>
+
+</LinearLayout>
