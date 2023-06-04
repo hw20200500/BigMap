@@ -5,6 +5,7 @@
     android:id="@+id/list_search"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
     android:orientation="vertical"
     tools:context=".search_sub">
 
@@ -15,7 +16,6 @@
         android:paddingHorizontal="15dp"
         android:paddingVertical="5dp"
         android:gravity="center_vertical"
-        android:clickable="true"
         android:orientation="horizontal">
 
         <ImageView
@@ -29,8 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="20"
-            android:orientation="vertical"
-            android:onClick="go_location">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/recent_search_text1"
@@ -68,7 +67,6 @@
             android:src="@drawable/login_x"
             app:tint="#bbbbbb"
             android:clickable="true"
-            android:onClick="delete_text"
             android:layout_weight="0"/>
     </LinearLayout>
 

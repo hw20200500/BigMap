@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -80,15 +81,17 @@ public class Search extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private searched_sub l_sub;
     private search_sub r_sub;
-    LinearLayout loc_inform_view;
+    public static LinearLayout loc_inform_view;
 
-    LinearLayout recent_view;
+    public static LinearLayout recent_view;
 
     public Double longi;
     public Double lati;
     TMapData tmapdata = new TMapData();
     int count = 0;
     int num = 1;
+    public static Context context;
+    public static EditText search_bar;
 
 
     @Override
@@ -96,6 +99,8 @@ public class Search extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        context = this;
 
         Intent intent = getIntent();
         longi = intent.getDoubleExtra("longi",0);
@@ -106,9 +111,9 @@ public class Search extends AppCompatActivity {
         recent();
         getid();
 
-        EditText search_bar = (EditText) findViewById(R.id.edittext_search);
-        LinearLayout recent_view = (LinearLayout) findViewById(R.id.recent_view);
-        LinearLayout loc_inform_view = (LinearLayout) findViewById(R.id.loc_inform_view);
+        search_bar = (EditText) findViewById(R.id.edittext_search);
+        recent_view = (LinearLayout) findViewById(R.id.recent_view);
+        loc_inform_view = (LinearLayout) findViewById(R.id.loc_inform_view);
 
         // 검색 버튼 또는 엔터 키를 눌렀을 때 동작하도록 설정
         search_bar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
