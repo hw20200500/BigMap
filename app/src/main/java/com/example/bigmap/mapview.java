@@ -546,14 +546,16 @@ public class mapview extends AppCompatActivity
         }
     };
     public void onClick1(View v){
-        findpoi("주유소");
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.refuel_pin_icon);
+        findpoi("주유소",icon);
     }
     public void onClick2(View v){
-        findpoi("주차장");
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.parking_pin_icon);
+        findpoi("주차장",icon);
     }
     public void onClick3(View v){
         Mileage mileage = new Mileage();
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.poi);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.favorites_gps_icon_modif);
         for(int i = 0;i<mileage.mileage().size();i++){
             addMapMarker(mileage.mileage().get(i),mileage.mileagename().get(i),icon);
         }
@@ -580,7 +582,7 @@ public class mapview extends AppCompatActivity
 
     }
 
-    private void findpoi(String data){
+    private void findpoi(String data,Bitmap icon){
         // 현재 위치를 가져오는 메서드를 호출하여 현재 위치를 얻습니다.
         TMapPoint currentLocation = getCurrentLocation();
         // TMapData 객체를 생성합니다.
@@ -592,7 +594,7 @@ public class mapview extends AppCompatActivity
                 for (TMapPOIItem poiItem : poiItems) {
                     TMapPoint point = poiItem.getPOIPoint();
                     String title = poiItem.getPOIName();
-                    Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.poi);
+
                     addMapMarker(point, title, icon);
                 }
             }
