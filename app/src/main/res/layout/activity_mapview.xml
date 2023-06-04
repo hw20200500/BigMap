@@ -94,14 +94,6 @@
                         android:src="@drawable/main_cafe_icon"
                         android:onClick="onClick3" />
 
-                    <ImageButton
-                        android:id="@+id/testbutton"
-                        android:layout_width="80dp"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginStart="10dp"
-                        android:src="@drawable/main_cafe_icon"
-                        android:onClick="onClick4" />
 
                 </LinearLayout>
             </HorizontalScrollView>

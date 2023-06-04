@@ -169,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -428,6 +427,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     public void searching(View view) {
         Intent intent_searching = new Intent(MainActivity.this, Search.class);
         startActivity(intent_searching);

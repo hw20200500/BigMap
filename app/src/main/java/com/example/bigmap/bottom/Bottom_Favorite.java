@@ -140,7 +140,6 @@ public class Bottom_Favorite extends Fragment {
 
                     n_layout = new Sub(getActivity().getApplicationContext());
 
-
                     // n_layout(=fragment_favorite_sub) 복제본을 넣을 즐겨찾기(fragment_bottom__favorite.xml) 내부 장소
 
                     TextView bookmarks_title = n_layout.findViewById(R.id.bookmarks_title);
