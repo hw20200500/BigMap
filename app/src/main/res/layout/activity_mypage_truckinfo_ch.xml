@@ -145,8 +145,6 @@
                 android:paddingVertical="10dp"/>
         </LinearLayout>
 
-
-
     </LinearLayout>
 
     <Button

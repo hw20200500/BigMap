@@ -46,32 +46,31 @@ public class mypage_truckinfo_ch extends AppCompatActivity {
 
         int height = 420;
         Object[] truck_height = new Object[301];
-        truck_height[0] = 420;
-        for (int i = 1; i <= 300; i++) {
+        for (int i = 0; i <= 300; i++) {
             truck_height[i] = height;
             height--;
         }
 
         int weight = 2500;
         Object[] truck_weight = new Object[101];
-        truck_weight[0] = 2500;
-        for (int i = 1; i <= 100; i++) {
+
+        for (int i = 0; i <= 50; i++) {
             truck_weight[i] = weight;
             weight= weight-50;
         }
 
         int width = 250;
         Object[] truck_width = new Object[101];
-        truck_width[0] = 250;
-        for (int i = 1; i <= 100; i++) {
+
+        for (int i = 0; i <= 100; i++) {
             truck_width[i] = width;
             width--;
         }
 
         int length = 1200;
         Object[] truck_length = new Object[101];
-        truck_length[0] = 1200;
-        for (int i = 1; i <= 100; i++) {
+
+        for (int i = 0; i <= 100; i++) {
             truck_length[i] = length;
             length = length - 10;
         }
@@ -143,36 +142,27 @@ public class mypage_truckinfo_ch extends AppCompatActivity {
             }
         });
 
+        button_save.setOnClickListener(view -> {
+            System.out.println("버튼눌림");
+            int user_height = Integer.parseInt(spinner_height.getSelectedItem().toString());
+            int user_weight = Integer.parseInt(spinner_weight.getSelectedItem().toString());
+            int user_width = Integer.parseInt(spinner_width.getSelectedItem().toString());
+            int user_length = Integer.parseInt(spinner_length.getSelectedItem().toString());
+            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
+            DocumentReference docref = firestore.collection("화물차DB").document(email);
+            docref.update("높이", user_height);
+            docref.update("무게", user_weight);
+            docref.update("너비", user_width);
+            docref.update("길이", user_length);
 
-        button_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (spinner_width.getSelectedItemPosition() != 0 && spinner_weight.getSelectedItemPosition() != 0
-                        && spinner_height.getSelectedItemPosition() != 0 &&spinner_width.getSelectedItemPosition()!=0) {
-                    int user_height = Integer.parseInt(spinner_height.getSelectedItem().toString());
-                    int user_weight = Integer.parseInt(spinner_weight.getSelectedItem().toString());
-                    int user_width = Integer.parseInt(spinner_width.getSelectedItem().toString());
-                    int user_length = Integer.parseInt(spinner_length.getSelectedItem().toString());
-                    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-
-                    DocumentReference docref = firestore.collection("화물차DB").document(email);
-                    docref.update("높이", user_height);
-                    docref.update("무게", user_weight);
-                    docref.update("너비", user_width);
-                    docref.update("길이", user_length);
-
-                    Toast.makeText(mypage_truckinfo_ch.this, "화물차 사양이 변경되었습니다.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(mypage_truckinfo_ch.this, mapview.class);
-                    startActivity(intent);
-
-                }
-            }
+            Toast.makeText(mypage_truckinfo_ch.this, "화물차 사양이 변경되었습니다.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getApplicationContext(), mapview.class);
+            startActivity(intent);
         });
     }
-
-    private void go_before() {
-        Intent intent_before = new Intent(this, MainActivity.class);
-        startActivity(intent_before);
-    }
+//    private void go_before() {
+//        Intent intent_before = new Intent(this, mapview.class);
+//        startActivity(intent_before);
+//    }
 }

@@ -82,16 +82,20 @@ public class mapview extends AppCompatActivity
     boolean isEDC;
     private LocationManager locationManager;
     public static TMapView tMapView;
-    double latitude;
-    double longitude;
+    double latitude = 36.35199106;
+    double longitude = 127.42223688 ;
     double loc_latitude;//터치위치 gps(위,경도)
     double loc_longitude;
     private Timer timer;
+    private Handler handler;
     private long startTime;
+    double latitude_user;
+    double longitude_user;
     FrameLayout tmaplayout;
     String poiName_loc="";
     String poiAddress_loc;
     int num = 0;
+    int num_loc_layout = 0;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
@@ -166,7 +170,8 @@ public class mapview extends AppCompatActivity
                     marker.setId("marker_"+ loc_name);
                     marker.setTMapPoint(loc_lat, loc_lon);
                     marker.setIcon(BitmapFactory.decodeResource(getResources(),R.drawable.search_bookmark2_icon));
-                                        tMapView.addTMapMarkerItem(marker);
+
+                    tMapView.addTMapMarkerItem(marker);
                 }
             }
         });
@@ -174,6 +179,7 @@ public class mapview extends AppCompatActivity
 
 
 
+        handler = new Handler(Looper.getMainLooper());
 
         // 사용자가 지도의 특정 위치 클릭시 해당 위치의 정보(poi data) 가져와서 저장하고,
         // 해당 정보를 Bottom_LocationInform으로 보내서 ottom_LocationInform에서 해당 정보를 보여줄 수 있도록 하는 코드
@@ -330,8 +336,6 @@ public class mapview extends AppCompatActivity
                     }
 
 
-
-
                 } else {
 
                     change_home_height();
@@ -461,12 +465,13 @@ public class mapview extends AppCompatActivity
     public void onLocationChanged(Location location) {
         latitude = location.getLatitude();
         longitude = location.getLongitude();
+//        System.out.println(latitude+"+"+longitude);
 
         if(num==0) {
-            // 현재 위치로 지도 중심 설정
             tMapView.setCenterPoint(latitude, longitude);
             tMapView.setZoomLevel(15);
             num=1;
+
         }
         // 핑(마커) 추가
         if(tMapView.getMarkerItemFromId("현재위치") != null){
@@ -547,13 +552,13 @@ public class mapview extends AppCompatActivity
         findpoi("주차장");
     }
     public void onClick3(View v){
-        findpoi("카페");
+        Mileage mileage = new Mileage();
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.poi);
+        for(int i = 0;i<mileage.mileage().size();i++){
+            addMapMarker(mileage.mileage().get(i),mileage.mileagename().get(i),icon);
+        }
     }
 
-    public void onClick4(View v){
-        Intent intent = new Intent(mapview.this,Test.class);
-        startActivity(intent);
-    }
 
     private void deletepoint(TMapMarkerItem markerItem){
         tMapView.removeTMapMarkerItem(markerItem.getId());
@@ -589,12 +594,6 @@ public class mapview extends AppCompatActivity
                     String title = poiItem.getPOIName();
                     Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.poi);
                     addMapMarker(point, title, icon);
-
-                    /*TMapMarkerItem map_marker = new TMapMarkerItem();
-                    map_marker.setTMapPoint(poiItem.getPOIPoint().getLatitude(), poiItem.getPOIPoint().getLongitude());
-                    map_marker.setIcon(icon);
-                    map_marker.setName(title);
-                    tMapView.addTMapMarkerItem(map_marker);*/
                 }
             }
         });
@@ -602,7 +601,12 @@ public class mapview extends AppCompatActivity
 
     // 검색창 함수
     public void searching(View view) {
+
         Intent intent_searching = new Intent(mapview.this, Search.class);
+        if(longitude != 0){
+            intent_searching.putExtra("longi",longitude);
+            intent_searching.putExtra("lati",latitude);
+        }
         startActivity(intent_searching);
     }
 

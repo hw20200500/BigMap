@@ -16,7 +16,6 @@
         android:paddingVertical="5dp"
         android:gravity="center_vertical"
         android:clickable="true"
-        android:onClick="go_location"
         android:orientation="horizontal">
 
         <ImageView
@@ -26,30 +25,51 @@
             app:tint="@color/main_blue"
             android:layout_weight="1"/>
 
-        <TextView
-            android:id="@+id/recent_search_text1"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:layout_marginLeft="5dp"
-            android:text="한남대"
-            android:layout_weight="20"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:text="05.08."
-            android:layout_weight="1.2"/>
+            android:layout_weight="20"
+            android:orientation="vertical"
+            android:onClick="go_location">
 
+            <TextView
+                android:id="@+id/recent_search_text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:text="한남대"/>
+            <TextView
+                android:id="@+id/recent_search_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="대전광역시 대덕구 한남로 70 한남대학교"
+                android:layout_marginLeft="10dp"
+                android:layout_marginVertical="5dp"
+                android:textSize="13dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/recent_search_longi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/recent_search_lati"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:visibility="gone"/>
         <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:adjustViewBounds="true"
             android:src="@drawable/login_x"
             app:tint="#bbbbbb"
             android:clickable="true"
             android:onClick="delete_text"
-            android:layout_weight="1"/>
+            android:layout_weight="0"/>
     </LinearLayout>
 
     <View
