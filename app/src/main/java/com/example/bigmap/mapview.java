@@ -159,27 +159,7 @@ public class mapview extends AppCompatActivity
 
 
 
-        // 즐겨찾기 마커 표시
-        DocumentReference docR = firestore.collection("즐겨찾기DB").document(email);
 
-        Task<QuerySnapshot> docRef = docR.collection("즐겨찾기").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
-                    String loc_name = ds.getString("location_name");
-                    String loc_addr = ds.getString("address");
-                    Double loc_lat = ds.getDouble("latitude");
-                    Double loc_lon = ds.getDouble("longitude");
-
-                    TMapMarkerItem marker = new TMapMarkerItem();
-                    marker.setId("marker_"+ loc_name);
-                    marker.setTMapPoint(loc_lat, loc_lon);
-                    marker.setIcon(BitmapFactory.decodeResource(getResources(),R.drawable.search_bookmark2_icon));
-
-                    tMapView.addTMapMarkerItem(marker);
-                }
-            }
-        });
 
 
 
@@ -255,6 +235,31 @@ public class mapview extends AppCompatActivity
 
                     change_home_height();
 
+                }
+            }
+        });
+    }
+
+    private void set_bookmarks() {
+        String email = firebaseAuth.getCurrentUser().getEmail();
+        // 즐겨찾기 마커 표시
+        DocumentReference docR = firestore.collection("즐겨찾기DB").document(email);
+
+        Task<QuerySnapshot> docRef = docR.collection("즐겨찾기").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
+                    String loc_name = ds.getString("location_name");
+                    String loc_addr = ds.getString("address");
+                    Double loc_lat = ds.getDouble("latitude");
+                    Double loc_lon = ds.getDouble("longitude");
+
+                    TMapMarkerItem marker = new TMapMarkerItem();
+                    marker.setId("marker_"+ loc_name);
+                    marker.setTMapPoint(loc_lat, loc_lon);
+                    marker.setIcon(BitmapFactory.decodeResource(getResources(),R.drawable.search_bookmark2_icon));
+
+                    tMapView.addTMapMarkerItem(marker);
                 }
             }
         });
@@ -470,6 +475,8 @@ public class mapview extends AppCompatActivity
         markerItem.setIcon(icon);
 
         tMapView.addTMapMarkerItem(markerItem);
+
+        set_bookmarks();
 
 
 
