@@ -1,9 +1,11 @@
 package com.example.bigmap.bottom;
 
+import static com.airbnb.lottie.L.TAG;
 import static com.example.bigmap.bottom.Bottom_Favorite.bookmarks_list;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.nfc.Tag;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,6 +27,7 @@ import com.example.bigmap.MainActivity;
 import com.example.bigmap.R;
 import com.example.bigmap.bookmarks.Sub;
 import com.example.bigmap.mapview;
+import com.example.bigmap.setPath;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -55,6 +58,7 @@ public class Bottom_LocationInform extends Fragment {
     String email;
     Bottom_Favorite bottomFavorite;
     View layout;
+    int num;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -117,8 +121,6 @@ public class Bottom_LocationInform extends Fragment {
             }
         });
 
-
-
         Button bttn_start = view.findViewById(R.id.bttn_start);
         Button bttn_dest = view.findViewById(R.id.bttn_dest);
 
@@ -127,10 +129,10 @@ public class Bottom_LocationInform extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent_set_dest = new Intent(getActivity(), MainActivity.class);
-                intent_set_dest.putExtra("loc_name", title);
-                intent_set_dest.putExtra("loc_addr", addr);
-                intent_set_dest.putExtra("loc_lat", latitude);
-                intent_set_dest.putExtra("loc_lon", longitude);
+                intent_set_dest.putExtra("name_destP", title);
+                intent_set_dest.putExtra("addr_destP", addr);
+                intent_set_dest.putExtra("lat_destP", latitude);
+                intent_set_dest.putExtra("lon_destP", longitude);
                 // 클릭한 버튼이 '출발' 버튼인지 '도착' 버튼인지 구분하기 위한 키워드 문자열
                 intent_set_dest.putExtra("title", "destination");
 
@@ -142,7 +144,7 @@ public class Bottom_LocationInform extends Fragment {
         bttn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_set_start = new Intent(getActivity(), MainActivity.class);
+                Intent intent_set_start = new Intent(getActivity(), setPath.class);
                 intent_set_start.putExtra("loc_name", title);
                 intent_set_start.putExtra("loc_addr", addr);
                 intent_set_start.putExtra("loc_lat", latitude);
@@ -375,7 +377,6 @@ public class Bottom_LocationInform extends Fragment {
                                         }
                                     });
 
-
                                 }
                             });
                         }
@@ -414,4 +415,6 @@ public class Bottom_LocationInform extends Fragment {
         View sub_list = layout.findViewById(R.id.sub_lists);
         sub_list.setVisibility(View.GONE);
     }
+
+
 }

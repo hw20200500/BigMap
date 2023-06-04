@@ -91,10 +91,13 @@ public class MainActivity extends AppCompatActivity {
     private final static String API_KEY = BuildConfig.Api_key;
     private final static String USER_KEY = "";
     boolean isEDC;
-    String loc_name;
+    String name_destP;
     String loc_addr;
-    Double loc_lat;
-    Double loc_lon;
+    Double lat_destP;
+    Double lon_destP;
+    String name_startP;
+    Double lat_startP;
+    Double lon_startP;
     int num = 0;
 
     ImageView imageView;
@@ -110,9 +113,13 @@ public class MainActivity extends AppCompatActivity {
 
         //Bottom_LocationInform에서 보낸 위치 정보 가져와서 String & Double 변수에 저장하기
         Intent intent_getiform = getIntent();
-        loc_name = intent_getiform.getStringExtra("loc_name");
-        loc_lat = intent_getiform.getDoubleExtra("loc_lat", 0);
-        loc_lon = intent_getiform.getDoubleExtra("loc_lon", 0);
+        name_destP = intent_getiform.getStringExtra("name_destP");
+        lat_destP = intent_getiform.getDoubleExtra("lat_destP", 0);
+        lon_destP = intent_getiform.getDoubleExtra("lon_destP", 0);
+
+        name_startP = intent_getiform.getStringExtra("name_startP");
+        lat_startP = intent_getiform.getDoubleExtra("lat_startP", 0);
+        lon_startP = intent_getiform.getDoubleExtra("lon_startP", 0);
 
         checkPermission();
     }
@@ -144,21 +151,43 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "success initialize");
 
                 //bottom_locationinform에서 받아온 위치 정보 List에 저장하기
-                List<Object> poiList = new ArrayList<>();
-                poiList.add(loc_name+","+loc_lon+","+loc_lat);
-                Log.d(TAG, "위도: "+loc_lat+" 경도: "+loc_lon);
+                List<Object> poiList_dest = new ArrayList<>();
+                poiList_dest.add(name_destP+","+lon_destP+","+lat_destP);
+                Log.d(TAG, "위도: "+lat_destP+" 경도: "+lon_destP);
 
-                if(loc_name == null ||loc_lat == 0.0 || loc_lon == 0.0){
-                    runOnUiThread(() -> {
-                        Toast.makeText(MainActivity.this, "비정상적인 길안내입니다 ", Toast.LENGTH_SHORT).show();
-                    });
+                List<Object> poiList_start = new ArrayList<>();
+                poiList_start.add(name_startP+","+lon_startP+","+lat_startP);
+                Log.d(TAG, "위도: "+lat_startP+" 경도: "+lon_startP);
+
+                if (lat_startP==0.0 || lon_startP==0.0) {
+                    // 도착지만 설정해서 네비게이션 구동(출발지는 사용자 현재위치로 설정)
+                    if(name_destP == null ||lat_destP == 0.0 || lon_destP == 0.0){
+                        runOnUiThread(() -> {
+                            Toast.makeText(MainActivity.this, "비정상적인 길안내입니다 ", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                    else{
+                        // nav_truck 실행
+                        runOnUiThread(() -> {
+                            truck_info(poiList_dest);
+                        });
+                    }
+                } else {
+                    // 출발지 & 도착지 설정해서 네비게이션 구동
+                    if(name_destP == null ||lat_destP == 0.0 || lon_destP == 0.0){
+                        runOnUiThread(() -> {
+                            Toast.makeText(MainActivity.this, "비정상적인 길안내입니다 ", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                    else {
+                        // nav_truck 실행
+                        runOnUiThread(() -> {
+                            truck_info(poiList_start, poiList_dest);
+                        });
+                    }
                 }
-                else{
-                    // nav_truck 실행
-                    runOnUiThread(() -> {
-                        truck_info(poiList);
-                    });
-                }
+
+
 
             }
 
@@ -309,6 +338,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // 도착지만 설정
     public void truck_info(List<Object> poi_search){
         FirebaseUser user = firebaseAuth.getCurrentUser();
         // 사용자 정보에 저장되어 있는 email 갖고오기 (이거는 Authentication에 저장되어 있는 정보만 사용 가능. 그 이외 (예: 전화번호, 실명이름, 생년월일 등)는 사용 불가)
@@ -365,7 +395,65 @@ public class MainActivity extends AppCompatActivity {
 //
     }
 
+    //출발지 & 도착지 둘 다 설정
+    public void truck_info(List<Object> poi_search_start, List<Object> poi_search_dest){
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        // 사용자 정보에 저장되어 있는 email 갖고오기 (이거는 Authentication에 저장되어 있는 정보만 사용 가능. 그 이외 (예: 전화번호, 실명이름, 생년월일 등)는 사용 불가)
+        String email = user.getEmail();
 
+        final String[] height1 = new String[1];
+        final String[] weight1 = new String[1];
+        final String[] width1 = new String[1];
+        final String[] length1 = new String[1];
+
+
+        DocumentReference docRef2 = firestore.collection("화물차DB").document(email);
+        docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    System.out.println("document:"+document);
+                    if (document.exists()) {
+                        String height = document.getLong("높이").toString();
+                        String weight = document.getLong("무게").toString();
+                        String width = document.getLong("너비").toString();
+                        String length = document.getLong("길이").toString();
+                        height1[0] = height;
+                        weight1[0] = weight;
+                        width1[0] = width;
+                        length1[0] = length;
+
+                        List<String> truckinfo = new ArrayList<>();
+                        truckinfo.add(0,height1[0]);
+                        truckinfo.add(1,weight1[0]);
+                        truckinfo.add(2,width1[0]);
+                        truckinfo.add(3,length1[0]);
+                        System.out.println(truckinfo);
+
+                        runOnUiThread(() -> {
+                            nav_truck(poi_search_start,poi_search_dest, truckinfo);
+                        });
+
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+//
+    }
+
+
+    //도착지만 설정
     public void nav_truck(List<Object> poi_search,List<String> truck_info){
 
         Object search_data = poi_search.get(0);
@@ -428,6 +516,83 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    //출발지 & 도착지 둘 다 설정
+    public void nav_truck(List<Object> poi_search_startP,List<Object> poi_search_destP,List<String> truck_info){
+
+        Object search_data_startP = poi_search_startP.get(0);
+
+        ArrayList<Object> search_data_list_startP = new ArrayList<>();
+        Collections.addAll(search_data_list_startP, ((String) search_data_startP).split(","));
+        System.out.println(search_data_list_startP.get(0));
+        System.out.println(search_data_list_startP.get(1));
+        System.out.println(search_data_list_startP.get(2));
+
+        Object search_data_destP = poi_search_destP.get(0);
+
+        ArrayList<Object> search_data_list_destP = new ArrayList<>();
+        Collections.addAll(search_data_list_destP, ((String) search_data_destP).split(","));
+        System.out.println(search_data_list_destP.get(0));
+        System.out.println(search_data_list_destP.get(1));
+        System.out.println(search_data_list_destP.get(2));
+
+        double longi_startP,lati_startP;
+        longi_startP = Double.parseDouble((String) search_data_list_startP.get(1));
+        lati_startP = Double.parseDouble((String) search_data_list_startP.get(2));
+
+        double longi_destP,lati_destP;
+        longi_destP = Double.parseDouble((String) search_data_list_destP.get(1));
+        lati_destP = Double.parseDouble((String) search_data_list_destP.get(2));
+
+        CarOption carOption = new CarOption();
+        carOption.setCarType(TollCarType.LargeTruck);
+        carOption.setOilType(CarOilType.PremiumGasoline);
+        carOption.setHipassOn(true);
+
+
+
+
+        //트럭 경로 요청 하기 위한 추가 정보
+        HashMap<String, String> truckDetailInfo = new HashMap<>();
+
+        truckDetailInfo.put(TruckInfoKey.TruckType.getValue(), TruckType.Truck.toString());
+        truckDetailInfo.put(TruckInfoKey.TruckHeight.getValue(), truck_info.get(0));     // 단위 cm 화물차 높이
+        truckDetailInfo.put(TruckInfoKey.TruckWeight.getValue(), truck_info.get(1));    // 단위 kg 화물의 무게
+        truckDetailInfo.put(TruckInfoKey.TruckWidth.getValue(),  truck_info.get(2));     // 단위 cm 화물차 너비
+        truckDetailInfo.put(TruckInfoKey.TruckLength.getValue(), truck_info.get(3));    // 단위 cm 화물차 길이
+
+        carOption.setTruckInfo(truckDetailInfo);
+
+        //현재 위치
+        /*Location currentLocation = SDKManager.getInstance().getCurrentPosition();
+        String currentName = VSMCoordinates.getAddressOffline(currentLocation.getLongitude(), currentLocation.getLatitude());*/
+
+        WayPoint startPoint = new WayPoint(search_data_list_startP.get(0).toString(), new MapPoint(longi_startP,lati_startP), "", RequestConstant.RpFlagCode.UNKNOWN);
+        System.out.println("start:"+startPoint.getMapPoint().getLatitude()+","+startPoint.getMapPoint().getLongitude());
+        //목적지
+        WayPoint endPoint = new WayPoint(search_data_list_destP.get(0).toString(), new MapPoint(longi_destP,lati_destP), "", RequestConstant.RpFlagCode.UNKNOWN);
+        System.out.println("end:"+endPoint.getMapPoint().getLatitude()+","+endPoint.getMapPoint().getLongitude());
+//        네비게이션 화면 구성
+        navigationFragment.setCarOption(carOption);
+
+        navigationFragment.setRoutePlanType(RoutePlanType.Traffic_Truck);
+
+        //길안내 코드(시작 지점,null,도착 지점,false or true(false 경로 안내 해줌 true 는 경로 안내 안하고 바로 네비시작),TmapUISDK.RouteRequestListener()
+        navigationFragment.requestRoute(startPoint, null, endPoint, false, new TmapUISDK.RouteRequestListener() {
+            @Override
+            public void onSuccess() {
+                Log.e(TAG, "requestRoute Success");
+            }
+
+            @Override
+            public void onFail(int i, @Nullable String s) {
+                Toast.makeText(MainActivity.this, i + "::" + s, Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onFail " + i + " :: " + s);
+                Log.e(TAG, "onFail " + i + " :: " + s);
+            }
+        });
+    }
+
     public void searching(View view) {
         Intent intent_searching = new Intent(MainActivity.this, Search.class);
         startActivity(intent_searching);

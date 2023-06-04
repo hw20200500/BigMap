@@ -376,11 +376,11 @@ public class PersonIform extends AppCompatActivity {
                                         } else {
                                             Log.d(TAG, "get failed with ", task.getException());
                                             Toast.makeText(PersonIform.this, "회원가입 실패", Toast.LENGTH_SHORT).show();
-                                            return;  //해당 메소드 진행을 멈추고 빠져나감.
+
 
                                         }
 
-                                    }
+                                }
                                 })
                                     // 새 계정 만드는 활동 자체가 실패(에러)했을 경우
                                     .addOnFailureListener(PersonIform.this, new OnFailureListener() {

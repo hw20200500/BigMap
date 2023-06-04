@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -227,8 +228,6 @@ public class Bottom_Favorite extends Fragment {
                                             tmaplayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ((mapview) getActivity()).mainLayoutHeight));
                                         }
                                     });
-
-
                                 }
                             });
                         }

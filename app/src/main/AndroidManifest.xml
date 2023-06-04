@@ -21,6 +21,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".setPath"
+            android:exported="false" />
+        <activity
             android:name=".login_register.foundPw"
             android:exported="false" />
         <activity
@@ -48,9 +51,6 @@
             android:value="YOUR_API_KEY" />
 
         <activity
-            android:name=".mapview_clone"
-            android:exported="false" />
-        <activity
             android:name=".mapview"
             android:exported="false" />
         <activity
@@ -67,6 +67,7 @@
             android:exported="false"
             android:label="@string/title_activity_search"
             android:theme="@style/Theme.BigMap.NoActionBar" />
+
         <activity
             android:name=".board.board_free"
             android:exported="false" />
@@ -163,6 +164,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
