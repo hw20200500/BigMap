@@ -34,16 +34,6 @@
             android:layout_marginHorizontal="10dp"
             android:textStyle="bold"/>
 
-        <ImageView
-            android:id="@+id/bttn_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="18dp"
-            android:adjustViewBounds="true"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:src="@drawable/login_x"
-            app:tint="#717171" />
-
     </LinearLayout>
 
     <View

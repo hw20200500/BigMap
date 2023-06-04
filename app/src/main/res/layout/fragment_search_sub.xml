@@ -35,7 +35,7 @@
                 android:id="@+id/recent_search_text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:textSize="18dp"
                 android:layout_marginLeft="10dp"
                 android:text="한남대"/>
             <TextView
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="대전광역시 대덕구 한남로 70 한남대학교"
                 android:layout_marginLeft="10dp"
-                android:layout_marginVertical="5dp"
+                android:layout_marginTop="5dp"
                 android:textSize="13dp"/>
         </LinearLayout>
 
@@ -61,6 +61,7 @@
             android:text=""
             android:visibility="gone"/>
         <ImageView
+            android:id="@+id/bttn_delete"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:adjustViewBounds="true"

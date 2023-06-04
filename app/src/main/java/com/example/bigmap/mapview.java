@@ -118,9 +118,13 @@ public class mapview extends AppCompatActivity
         tMapView = new TMapView(mapview.this);
         tmaplayout = findViewById(R.id.tmap_layout);
         tmaplayout.addView(tMapView);
+
+
         tMapView.setSKTMapApiKey(API_KEY);
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
+
+
 
 
         // tmap 위치 관리자(LocationManager) 초기화
@@ -149,6 +153,7 @@ public class mapview extends AppCompatActivity
         });
 
         initnav();
+
 
 
 
@@ -221,13 +226,14 @@ public class mapview extends AppCompatActivity
                     }*/
                     if (!arrayList3.isEmpty()) {
                         poiName_loc = arrayList3.get(0).getId();
-                        tMapData.findAllPOI("대전 "+poiName_loc, new TMapData.OnFindAllPOIListener() {
+                        loc_latitude = tMapPoint.getLatitude();
+                        loc_longitude = tMapPoint.getLongitude();
+                        tMapData.findAllPOI(poiName_loc, new TMapData.OnFindAllPOIListener() {
                             @Override
                             public void onFindAllPOI(ArrayList<TMapPOIItem> arrayList) {
                                 TMapPOIItem poi = arrayList.get(0);
                                 poiAddress_loc = poi.getPOIAddress();
-                                loc_latitude = poi.getPOIPoint().getLatitude();
-                                loc_longitude = poi.getPOIPoint().getLongitude();
+
                             }
                         });
                     } else {
@@ -237,100 +243,9 @@ public class mapview extends AppCompatActivity
                     }
 
 
-
-
-                    /*TMapPOIItem tMapPOIItem = arrayList1.get(0);
-                    String click_locname = tMapPOIItem.getPOIName();
-                    Toast.makeText(mapview.this, "클릭 장소 이름: "+click_locname, Toast.LENGTH_SHORT).show();*/
-
-
-                    // 터치한 화면의 장소(tMapPoint)를 위도, 경도를 변환하기
-//                    final double[] latitude_loc = {tMapPoint.getLatitude()};
-//                    final double[] longitude_loc = {tMapPoint.getLongitude()};
-//
-//                    TMapData tMapData = new TMapData();
-//
-//                    // 위도, 경도로 주소 찾기
-//                    tMapData.convertGpsToAddress(latitude_loc[0], longitude_loc[0], new TMapData.OnConvertGPSToAddressListener() {
-//                        @Override
-//                        public void onConverGPSToAddress(String s) {
-//                            String address = s;
-//                            Log.d(TAG, "주소 : "+s);
-//
-//                            tMapData.findAllPOI(s, new TMapData.OnFindAllPOIListener() {
-//                                @Override
-//                                public void onFindAllPOI(ArrayList<TMapPOIItem> poiItems) {
-//                                    if(poiItems!=null) {
-//
-//                                        // 찾은 주소 및 장소 정보 저장하기
-//                                        TMapPOIItem tMapPOIItem = poiItems.get(0);
-//
-//                                        poiName_loc = tMapPOIItem.getPOIName();
-//                                        poiAddress_loc = s;
-//                                        loc_latitude = tMapPOIItem.getPOIPoint().getLatitude();
-//                                        loc_longitude = tMapPOIItem.getPOIPoint().getLongitude();
-//
-//                                        Log.d(TAG, "장소명: "+poiName_loc+" /장소: "+poiAddress_loc+" /위도: "+loc_latitude+" /경도: "+loc_longitude);
-//
-//                                        HashMap <Object, Object> poiList = new HashMap<>();
-//                                        poiList.put("loc_name", poiName_loc);
-//                                        poiList.put("loc_addr", poiAddress_loc);
-//                                        poiList.put("loc_lat", loc_latitude);
-//                                        poiList.put("loc_lon", loc_longitude);
-//                                    } else {
-//                                        findViewById(R.id.loc_layout).setVisibility(View.GONE);
-//                                        bottomNavigationView.setVisibility(View.VISIBLE);
-//                                        findViewById(R.id.main_content).setVisibility(View.VISIBLE);
-//                                    }
-//                                }
-//                            });
-//                        }
-//                    });
-
                     if (!poiName_loc.equals("")) {
                         // 위치 정보 bottom_sheet(Bottom_LocationInform) 관련 코드 (위의 홈 fragment 코드와 유사)
-                        home_height = mainLayoutHeight;
-                        FrameLayout loc_layout = findViewById(R.id.loc_layout);
-                        findViewById(R.id.loc_layout).setVisibility(View.VISIBLE);
-                        int screenHeight = getResources().getDisplayMetrics().heightPixels;
-
-
-
-                        BottomSheetBehavior bottomSheetBehavior_loc = BottomSheetBehavior.from(loc_layout);
-                        bottomSheetBehavior_loc.setPeekHeight(getResources().getDimensionPixelSize(R.dimen.main_layout_height));
-                        bottomSheetBehavior_loc.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-                            @Override
-                            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-
-                                int bottomSheetHeight = 400;
-                                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                                    bottomSheetHeight = (int) (bottomSheet.getHeight()) - 150;
-                                }
-                                mainLayoutHeight = screenHeight - bottomSheetHeight;
-                                tmaplayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
-                            }
-
-                            @Override
-                            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                                int bottomSheetHeight = (int) (bottomSheet.getHeight() * slideOffset);
-                                mainLayoutHeight = screenHeight - bottomSheetHeight;
-                                tmaplayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
-                            }
-                        });
-                        findViewById(R.id.loc_layout).setVisibility(View.VISIBLE);
-
-                        bundle = new Bundle();
-                        bundle.putString("loc_name", poiName_loc);
-                        bundle.putString("loc_addr", poiAddress_loc);
-                        bundle.putDouble("loc_lat", loc_latitude);
-                        bundle.putDouble("loc_lon", loc_longitude);
-
-                        Bottom_LocationInform bottom_locationInform = new Bottom_LocationInform();
-                        bottom_locationInform.setArguments(bundle);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.loc_layout, bottom_locationInform).commit();
-
-                        bottomNavigationView.setVisibility(View.GONE);
-                        findViewById(R.id.main_content).setVisibility(View.GONE);
+                        show_Bottom_Location(poiName_loc, poiAddress_loc, loc_latitude, loc_longitude);
                     } else {
 
                     }
@@ -343,6 +258,74 @@ public class mapview extends AppCompatActivity
                 }
             }
         });
+    }
+
+    private void search_result() {
+        Intent get_inform = getIntent();
+        String search_name = get_inform.getStringExtra("loc_name");
+        String search_addr = get_inform.getStringExtra("loc_addr");
+        Double search_lat = get_inform.getDoubleExtra("loc_lat", 0);
+        Double search_lon = get_inform.getDoubleExtra("loc_lon", 0);
+
+
+        if (search_lat!=0 && search_lon!=0) {
+
+            Log.d(TAG, "검색 장소: "+search_name+" 검색 위도: "+search_lat+" 경도: "+search_lon);
+            show_Bottom_Location(search_name, search_addr, search_lat, search_lon);
+            TMapMarkerItem marker_search = new TMapMarkerItem();
+            tMapView.setCenterPoint(search_lat, search_lon);
+            marker_search.setId("bookmarker");
+            marker_search.setTMapPoint(search_lat, search_lon);
+            marker_search.setIcon(BitmapFactory.decodeResource(getResources(),R.drawable.location_icon));
+            tMapView.addTMapMarkerItem(marker_search);
+
+
+        }
+    }
+
+    private void show_Bottom_Location(String name, String addr, Double lat, Double lon) {
+        home_height = mainLayoutHeight;
+        FrameLayout loc_layout = findViewById(R.id.loc_layout);
+        findViewById(R.id.loc_layout).setVisibility(View.VISIBLE);
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+
+
+
+        BottomSheetBehavior bottomSheetBehavior_loc = BottomSheetBehavior.from(loc_layout);
+        bottomSheetBehavior_loc.setPeekHeight(getResources().getDimensionPixelSize(R.dimen.main_layout_height));
+        bottomSheetBehavior_loc.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+                int bottomSheetHeight = 400;
+                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    bottomSheetHeight = (int) (bottomSheet.getHeight()) - 150;
+                }
+                mainLayoutHeight = screenHeight - bottomSheetHeight;
+                tmaplayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                int bottomSheetHeight = (int) (bottomSheet.getHeight() * slideOffset);
+                mainLayoutHeight = screenHeight - bottomSheetHeight;
+                tmaplayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight));
+            }
+        });
+        findViewById(R.id.loc_layout).setVisibility(View.VISIBLE);
+
+        bundle = new Bundle();
+        bundle.putString("loc_name", name);
+        bundle.putString("loc_addr", addr);
+        bundle.putDouble("loc_lat", lat);
+        bundle.putDouble("loc_lon", lon);
+
+        Bottom_LocationInform bottom_locationInform = new Bottom_LocationInform();
+        bottom_locationInform.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.loc_layout, bottom_locationInform).commit();
+
+        bottomNavigationView.setVisibility(View.GONE);
+        findViewById(R.id.main_content).setVisibility(View.GONE);
     }
 
     private void change_home_height() {
@@ -470,6 +453,7 @@ public class mapview extends AppCompatActivity
         if(num==0) {
             tMapView.setCenterPoint(latitude, longitude);
             tMapView.setZoomLevel(15);
+            search_result();
             num=1;
 
         }
@@ -486,6 +470,8 @@ public class mapview extends AppCompatActivity
         markerItem.setIcon(icon);
 
         tMapView.addTMapMarkerItem(markerItem);
+
+
 
     }
 

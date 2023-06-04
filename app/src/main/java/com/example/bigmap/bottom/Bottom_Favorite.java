@@ -190,7 +190,7 @@ public class Bottom_Favorite extends Fragment {
                                     }
                                     marker_bookmarker.setId("bookmarker");
                                     marker_bookmarker.setTMapPoint(get_latitude, get_longitude);
-                                    marker_bookmarker.setIcon(BitmapFactory.decodeResource(getResources(),R.drawable.search_gps_icon));
+                                    marker_bookmarker.setIcon(BitmapFactory.decodeResource(getResources(),R.drawable.location_icon));
                                     tMapView.addTMapMarkerItem(marker_bookmarker);
 
                                     FrameLayout loc_layout = ((mapview) getActivity()).findViewById(R.id.loc_layout);

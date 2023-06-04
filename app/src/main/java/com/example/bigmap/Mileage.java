@@ -64,52 +64,52 @@ public class Mileage {
         List<String> mileagename = new ArrayList<>();
 
         // 휴게소명 추가
-        mileagename.add("입장거봉(서울)");
-        mileagename.add("천안삼거리(서울)");
-        mileagename.add("청주(서울)");
-        mileagename.add("죽암(서울)");
-        mileagename.add("신탄진(서울)");
-        mileagename.add("옥천(서울)");
-        mileagename.add("황간(서울)");
-        mileagename.add("망향(부산)");
-        mileagename.add("천안호두(부산)");
-        mileagename.add("옥산(부산)");
-        mileagename.add("죽암(부산)");
-        mileagename.add("옥천(부산)");
-        mileagename.add("금강(양)");
-        mileagename.add("황간(부산)");
+        mileagename.add("입장거봉 휴게소 (서울 방향)");
+        mileagename.add("천안삼거리 휴게소 (서울 방향)");
+        mileagename.add("청주 휴게소 (서울 방향)");
+        mileagename.add("죽암 휴게소 (서울 방향)");
+        mileagename.add("신탄진 휴게소 (서울 방향)");
+        mileagename.add("옥천 휴게소(서울 방향)");
+        mileagename.add("황간 휴게소 (서울 방향)");
+        mileagename.add("망향 휴게소 (부산 방향)");
+        mileagename.add("천안호두 휴게소(부산 방향)");
+        mileagename.add("옥산 휴게소 (부산 방향)");
+        mileagename.add("죽암 휴게소(부산 방향)");
+        mileagename.add("옥천 휴게소(부산 방향)");
+        mileagename.add("금강 휴게소(부산 방향)");
+        mileagename.add("황간 휴게소(부산 방향)");
 
 
-        mileagename.add("괴산(양평)");
-        mileagename.add("충주(양평)");
-        mileagename.add("괴산(창원)");
-        mileagename.add("충주(창원)");
+        mileagename.add("괴산 휴게소 (양평 방향)");
+        mileagename.add("충주 휴게소 (양평 방향)");
+        mileagename.add("괴산 휴게소 (창원 방향)");
+        mileagename.add("충주 휴게소 (창원 방향)");
 
 
-        mileagename.add("문의(영덕)");
-        mileagename.add("문의(청주)");
-        mileagename.add("속리산(청주)");
+        mileagename.add("문의 휴게소 (영덕 방향)");
+        mileagename.add("문의(청주 방향)");
+        mileagename.add("속리산(청주 방향)");
 
 
-        mileagename.add("행당돔(양)");
-        mileagename.add("서산(서울)");
-        mileagename.add("홍성(서울)");
-        mileagename.add("대천(서울)");
-        mileagename.add("서천(서울)");
-        mileagename.add("서산(목포)");
-        mileagename.add("홍성(목포)");
-        mileagename.add("대천(목포)");
-        mileagename.add("서천(목포)");
+        mileagename.add("행담도 휴게소");
+        mileagename.add("서산 휴게소 (서울 방향)");
+        mileagename.add("홍성 휴게소 (서울 방향)");
+        mileagename.add("대천 휴게소 (서울 방향)");
+        mileagename.add("서천 휴게소 (서울 방향)");
+        mileagename.add("서산 휴게소 (목포 방향)");
+        mileagename.add("홍성 휴게소 (목포 방향)");
+        mileagename.add("대천 휴게소 (목포 방향)");
+        mileagename.add("서천 휴게소 (목포 방향)");
 
 
-        mileagename.add("인삼랜드(하남)");
-        mileagename.add("인삼랜드(통영)");
+        mileagename.add("인삼랜드 휴게소 (하남 방향)");
+        mileagename.add("인삼랜드 휴게소 (통영 방향)");
 
 
-        mileagename.add("오창(하남)");
-        mileagename.add("음성(하남)");
-        mileagename.add("오창(통영)");
-        mileagename.add("음성(통영)");
+        mileagename.add("오창 휴게소 (하남 방향)");
+        mileagename.add("음성 휴게소 (하남 방향)");
+        mileagename.add("오창 휴게소 (통영 방향)");
+        mileagename.add("음성 휴게소(통영 방향)");
         return mileagename;
     }
 

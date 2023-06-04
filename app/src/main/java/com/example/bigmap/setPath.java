@@ -61,7 +61,7 @@ public class setPath extends AppCompatActivity {
     String addr_startP;
     Double lat_startP;
     Double lon_startP;
-    String name_destP;
+    String name_destP="";
     String addr_destP;
     Double lat_destP;
     Double lon_destP;
@@ -98,7 +98,6 @@ public class setPath extends AppCompatActivity {
         text_startPoint = findViewById(R.id.text_startPoint);
         text_dest = findViewById(R.id.text_destPoint);
         text_startPoint.setText(name_startP);
-
 
         set_subLayout("최근기록");
         set_subLayout("즐겨찾기");
@@ -176,6 +175,30 @@ public class setPath extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void point_change(View view) {
+        String ch_name = name_startP;
+        String ch_addr = addr_startP;
+        Double ch_lat = lat_startP;
+        Double ch_lon = lon_startP;
+
+        name_startP = name_destP;
+        if (name_startP.equals("") || name_startP==null || name_startP.equals("도착지 입력")) {name_startP = "출발지 입력";}
+        addr_startP = addr_destP;
+        lat_startP = lat_destP;
+        lon_startP = lon_destP;
+
+        name_destP = ch_name;
+        if (name_destP.equals("출발지 입력") || name_destP==null || name_destP.equals("")) {
+            name_startP = "도착지 입력";
+        }
+        addr_destP = ch_addr;
+        lat_destP = ch_lat;
+        lon_destP = ch_lon;
+
+        text_startPoint.setText(name_startP);
+        text_dest.setText(name_destP);
     }
 
     public void getid(){

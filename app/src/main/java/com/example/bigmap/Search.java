@@ -19,6 +19,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import org.checkerframework.checker.units.qual.Length;
@@ -46,6 +47,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.skt.tmap.TMapData;
 import com.skt.tmap.TMapPoint;
+import com.skt.tmap.TMapView;
 import com.skt.tmap.engine.navigation.SDKManager;
 import com.skt.tmap.engine.navigation.network.RequestConstant;
 import com.skt.tmap.engine.navigation.network.ndds.CarOilType;
@@ -54,6 +56,7 @@ import com.skt.tmap.engine.navigation.network.ndds.dto.request.TruckType;
 import com.skt.tmap.engine.navigation.route.RoutePlanType;
 import com.skt.tmap.engine.navigation.route.data.MapPoint;
 import com.skt.tmap.engine.navigation.route.data.WayPoint;
+import com.skt.tmap.overlay.TMapMarkerItem;
 import com.skt.tmap.poi.TMapPOIItem;
 import com.skt.tmap.vsm.coordinates.VSMCoordinates;
 import com.tmapmobility.tmap.tmapsdk.ui.data.CarOption;
@@ -93,6 +96,8 @@ public class Search extends AppCompatActivity {
     public static Context context;
     public static EditText search_bar;
 
+    LinearLayout recent_search_layout1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +119,8 @@ public class Search extends AppCompatActivity {
         search_bar = (EditText) findViewById(R.id.edittext_search);
         recent_view = (LinearLayout) findViewById(R.id.recent_view);
         loc_inform_view = (LinearLayout) findViewById(R.id.loc_inform_view);
+
+
 
         // 검색 버튼 또는 엔터 키를 눌렀을 때 동작하도록 설정
         search_bar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -195,6 +202,32 @@ public class Search extends AppCompatActivity {
         searched_lati.setText(lati.toString());
         searched_longi.setText(longi.toString());
         searched_distance.setText(distance1+"km");
+
+        LinearLayout search_list = l_sub.findViewById(R.id.linear_list);
+        search_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView click_name = search_list.findViewById(R.id.loc_inform_text1);
+                TextView click_address = search_list.findViewById(R.id.loc_inform_detail1);
+                TextView click_lati = l_sub.findViewById(R.id.longi1);
+                TextView click_longi = l_sub.findViewById(R.id.lati1);
+
+                String name = click_name.getText().toString();
+                String addr = click_address.getText().toString();
+                Double lat = Double.parseDouble(click_lati.getText().toString());
+                Double lon = Double.parseDouble(click_longi.getText().toString());
+
+                Intent go_mapview = new Intent(Search.this, mapview.class);
+                go_mapview.putExtra("loc_name", name);
+                go_mapview.putExtra("loc_addr", addr);
+                go_mapview.putExtra("loc_lat", lat);
+                go_mapview.putExtra("loc_lon", lon);
+
+                TMapMarkerItem marker_search = new TMapMarkerItem();
+
+                startActivity(go_mapview);
+            }
+        });
 
         runOnUiThread(() -> {
             loc_inform_view.addView(l_sub);
@@ -322,7 +355,7 @@ public class Search extends AppCompatActivity {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String email = user.getEmail();
-        recent_view = findViewById(R.id.recent_view);
+        recent_search_layout1 = findViewById(R.id.recent_search_layout1);
 
         if (email != null) {
             CollectionReference recentCollectionRef = firestore.collection("최근기록DB").document(email).collection("최근기록");
@@ -333,8 +366,8 @@ public class Search extends AppCompatActivity {
                         runOnUiThread(() -> {
                             List<List<Object>> documentList = new ArrayList<>(); // 각 문서를 담는 리스트
 
-                            if (recent_view.getChildCount() > 0) {
-                                recent_view.removeAllViews();
+                            if (recent_search_layout1.getChildCount() > 0) {
+                                recent_search_layout1.removeAllViews();
                             }
 
                             for (QueryDocumentSnapshot document : querySnapshot) {
@@ -382,7 +415,7 @@ public class Search extends AppCompatActivity {
 
     private void recentget(String name ,String address, Double lati,Double longi){
 
-        recent_view = (LinearLayout) findViewById(R.id.recent_view);
+        recent_search_layout1 = (LinearLayout) findViewById(R.id.recent_search_layout1);
 
         r_sub = new search_sub(getApplicationContext());
 
@@ -398,10 +431,45 @@ public class Search extends AppCompatActivity {
         search_lati.setText(lati.toString());
         search_longi.setText(longi.toString());
 
+        ImageView bttn_delete = r_sub.findViewById(R.id.bttn_delete);
+        bttn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                delete_text(view);
+            }
+        });
+        LinearLayout search_list = r_sub.findViewById(R.id.list_search);
+        search_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView click_name = search_list.findViewById(R.id.recent_search_text1);
+                TextView click_address = search_list.findViewById(R.id.recent_search_address);
+                TextView click_lati = r_sub.findViewById(R.id.recent_search_longi);
+                TextView click_longi = r_sub.findViewById(R.id.recent_search_lati);
+
+                String name = click_name.getText().toString();
+                String addr = click_address.getText().toString();
+                Double lat = Double.parseDouble(click_lati.getText().toString());
+                Double lon = Double.parseDouble(click_longi.getText().toString());
+
+                Intent go_mapview = new Intent(Search.this, mapview.class);
+                go_mapview.putExtra("loc_name", name);
+                go_mapview.putExtra("loc_addr", addr);
+                go_mapview.putExtra("loc_lat", lat);
+                go_mapview.putExtra("loc_lon", lon);
+
+                TMapMarkerItem marker_search = new TMapMarkerItem();
+
+                startActivity(go_mapview);
+            }
+        });
+
 
         runOnUiThread(() -> {
-            recent_view.addView(r_sub);
+            recent_search_layout1.addView(r_sub);
         });
+
+
 
     }
 
