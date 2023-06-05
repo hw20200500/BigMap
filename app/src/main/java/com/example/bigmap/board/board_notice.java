@@ -23,8 +23,8 @@ import java.util.List;
 public class board_notice extends AppCompatActivity {
 
     private ListView listView;
-    private freelist_Adapter adapter;
-    private List<freelist_item> itemList;
+    private noticelist_Adapter adapter;
+    private List<noticelist_item> itemList;
     private FirebaseFirestore db;
 
     private static final String TAG = "board_notice";
@@ -36,7 +36,7 @@ public class board_notice extends AppCompatActivity {
 
         listView = findViewById(R.id.notice_List);
         itemList = new ArrayList<>();
-        adapter = new freelist_Adapter(board_notice.this, itemList);
+        adapter = new noticelist_Adapter(board_notice.this, itemList);
         listView.setAdapter(adapter);
 
         // Firestore 초기화
@@ -48,9 +48,10 @@ public class board_notice extends AppCompatActivity {
         // 리스트뷰 아이템 클릭 이벤트 처리
         listView.setOnItemClickListener((parent, view, position, id) -> {
             // 클릭한 아이템의 동작 정의
-            freelist_item selectedItem = itemList.get(position);
+            noticelist_item selectedItem = itemList.get(position);
             // 클릭한 아이템에 대한 동작 구현
-            Intent intent = new Intent(getApplicationContext(), board_free_detail.class);
+            Intent intent = new Intent(getApplicationContext(), board_notice_detail.class);
+            intent.putExtra("postId", selectedItem.getPostId());
             intent.putExtra("title", selectedItem.getTitle());
             intent.putExtra("user", selectedItem.getUser());
             intent.putExtra("time", selectedItem.getTime());
@@ -71,11 +72,11 @@ public class board_notice extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         itemList.clear();
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            String postId = document.getId(); // Firestore 문서의 postId 가져오기
+                            String postId = document.getString("postId"); // Firestore 문서의 postId 가져오기
                             String title = document.getString("제목");
                             String user = document.getString("작성자");
                             String time = document.getString("작성_시간_날짜");
-                            freelist_item item = new freelist_item(postId, title, user, time);
+                            noticelist_item item = new noticelist_item(postId, title, user, time);
                             itemList.add(item);
                         }
                         adapter.notifyDataSetChanged();

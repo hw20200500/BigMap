@@ -64,7 +64,7 @@ public class noticelist_Adapter extends BaseAdapter {
                 String postId = item.getPostId();
 
                 // board_free_detail 액티비티로 이동하면서 postId 값을 전달
-                Intent intent = new Intent(context, board_free_detail.class);
+                Intent intent = new Intent(context, board_notice_detail.class);
                 intent.putExtra("postId", postId);
                 context.startActivity(intent);
             }
@@ -78,6 +78,7 @@ public class noticelist_Adapter extends BaseAdapter {
         listViewItemList.add(item);
         notifyDataSetChanged();
     }
+
 
 
 }

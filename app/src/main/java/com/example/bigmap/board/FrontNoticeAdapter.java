@@ -25,7 +25,7 @@ public class FrontNoticeAdapter extends ArrayAdapter<String> {
     @Override
     public int getCount() {
         // 최대 3개의 아이템만 표시
-        return Math.min(super.getCount(), 3);
+        return Math.min(super.getCount(), 2);
     }
 
 
