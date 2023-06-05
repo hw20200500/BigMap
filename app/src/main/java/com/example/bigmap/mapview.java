@@ -200,6 +200,9 @@ public class mapview extends AppCompatActivity
                     }*/
                     if (!arrayList3.isEmpty()) {
                         poiName_loc = arrayList3.get(0).getId();
+                        if (poiName_loc.contains("marker_")) {
+                            poiName_loc = poiName_loc.replace("marker_", "");
+                        }
                         loc_latitude = tMapPoint.getLatitude();
                         loc_longitude = tMapPoint.getLongitude();
                         tMapData.findAllPOI(poiName_loc, new TMapData.OnFindAllPOIListener() {

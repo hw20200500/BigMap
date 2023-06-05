@@ -39,6 +39,7 @@ public class board_notice_detail extends AppCompatActivity {
 
         // 게시물 데이터 가져오기
         String postId = getIntent().getStringExtra("postId");
+
         if (postId != null) {
             db.collection("공지사항DB")
                     .document(postId)

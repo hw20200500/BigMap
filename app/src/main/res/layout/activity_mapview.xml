@@ -48,34 +48,41 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/refuelButton"
-                        android:layout_width="80dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/main_refuel_icon_modif"
                         android:layout_gravity="top"
                         android:layout_marginTop="0dp"
                         android:layout_marginStart="30dp"
-                        android:src="@drawable/main_refuel_icon_modif"
-                        android:onClick="onClick1" />
+                        android:clickable="true"
+                        android:onClick="onClick1"/>
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/parkingButton"
-                        android:layout_width="80dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginStart="10dp"
-                        android:src="@drawable/main_parking_icon_modif"
-                        android:onClick="onClick2" />
-
-                    <ImageButton
-                        android:id="@+id/deletebutton"
-                        android:layout_width="80dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="40dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/main_parking_icon_modif"
+                        android:layout_gravity="top"
                         android:layout_marginTop="0dp"
                         android:layout_marginStart="10dp"
+                        android:clickable="true"
+                        android:onClick="onClick2"/>
+
+                    <ImageView
+                        android:id="@+id/deleteButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:adjustViewBounds="true"
                         android:src="@drawable/main_rest_area_icon_modif"
-                        android:onClick="onClick3" />
+                        android:layout_gravity="top"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginStart="10dp"
+                        android:clickable="true"
+                        android:onClick="onClick3"/>
 
 
                 </LinearLayout>

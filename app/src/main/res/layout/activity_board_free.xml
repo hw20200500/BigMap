@@ -19,10 +19,11 @@
 
         <ImageView
             android:id="@+id/back"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:adjustViewBounds="true"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/board_back_icon"
+            android:src="@drawable/backward_modif"
             android:clickable="true"/>
         <View
             android:layout_width="0dp"
@@ -31,14 +32,13 @@
         <Button
             android:id="@+id/write"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="글쓰기"
             android:textSize="18sp"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:background="@android:color/transparent"/>
-        />
 
     </LinearLayout>
     <LinearLayout
@@ -58,6 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:gravity="center"
+        android:layout_marginTop="15dp"
         android:background="@drawable/solid_button"
         android:text="공지"/>
     <LinearLayout
@@ -69,6 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="7.2"
+        android:layout_marginTop="10dp"
         android:orientation="vertical">
 
         <ListView

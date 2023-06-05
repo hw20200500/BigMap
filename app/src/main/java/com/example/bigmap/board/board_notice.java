@@ -50,8 +50,8 @@ public class board_notice extends AppCompatActivity {
             // 클릭한 아이템의 동작 정의
             noticelist_item selectedItem = itemList.get(position);
             // 클릭한 아이템에 대한 동작 구현
-            Intent intent = new Intent(getApplicationContext(), board_notice_detail.class);
-            intent.putExtra("postId", selectedItem.getPostId());
+            Intent intent = new Intent(board_notice.this, board_notice_detail.class);
+//            intent.putExtra("postId", selectedItem.getPostId());
             intent.putExtra("title", selectedItem.getTitle());
             intent.putExtra("user", selectedItem.getUser());
             intent.putExtra("time", selectedItem.getTime());

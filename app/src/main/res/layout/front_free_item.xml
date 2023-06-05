@@ -12,15 +12,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="여기는 제목입니다."
+            android:padding="10dp"
             android:textSize="16sp"
             android:layout_marginBottom="2dp"
             android:textColor="@color/black"/>
 
 
         <View
-            android:background="@color/black"
+            android:background="#cccccc"
             android:layout_width="match_parent"
-            android:layout_height="2px"/>
+            android:layout_height="1dp"/>
     </LinearLayout>
 
 
