@@ -269,10 +269,12 @@ public class mapview extends AppCompatActivity
         Double search_lat = get_inform.getDoubleExtra("loc_lat", 0);
         Double search_lon = get_inform.getDoubleExtra("loc_lon", 0);
 
+        System.out.println("intented");
 
         if (search_lat!=0 && search_lon!=0) {
 
             Log.d(TAG, "검색 장소: "+search_name+" 검색 위도: "+search_lat+" 경도: "+search_lon);
+            System.out.println("검색 장소: "+search_name+" 검색 위도: "+search_lat+" 경도: "+search_lon);
             show_Bottom_Location(search_name, search_addr, search_lat, search_lon);
             TMapMarkerItem marker_search = new TMapMarkerItem();
             tMapView.setCenterPoint(search_lat, search_lon);
@@ -280,7 +282,6 @@ public class mapview extends AppCompatActivity
             marker_search.setTMapPoint(search_lat, search_lon);
             marker_search.setIcon(BitmapFactory.decodeResource(getResources(),R.drawable.location_icon));
             tMapView.addTMapMarkerItem(marker_search);
-
 
         }
     }
@@ -592,25 +593,6 @@ public class mapview extends AppCompatActivity
                     String title = poiItem.getPOIName();
 
                     addMapMarker(point, title, icon);
-                }
-            }
-        });
-    }
-
-    private void findpoi(String data){
-        // 현재 위치를 가져오는 메서드를 호출하여 현재 위치를 얻습니다.
-        TMapPoint currentLocation = getCurrentLocation();
-        // TMapData 객체를 생성합니다.
-        TMapData tMapData = new TMapData();
-
-        tMapData.findAroundNamePOI(currentLocation,data, 3, 50, new TMapData.OnFindAroundNamePOIListener() {
-            @Override
-            public void onFindAroundNamePOI(ArrayList<TMapPOIItem> poiItems) {
-                for (TMapPOIItem poiItem : poiItems) {
-                    TMapPoint point = poiItem.getPOIPoint();
-                    String title = poiItem.getPOIName();
-                    String address = poiItem.getPOIAddress();
-
                 }
             }
         });

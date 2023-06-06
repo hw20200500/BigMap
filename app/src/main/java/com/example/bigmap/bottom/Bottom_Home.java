@@ -140,11 +140,7 @@ public class Bottom_Home extends Fragment {
             }
         });
 
-
-
     }
-
-
 
 
     private void createGasList(String data) {
@@ -207,8 +203,8 @@ public class Bottom_Home extends Fragment {
 
         TextView search_name = r_sub.findViewById(R.id.recent_search_text1);
         TextView search_address = r_sub.findViewById(R.id.recent_search_address);
-        TextView search_lati = r_sub.findViewById(R.id.recent_search_longi);
-        TextView search_longi = r_sub.findViewById(R.id.recent_search_lati);
+        TextView search_lati = r_sub.findViewById(R.id.recent_search_lati);
+        TextView search_longi = r_sub.findViewById(R.id.recent_search_longi);
 
         search_name.setText(name);
         search_address.setText(address);
@@ -235,6 +231,8 @@ public class Bottom_Home extends Fragment {
                 go_mapview.putExtra("loc_addr", addr);
                 go_mapview.putExtra("loc_lat", lat);
                 go_mapview.putExtra("loc_lon", lon);
+
+                TMapMarkerItem marker_search = new TMapMarkerItem();
 
                 startActivity(go_mapview);
             }

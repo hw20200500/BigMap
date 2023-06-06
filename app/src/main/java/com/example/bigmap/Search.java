@@ -520,6 +520,7 @@ public class Search extends AppCompatActivity {
         mapIntent.putExtra("distance", distance);
         mapIntent.putExtra("latitude", latitude);
         mapIntent.putExtra("longitude", longitude);
+
         startActivity(mapIntent);
     }
 
