@@ -446,6 +446,12 @@ public class mapview extends AppCompatActivity
                 0, 0, this);
     }
 
+    public double getLatitude(){
+        return latitude;
+    }
+    public double getLongitude(){
+        return longitude;
+    }
     @Override
     public void onLocationChanged(Location location) {
         latitude = location.getLatitude();
@@ -586,6 +592,25 @@ public class mapview extends AppCompatActivity
                     String title = poiItem.getPOIName();
 
                     addMapMarker(point, title, icon);
+                }
+            }
+        });
+    }
+
+    private void findpoi(String data){
+        // 현재 위치를 가져오는 메서드를 호출하여 현재 위치를 얻습니다.
+        TMapPoint currentLocation = getCurrentLocation();
+        // TMapData 객체를 생성합니다.
+        TMapData tMapData = new TMapData();
+
+        tMapData.findAroundNamePOI(currentLocation,data, 3, 50, new TMapData.OnFindAroundNamePOIListener() {
+            @Override
+            public void onFindAroundNamePOI(ArrayList<TMapPOIItem> poiItems) {
+                for (TMapPOIItem poiItem : poiItems) {
+                    TMapPoint point = poiItem.getPOIPoint();
+                    String title = poiItem.getPOIName();
+                    String address = poiItem.getPOIAddress();
+
                 }
             }
         });

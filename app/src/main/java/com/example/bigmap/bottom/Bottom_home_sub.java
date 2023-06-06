@@ -1,28 +1,21 @@
 package com.example.bigmap.bottom;
 
 import android.content.Context;
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.bigmap.R;
 
+public class Bottom_home_sub extends LinearLayout {
 
-public class fragment_home_sub extends LinearLayout {
-
-    public fragment_home_sub(Context context, AttributeSet attrs) {
+    public Bottom_home_sub(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         init(context);
     }
 
-    public fragment_home_sub(Context context) {
+    public Bottom_home_sub(Context context) {
         super(context);
 
         init(context);
@@ -31,6 +24,4 @@ public class fragment_home_sub extends LinearLayout {
         LayoutInflater inflater =(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.fragment_mainbottom_sub,this,true);
     }
-
-
 }
