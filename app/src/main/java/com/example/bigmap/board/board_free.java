@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.bigmap.R;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,7 +27,7 @@ public class board_free extends AppCompatActivity {
     private freelist_Adapter adapter;
     private List<freelist_item> itemList;
     private FirebaseFirestore db;
-    private Button writeButton;
+    private TextView writeButton;
     private static final String TAG = "board_free";
 
     @Override

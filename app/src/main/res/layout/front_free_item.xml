@@ -17,11 +17,6 @@
             android:layout_marginBottom="2dp"
             android:textColor="@color/black"/>
 
-
-        <View
-            android:background="#cccccc"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
     </LinearLayout>
 
 

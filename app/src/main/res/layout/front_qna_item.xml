@@ -18,11 +18,6 @@
             android:textColor="@color/black"
             android:textStyle="bold"/>
 
-
-        <View
-            android:background="#cccccc"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
     </LinearLayout>
 
 

@@ -22,7 +22,7 @@
                     android:layout_width="320dp"
                     android:layout_height="wrap_content"
                     android:text="여기는 제목입니다."
-                    android:textSize="20sp"
+                    android:textSize="18dp"
                     android:textColor="@color/black"
                     android:textStyle="bold"/>
                 <LinearLayout
@@ -49,10 +49,6 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-        <View
-            android:background="#cccccc"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
 
     </LinearLayout>
 

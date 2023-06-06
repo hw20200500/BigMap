@@ -11,7 +11,7 @@
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -24,7 +24,7 @@
                     android:layout_width="320dp"
                     android:layout_height="wrap_content"
                     android:text="여기는 제목입니다."
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="@color/black"
                     android:textStyle="bold"/>
                 <LinearLayout
@@ -58,16 +58,12 @@
                 android:adjustViewBounds="true"
                 android:layout_gravity="center"
                 android:layout_weight="1"
+                android:layout_marginLeft="8dp"
                 android:src="@drawable/board_message_icon"/>
 
 
 
         </LinearLayout>
-        <View
-            android:background="#cccccc"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"/>
 
     </LinearLayout>
 

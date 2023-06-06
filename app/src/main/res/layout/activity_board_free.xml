@@ -22,23 +22,36 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:adjustViewBounds="true"
+            android:layout_marginRight="10dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/backward_modif"
             android:clickable="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="자유게시판"
+            android:textSize="20dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1"/>
-        <Button
+        <TextView
             android:id="@+id/write"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="글쓰기"
             android:textSize="18sp"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="15dp"
+            android:clickable="true"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:background="@android:color/transparent"/>
+            android:background="@drawable/solid_button2"/>
 
     </LinearLayout>
     <LinearLayout

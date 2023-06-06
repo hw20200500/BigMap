@@ -32,7 +32,7 @@
         <Button
             android:id="@+id/reg"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/solid_button2"
             android:layout_gravity="center_vertical|end"
