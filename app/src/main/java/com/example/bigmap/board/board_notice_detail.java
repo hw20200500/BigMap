@@ -1,9 +1,12 @@
 package com.example.bigmap.board;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,17 +42,17 @@ public class board_notice_detail extends AppCompatActivity {
 
         // 게시물 데이터 가져오기
         String postId = getIntent().getStringExtra("postId");
-
+        Log.d(TAG, "받은 공지 id: "+postId);
         if (postId != null) {
             db.collection("공지사항DB")
                     .document(postId)
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
-                            String title = documentSnapshot.getString("title");
-                            String user = documentSnapshot.getString("user");
-                            String time = documentSnapshot.getString("time");
-                            String content = documentSnapshot.getString("content");
+                            String title = documentSnapshot.getString("제목");
+                            String user = documentSnapshot.getString("작성자");
+                            String time = documentSnapshot.getString("작성_시간_날짜");
+                            String content = documentSnapshot.getString("내용");
 
                             titleTextView.setText(title);
                             userTextView.setText(user);

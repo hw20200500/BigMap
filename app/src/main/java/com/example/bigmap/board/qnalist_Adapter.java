@@ -1,7 +1,10 @@
 package com.example.bigmap.board;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +67,8 @@ public class qnalist_Adapter extends BaseAdapter {
                 String postId = item.getPostId();
 
                 // board_free_detail 액티비티로 이동하면서 postId 값을 전달
-                Intent intent = new Intent(context, board_free_detail.class);
+                Intent intent = new Intent(context, board_qna_detail.class);
+                Log.d(TAG, "보낼 QnA id: "+postId);
                 intent.putExtra("postId", postId);
                 context.startActivity(intent);
             }

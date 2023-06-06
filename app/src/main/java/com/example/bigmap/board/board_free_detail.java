@@ -1,9 +1,12 @@
 package com.example.bigmap.board;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -73,6 +76,7 @@ public class board_free_detail extends AppCompatActivity {
 
         // 게시물 데이터 받아오기
         String postId = getIntent().getStringExtra("postId");
+        Log.d(TAG, "받은 자유게시판 id: "+postId);
         db.collection("게시판DB")
                 .document(postId)
                 .get()

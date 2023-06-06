@@ -1,7 +1,10 @@
 package com.example.bigmap.board;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +65,7 @@ public class noticelist_Adapter extends BaseAdapter {
             public void onClick(View v) {
                 // 해당 아이템의 postId 가져오기
                 String postId = item.getPostId();
-
+                Log.d(TAG, "보낼 공지 id: "+postId);
                 // board_free_detail 액티비티로 이동하면서 postId 값을 전달
                 Intent intent = new Intent(context, board_notice_detail.class);
                 intent.putExtra("postId", postId);

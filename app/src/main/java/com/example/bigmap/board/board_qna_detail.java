@@ -1,9 +1,12 @@
 package com.example.bigmap.board;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -63,6 +66,7 @@ public class board_qna_detail extends AppCompatActivity {
 
         // 게시물 데이터 받아오기
         String postId = getIntent().getStringExtra("postId");
+        Log.d(TAG, "받은 QnA id: "+postId);
         db.collection("qnaDB")
                 .document(postId)
                 .get()

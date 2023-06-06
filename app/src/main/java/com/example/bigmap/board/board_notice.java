@@ -72,7 +72,7 @@ public class board_notice extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         itemList.clear();
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            String postId = document.getString("postId"); // Firestore 문서의 postId 가져오기
+                            String postId = document.getId(); // Firestore 문서의 postId 가져오기
                             String title = document.getString("제목");
                             String user = document.getString("작성자");
                             String time = document.getString("작성_시간_날짜");
