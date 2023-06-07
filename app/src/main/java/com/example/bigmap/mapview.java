@@ -94,7 +94,7 @@ public class mapview extends AppCompatActivity
     FrameLayout tmaplayout;
     String poiName_loc="";
     String poiAddress_loc;
-    int num = 0;
+    public int num_currentL = 0;
     int num_loc_layout = 0;
 
     private FirebaseAuth firebaseAuth;
@@ -140,6 +140,7 @@ public class mapview extends AppCompatActivity
         } else {
             // 권한이 있으면 위치 정보 요청
             requestLocationUpdates();
+
         }
 
         // '내 위치' 버튼, 클릭시 사용자의 위치 정보를 받아와서 해당 위치로 지도의 중심지 이동하기 (몇번 실행했으나 될 때도 있고, 안될 때도 있음. 수정 필요)
@@ -147,7 +148,7 @@ public class mapview extends AppCompatActivity
         location_bttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                num = 0;
+                num_currentL = 0;
                 tMapView.setCenterPoint(latitude, longitude);
             }
         });
@@ -205,6 +206,7 @@ public class mapview extends AppCompatActivity
                         }
                         loc_latitude = tMapPoint.getLatitude();
                         loc_longitude = tMapPoint.getLongitude();
+                        set_clickMarker(loc_latitude, loc_longitude);
                         tMapData.findAllPOI(poiName_loc, new TMapData.OnFindAllPOIListener() {
                             @Override
                             public void onFindAllPOI(ArrayList<TMapPOIItem> arrayList) {
@@ -276,14 +278,18 @@ public class mapview extends AppCompatActivity
             Log.d(TAG, "검색 장소: "+search_name+" 검색 위도: "+search_lat+" 경도: "+search_lon);
             System.out.println("검색 장소: "+search_name+" 검색 위도: "+search_lat+" 경도: "+search_lon);
             show_Bottom_Location(search_name, search_addr, search_lat, search_lon);
-            TMapMarkerItem marker_search = new TMapMarkerItem();
-            tMapView.setCenterPoint(search_lat, search_lon);
-            marker_search.setId("bookmarker");
-            marker_search.setTMapPoint(search_lat, search_lon);
-            marker_search.setIcon(BitmapFactory.decodeResource(getResources(),R.drawable.location_icon));
-            tMapView.addTMapMarkerItem(marker_search);
+            set_clickMarker(search_lat, search_lon);
 
         }
+    }
+
+    private void set_clickMarker(Double lat, Double lon) {
+        TMapMarkerItem marker_search = new TMapMarkerItem();
+        tMapView.setCenterPoint(lat, lon);
+        marker_search.setId("bookmarker");
+        marker_search.setTMapPoint(lat, lon);
+        marker_search.setIcon(BitmapFactory.decodeResource(getResources(),R.drawable.location_icon));
+        tMapView.addTMapMarkerItem(marker_search);
     }
 
     private void show_Bottom_Location(String name, String addr, Double lat, Double lon) {
@@ -459,11 +465,11 @@ public class mapview extends AppCompatActivity
         longitude = location.getLongitude();
 //        System.out.println(latitude+"+"+longitude);
 
-        if(num==0) {
+        if(num_currentL==0) {
             tMapView.setCenterPoint(latitude, longitude);
             tMapView.setZoomLevel(15);
             search_result();
-            num=1;
+            num_currentL=1;
 
         }
         // 핑(마커) 추가
@@ -481,6 +487,11 @@ public class mapview extends AppCompatActivity
         tMapView.addTMapMarkerItem(markerItem);
 
         set_bookmarks();
+
+
+        /*Bottom_Home bottom_home_tag = (Bottom_Home) getSupportFragmentManager().findFragmentByTag("bottom_home_tag");
+        bottom_home_tag.createGasList("주유소");
+        bottom_home_tag.creatrestList("휴게소");*/
 
 
 

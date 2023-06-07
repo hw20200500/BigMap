@@ -51,7 +51,8 @@ public class Bottom_Home extends Fragment {
     int j;
     double latitude = 36.35199106;
     double longitude = 127.42223688;
-    LinearLayout Layout;
+    LinearLayout Layout_gas;
+    LinearLayout Layout_rest;
     private fragment_home_sub home_sub;
 
     @Override
@@ -59,7 +60,12 @@ public class Bottom_Home extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bottom__home, container, false);
+//        return inflater.inflate(R.layout.fragment_bottom__home, container, false);
+        View rootview = inflater.inflate(R.layout.fragment_bottom__home, container, false);
+
+
+        rootview.setTag("bottom_home_tag");
+        return rootview;
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -125,7 +131,11 @@ public class Bottom_Home extends Fragment {
 
         ImageView refuel = view.findViewById(R.id.refuel01);
         ImageView restarea = view.findViewById(R.id.restarea01);
-        refuel.setOnClickListener(new View.OnClickListener() {
+
+        createGasList("주유소");
+        creatrestList("휴게소");
+
+        /*refuel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createGasList("주유소");
@@ -138,27 +148,27 @@ public class Bottom_Home extends Fragment {
             public void onClick(View v) {
                 creatrestList("휴게소");
             }
-        });
+        });*/
 
     }
 
 
-    private void createGasList(String data) {
-        Layout = getView().findViewById(R.id.gas_layout);
-        if (Layout.getChildCount() > 0) {
-            Layout.removeAllViews();
+    public void createGasList(String data) {
+        Layout_gas = getView().findViewById(R.id.gas_layout);
+        if (Layout_gas.getChildCount() > 0) {
+            Layout_gas.removeAllViews();
         }
-        findpoi(data);
+        findpoi(data, Layout_gas);
     }
 
-    private void creatrestList(String data) {
-        Layout = getView().findViewById(R.id.resting_layout);
-        if (Layout.getChildCount() > 0) {
-            Layout.removeAllViews();
+    public void creatrestList(String data) {
+        Layout_rest = getView().findViewById(R.id.resting_layout);
+        if (Layout_rest.getChildCount() > 0) {
+            Layout_rest.removeAllViews();
         }
-        findpoi(data);
+        findpoi(data, Layout_rest);
     }
-    private TMapPoint getCurrentLocation() {
+    public TMapPoint getCurrentLocation() {
         mapview mv = new mapview();
         longitude = mv.getLongitude();
         latitude = mv.getLatitude();
@@ -166,13 +176,13 @@ public class Bottom_Home extends Fragment {
         return new TMapPoint(latitude, longitude);
     }
 
-    private void findpoi(String data) {
+    public void findpoi(String data, LinearLayout linearLayout) {
         // 현재 위치를 가져오는 메서드를 호출하여 현재 위치를 얻습니다.
         TMapPoint currentLocation = getCurrentLocation();
         // TMapData 객체를 생성합니다.
         TMapData tMapData = new TMapData();
 
-        tMapData.findAroundNamePOI(currentLocation, data, 50, 5, new TMapData.OnFindAroundNamePOIListener() {
+        tMapData.findAroundNamePOI(currentLocation, data, 100, 3, new TMapData.OnFindAroundNamePOIListener() {
             @Override
             public void onFindAroundNamePOI(ArrayList<TMapPOIItem> poiItems) {
                 if (poiItems != null && !poiItems.isEmpty()) {
@@ -184,18 +194,18 @@ public class Bottom_Home extends Fragment {
                                 String address = poiItem.getPOIAddress();
                                 double lati = poiItem.getPOIPoint().getLatitude();
                                 double longi = poiItem.getPOIPoint().getLongitude();
-                                recentget(title,address,lati,longi);
+                                recentget(title,address,lati,longi, linearLayout);
                             }
                         }
                     });
                 }else{
-                    getActivity().runOnUiThread(() -> Toast.makeText(getContext(), "검색 결과가 없습니다.", Toast.LENGTH_LONG).show());
+//                    getActivity().runOnUiThread(() -> Toast.makeText(getContext(), "검색 결과가 없습니다.", Toast.LENGTH_LONG).show());
                 }
             }
         });
     }
 
-    private void recentget(String name ,String address, Double lati,Double longi){
+    public void recentget(String name ,String address, Double lati,Double longi, LinearLayout linearLayout){
 
         home_sub = new fragment_home_sub(getActivity().getApplicationContext());
 
@@ -238,7 +248,7 @@ public class Bottom_Home extends Fragment {
             }
         });
 
-        Layout.addView(r_sub);
+        linearLayout.addView(r_sub);
 
     }
 

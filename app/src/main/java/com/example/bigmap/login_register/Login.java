@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -126,7 +127,29 @@ public class Login extends AppCompatActivity {
                 startActivity(intent_pw);
             }
         });
+
+        ImageView delete_email = findViewById(R.id.bttn_delete_email);
+        ImageView delete_pw = findViewById(R.id.bttn_delete_pw);
+
+        delete_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText editemail = findViewById(R.id.userEmail);
+                editemail.setText("");
+
+            }
+        });
+
+        delete_pw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText editpassword = findViewById(R.id.userPassword);
+                editpassword.setText("");
+
+            }
+        });
     }
+
 
 
 }

@@ -68,6 +68,7 @@ public class Bottom_LocationInform extends Fragment {
 
 
 
+
         return rootview;
     }
 
