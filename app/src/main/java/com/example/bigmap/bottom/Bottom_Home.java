@@ -1,5 +1,6 @@
 package com.example.bigmap.bottom;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,16 +31,22 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.AggregateQuery;
 import com.google.firebase.firestore.AggregateQuerySnapshot;
 import com.google.firebase.firestore.AggregateSource;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.skt.tmap.TMapData;
 import com.skt.tmap.TMapPoint;
 import com.skt.tmap.overlay.TMapMarkerItem;
 import com.skt.tmap.poi.TMapPOIItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 
 public class Bottom_Home extends Fragment {
@@ -53,6 +60,8 @@ public class Bottom_Home extends Fragment {
     double longitude = 127.42223688;
     LinearLayout Layout_gas;
     LinearLayout Layout_rest;
+
+    LinearLayout recent_search_layout1;
     private fragment_home_sub home_sub;
 
     @Override
@@ -68,88 +77,147 @@ public class Bottom_Home extends Fragment {
         return rootview;
     }
 
+    @SuppressLint("SetTextI18n")
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
 
-        TextView recent_title1 = view.findViewById(R.id.recent_title1);
-        TextView recent_title2 = view.findViewById(R.id.recent_title2);
-        TextView recent_title3 = view.findViewById(R.id.recent_title3);
-        TextView[] recent_titles = {recent_title1, recent_title2, recent_title3};
+        LinearLayout recent_title1 = view.findViewById(R.id.recent_linear1);
+        LinearLayout recent_title2 = view.findViewById(R.id.recent_linear2);
+        LinearLayout recent_title3 = view.findViewById(R.id.recent_linear3);
+        LinearLayout[] recent_titles = {recent_title1, recent_title2, recent_title3};
 
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String email = user.getEmail();
 
-        DocumentReference docR = firestore.collection("최근기록DB").document(email);
-
+        CollectionReference recentCollectionRef = firestore.collection("최근기록DB").document(email).collection("최근기록");
         // 데이터베이스에 데이터가 몇 개 있는지 확인하는 코드
-        Query query1 = docR.collection("최근기록");
-        AggregateQuery countQuery1 = query1.count();
-        countQuery1.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<AggregateQuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    // Count fetched successfully
-                    AggregateQuerySnapshot snapshot = task.getResult();
-                    // 데이터베이스에 저장된 데이터의 개수 num에 저장
-                    String number = String.valueOf(snapshot.getCount());
-                    num = Integer.parseInt(number);
-                    j = num;
-                    for (TextView textView : recent_titles) {
+        recentCollectionRef.get().addOnSuccessListener(querySnapshots -> {
+            getActivity().runOnUiThread(() -> {
+                List<List<Object>> documentList = new ArrayList<>(); // 각 문서를 담는 리스트
 
-                        Log.d("TAG", "j: " + j);
-                        DocumentReference read_doc = docR.collection("최근기록").document(String.valueOf(j));
 
-                        read_doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-                                        String read_name = document.getString("location_name");
-                                        double read_lat = document.getDouble("latitude");
-                                        double read_lon = document.getDouble("longitude");
+                for (QueryDocumentSnapshot document : querySnapshots) {
+                    List<Object> docData = new ArrayList<>(); // 문서 데이터를 담는 리스트
+                    docData.add(document.getId());
+                    docData.add(document.getString("location_name"));
+                    docData.add(document.getString("address"));
+                    docData.add(document.getDouble("latitude"));
+                    docData.add(document.getDouble("longitude"));
 
-                                        textView.setText(read_name);
-
-                                    }
-
-                                } else {
-                                    Log.d(getTag(), "get failed with ", task.getException());
-                                }
-                            }
-                        });
-                        j--;
-                    }
-                } else {
-                    Log.d(getTag(), "Count failed: ", task.getException());
+                    documentList.add(docData);
                 }
-            }
-        });
 
-        ImageView refuel = view.findViewById(R.id.refuel01);
-        ImageView restarea = view.findViewById(R.id.restarea01);
+                // 리스트 정렬
+                Collections.sort(documentList, new Comparator<List<Object>>() {
+                    @Override
+                    public int compare(List<Object> doc1, List<Object> doc2) {
+                        // id를 기준으로 내림차순으로 정렬
+                        int id1 = Integer.parseInt((String) doc1.get(0));
+                        int id2 = Integer.parseInt((String) doc2.get(0));
+                        return id2 - id1;
+                    }
+                });
 
-        createGasList("주유소");
-        creatrestList("휴게소");
+                // 최대 3개의 기록 화면에 출력
+                int count = 0;
+                for (List<Object> docData : documentList) {
+                    String locationName = (String) docData.get(1);
+                    String address = (String) docData.get(2);
+                    Double latitude = (Double) docData.get(3);
+                    Double longitude = (Double) docData.get(4);
 
-        /*refuel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                    count++; // 반복 횟수 증가
+
+                    if (count == 4) {
+                        // 3번 반복 후 종료
+                        break;
+                    }
+
+                    String r_title = "recent_title" + count;
+                    int titleId = getResources().getIdentifier(r_title, "id", getActivity().getPackageName());
+                    TextView titleTextView = recent_titles[count - 1].findViewById(titleId);
+                    titleTextView.setText(locationName);
+
+                    String r_address = "recent_address" + count;
+                    int address_Id = getResources().getIdentifier(r_address, "id", getActivity().getPackageName());
+                    titleTextView = recent_titles[count - 1].findViewById(address_Id);
+
+                    titleTextView.setText(address);
+
+                    String r_longi = "recent_longi" + count;
+                    int longiId = getResources().getIdentifier(r_longi, "id", getActivity().getPackageName());
+                    titleTextView = recent_titles[count - 1].findViewById(longiId);
+                    System.out.println(longitude);
+                    titleTextView.setText(longitude.toString());
+
+                    String r_lati = "recent_lati" + count;
+                    int latiId = getResources().getIdentifier(r_lati, "id", getActivity().getPackageName());
+                    titleTextView = recent_titles[count - 1].findViewById(latiId);
+                    System.out.println(latitude);
+                    titleTextView.setText(latitude.toString());
+
+                }
+
                 createGasList("주유소");
+                creatrestList("휴게소");
+            });
+        });
+
+        recent_title1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intentdata(recent_title1,1);
             }
         });
 
-        restarea.setOnClickListener(new View.OnClickListener(){
-
+        recent_title2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                creatrestList("휴게소");
+                intentdata(recent_title2,2);
             }
-        });*/
+        });
 
+        recent_title3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intentdata(recent_title3,3);
+            }
+        });
+
+    }
+
+    public void intentdata(LinearLayout llout,int i){
+        String getdata = "recent_title" + i;
+        int id = getResources().getIdentifier(getdata, "id", getActivity().getPackageName());
+        TextView click_name = llout.findViewById(id);
+
+        getdata = "recent_address" + i;
+        id = getResources().getIdentifier(getdata, "id", getActivity().getPackageName());
+        TextView click_address = llout.findViewById(id);
+
+        getdata = "recent_lati" + i;
+        id = getResources().getIdentifier(getdata, "id", getActivity().getPackageName());
+        TextView click_lati = llout.findViewById(id);
+
+        getdata = "recent_longi" + i;
+        id = getResources().getIdentifier(getdata, "id", getActivity().getPackageName());
+        TextView click_longi = llout.findViewById(id);
+
+        String name = click_name.getText().toString();
+        String addr = click_address.getText().toString();
+        Double lat = Double.parseDouble(click_lati.getText().toString());
+        Double lon = Double.parseDouble(click_longi.getText().toString());
+
+        Intent go_mapview = new Intent(getContext(), mapview.class);
+        go_mapview.putExtra("loc_name", name);
+        go_mapview.putExtra("loc_addr", addr);
+        go_mapview.putExtra("loc_lat", lat);
+        go_mapview.putExtra("loc_lon", lon);
+
+        startActivity(go_mapview);
     }
 
 
@@ -172,7 +240,6 @@ public class Bottom_Home extends Fragment {
         mapview mv = new mapview();
         longitude = mv.getLongitude();
         latitude = mv.getLatitude();
-        System.out.println(latitude + "," + longitude);
         return new TMapPoint(latitude, longitude);
     }
 

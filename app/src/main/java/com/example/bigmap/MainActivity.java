@@ -498,7 +498,6 @@ public class MainActivity extends AppCompatActivity {
         navigationFragment.setCarOption(carOption);
 
         navigationFragment.setRoutePlanType(RoutePlanType.Traffic_Truck);
-
         //길안내 코드(시작 지점,null,도착 지점,false or true(false 경로 안내 해줌 true 는 경로 안내 안하고 바로 네비시작),TmapUISDK.RouteRequestListener()
         navigationFragment.requestRoute(startPoint, null, endPoint, false, new TmapUISDK.RouteRequestListener() {
             @Override
@@ -574,6 +573,7 @@ public class MainActivity extends AppCompatActivity {
         navigationFragment.setCarOption(carOption);
 
         navigationFragment.setRoutePlanType(RoutePlanType.Traffic_Truck);
+
 
         //길안내 코드(시작 지점,null,도착 지점,false or true(false 경로 안내 해줌 true 는 경로 안내 안하고 바로 네비시작),TmapUISDK.RouteRequestListener()
         navigationFragment.requestRoute(startPoint, null, endPoint, false, new TmapUISDK.RouteRequestListener() {
