@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                         // nav_truck 실행
                         runOnUiThread(() -> {
                             truck_info(poiList_start, poiList_dest);
+                            Log.d(TAG, "다음 장소로 네비게이션 경로 탐색: "+"위도 "+lat_destP+" 경도 "+lon_destP);
                         });
                     }
                 }

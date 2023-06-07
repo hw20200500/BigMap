@@ -366,8 +366,16 @@ public class PersonIform extends AppCompatActivity {
                                             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
                                             firestore.collection("사용자DB").document(email).set(hashMap);
 
+                                        HashMap<Object,Object> car_hashmap = new HashMap<>();
+                                        car_hashmap.put("높이", 420);
+                                        car_hashmap.put("너비", 250);
+                                        car_hashmap.put("길이", 1200);
+                                        car_hashmap.put("무게", 2500);
+                                        firestore.collection("화물차DB").document(email).set(car_hashmap);
 
-                                            //가입이 이루어져을시 가입 화면을 빠져나감.
+
+
+                                        //가입이 이루어져을시 가입 화면을 빠져나감.
                                             Toast.makeText(PersonIform.this, "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(PersonIform.this, WelcomeView.class);
                                             startActivity(intent);
