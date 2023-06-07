@@ -132,11 +132,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/refuel01"
                 android:layout_width="wrap_content"
-                android:layout_height="45dp"
+                android:layout_height="41dp"
                 android:adjustViewBounds="true"
                 android:src="@drawable/home_refuel2_icon_modif" />
 
@@ -155,12 +157,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
+
             android:orientation="vertical">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
                 android:adjustViewBounds="true"
+                android:id="@+id/restarea01"
                 android:src="@drawable/home_rest_icon_modif" />
 
 <!--            Sub에서 리스트 복사해서 붙여넣을 장소. 여기서는 안보이지만 이후 실행하면 리스트가 보일 예정.-->
@@ -173,10 +177,6 @@
 
         </LinearLayout>
     </LinearLayout>
-
-
-
-
 
 </LinearLayout>
 

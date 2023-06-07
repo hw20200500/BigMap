@@ -269,10 +269,12 @@ public class mapview extends AppCompatActivity
         Double search_lat = get_inform.getDoubleExtra("loc_lat", 0);
         Double search_lon = get_inform.getDoubleExtra("loc_lon", 0);
 
+        System.out.println("intented");
 
         if (search_lat!=0 && search_lon!=0) {
 
             Log.d(TAG, "검색 장소: "+search_name+" 검색 위도: "+search_lat+" 경도: "+search_lon);
+            System.out.println("검색 장소: "+search_name+" 검색 위도: "+search_lat+" 경도: "+search_lon);
             show_Bottom_Location(search_name, search_addr, search_lat, search_lon);
             TMapMarkerItem marker_search = new TMapMarkerItem();
             tMapView.setCenterPoint(search_lat, search_lon);
@@ -280,7 +282,6 @@ public class mapview extends AppCompatActivity
             marker_search.setTMapPoint(search_lat, search_lon);
             marker_search.setIcon(BitmapFactory.decodeResource(getResources(),R.drawable.location_icon));
             tMapView.addTMapMarkerItem(marker_search);
-
 
         }
     }
@@ -446,6 +447,12 @@ public class mapview extends AppCompatActivity
                 0, 0, this);
     }
 
+    public double getLatitude(){
+        return latitude;
+    }
+    public double getLongitude(){
+        return longitude;
+    }
     @Override
     public void onLocationChanged(Location location) {
         latitude = location.getLatitude();
