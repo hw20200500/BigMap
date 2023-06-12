@@ -94,9 +94,9 @@ public class mapview extends AppCompatActivity
     FrameLayout tmaplayout;
     String poiName_loc="";
     String poiAddress_loc;
-    public int num_currentL = 0;
+    public int num_currentL = 1;
     int num_loc_layout = 0;
-
+    boolean maploading = false;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
     Bundle bundle;
@@ -115,12 +115,21 @@ public class mapview extends AppCompatActivity
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String email = user.getEmail();
 
+
+
         tMapView = new TMapView(mapview.this);
+        tMapView.setSKTMapApiKey(API_KEY);
+
         tmaplayout = findViewById(R.id.tmap_layout);
         tmaplayout.addView(tMapView);
 
-
-        tMapView.setSKTMapApiKey(API_KEY);
+        tMapView.setOnMapReadyListener(new TMapView.OnMapReadyListener() {
+            @Override
+            public void onMapReady() {
+                num_currentL = 0;
+                maploading = true;
+            }
+        });
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
 
@@ -148,15 +157,12 @@ public class mapview extends AppCompatActivity
         location_bttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                num_currentL = 0;
+
                 tMapView.setCenterPoint(latitude, longitude);
             }
         });
 
         initnav();
-
-
-
 
 
         handler = new Handler(Looper.getMainLooper());
@@ -452,7 +458,9 @@ public class mapview extends AppCompatActivity
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
                 0, 0, this);
     }
+    public void lisner(){
 
+    }
     public double getLatitude(){
         return latitude;
     }
@@ -463,37 +471,29 @@ public class mapview extends AppCompatActivity
     public void onLocationChanged(Location location) {
         latitude = location.getLatitude();
         longitude = location.getLongitude();
-//        System.out.println(latitude+"+"+longitude);
+        if(maploading){
+            if(num_currentL==0) {
+                tMapView.setCenterPoint(latitude, longitude);
+                tMapView.setZoomLevel(15);
+                search_result();
+                num_currentL=1;
+            }
+            // 핑(마커) 추가
+            if(tMapView.getMarkerItemFromId("현재위치") != null){
+                tMapView.removeTMapMarkerItem("현재위치");
+            }
 
-        if(num_currentL==0) {
-            tMapView.setCenterPoint(latitude, longitude);
-            tMapView.setZoomLevel(15);
-            search_result();
-            num_currentL=1;
+            TMapMarkerItem markerItem = new TMapMarkerItem();
+            TMapPoint point = new TMapPoint(latitude, longitude);
+            Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.main_gps);
+            markerItem.setTMapPoint(point);
+            markerItem.setId("현재위치");
+            markerItem.setIcon(icon);
 
+            tMapView.addTMapMarkerItem(markerItem);
+
+            set_bookmarks();
         }
-        // 핑(마커) 추가
-        if(tMapView.getMarkerItemFromId("현재위치") != null){
-            tMapView.removeTMapMarkerItem("현재위치");
-        }
-
-        TMapMarkerItem markerItem = new TMapMarkerItem();
-        TMapPoint point = new TMapPoint(latitude, longitude);
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.main_gps);
-        markerItem.setTMapPoint(point);
-        markerItem.setId("현재위치");
-        markerItem.setIcon(icon);
-
-        tMapView.addTMapMarkerItem(markerItem);
-
-        set_bookmarks();
-
-
-        /*Bottom_Home bottom_home_tag = (Bottom_Home) getSupportFragmentManager().findFragmentByTag("bottom_home_tag");
-        bottom_home_tag.createGasList("주유소");
-        bottom_home_tag.creatrestList("휴게소");*/
-
-
 
     }
 

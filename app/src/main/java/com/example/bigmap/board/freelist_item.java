@@ -6,6 +6,10 @@ public class freelist_item {
     private String 작성자;
     private String 작성_시간_날짜;
 
+    public freelist_item(){
+
+    }
+
     public freelist_item(String postId, String title, String user, String time){
         this.postId = postId;
         this.제목 = title;

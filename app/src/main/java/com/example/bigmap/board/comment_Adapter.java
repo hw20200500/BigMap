@@ -17,6 +17,9 @@ public class comment_Adapter extends BaseAdapter {
     private List<comment_item> listViewItemList = new ArrayList<>();
     private Context context;
 
+    public comment_Adapter() {
+
+    }
     public comment_Adapter(Context context, List<comment_item> itemList) {
         this.context = context;
         this.listViewItemList = itemList;
