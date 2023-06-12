@@ -500,6 +500,10 @@ public class Search extends AppCompatActivity {
         recent();
     }
 
+    public void go_before(View view) {
+        Intent intent_before = new Intent(this, mapview.class);
+        startActivity(intent_before);
+    }
     public void go_location(View v) {
         LinearLayout layout = (LinearLayout) v.getParent();
         TextView textViewName = layout.findViewById(R.id.loc_inform_text1);

@@ -161,8 +161,10 @@ public class mypage_truckinfo_ch extends AppCompatActivity {
             startActivity(intent);
         });
     }
-//    private void go_before() {
-//        Intent intent_before = new Intent(this, mapview.class);
-//        startActivity(intent_before);
-//    }
+
+    public void go_before(View view) {
+        Intent intent_before = new Intent(this, mapview.class);
+        startActivity(intent_before);
+    }
+
 }

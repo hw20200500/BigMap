@@ -22,6 +22,7 @@
             android:layout_height="40dp"
             android:adjustViewBounds="true"
             android:layout_marginRight="10dp"
+            android:onClick="go_before"
             android:src="@drawable/login_backright_icon"/>
 
         <EditText
