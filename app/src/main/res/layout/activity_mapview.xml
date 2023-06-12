@@ -68,7 +68,7 @@
                         android:src="@drawable/main_parking_icon_modif"
                         android:layout_gravity="top"
                         android:layout_marginTop="0dp"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginStart="5dp"
                         android:clickable="true"
                         android:onClick="onClick2"/>
 
@@ -80,7 +80,7 @@
                         android:src="@drawable/main_rest_area_icon_modif"
                         android:layout_gravity="top"
                         android:layout_marginTop="0dp"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginStart="5dp"
                         android:clickable="true"
                         android:onClick="onClick3"/>
 
